@@ -1,0 +1,33 @@
+{
+    "name": "oktopost/eddy",
+    "description": "Events library",
+    "type": "lib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Demchenkov",
+            "email": "ivan@oktopost.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "oktopost/skeleton": "^1.0",
+        "oktopost/squid": "dev-master#caac9ef",
+        "oktopost/annotation": "^1.0",
+        "oktopost/deep-queue": "^1.0",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "DeepQueue": "src"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "scripts": {
+        "test": "./vendor/phpunit/phpunit/phpunit",
+        "test-cover": "./vendor/phpunit/phpunit/phpunit --coverage-html ./build/cover"
+    }
+}
