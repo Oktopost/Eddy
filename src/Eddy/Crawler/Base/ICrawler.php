@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Crawler;
+namespace Eddy\Crawler\Base;
 
 
 interface ICrawler

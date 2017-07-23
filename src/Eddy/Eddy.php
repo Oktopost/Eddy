@@ -3,8 +3,8 @@ namespace Eddy;
 
 
 use Eddy\Base\IEddyConfig;
-use Eddy\Base\Crawler\ICrawler;
-use Eddy\Engine\Base\Publisher\IPublisher;
+use Eddy\Crawler\Base\ICrawler;
+use Eddy\Crawler\Crawler;
 
 
 class Eddy
@@ -42,11 +42,6 @@ class Eddy
 	
 	public function crawler(): ICrawler
 	{
-		
-	}
-	
-	public function publisher(): IPublisher
-	{
-		
+		return new Crawler();
 	}
 }

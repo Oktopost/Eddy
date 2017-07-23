@@ -3,6 +3,7 @@ namespace Eddy;
 
 
 use Eddy\Base\IEddyConfig;
+use Eddy\Engine\Base\Publisher\IPublisher;
 use Eddy\Engine\Base\Publisher\Locker\ILocker;
 
 use DeepQueue\DeepQueue;
@@ -47,5 +48,10 @@ class EddyConfig implements IEddyConfig
 	{
 		$this->prefix = $prefix;
 		return $this;
+	}
+
+	public function publisher(): IPublisher
+	{
+		
 	}
 }
