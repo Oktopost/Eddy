@@ -1,9 +1,9 @@
 <?php
-namespace Eddy\DAO\Connector;
+namespace Eddy\Module\DAO\Connector;
 
 
 use Eddy\Object\EventObject;
-use Eddy\Base\DAO\Connector\IHandlerConnector;
+use Eddy\Base\Module\DAO\Connector\IHandlerConnector;
 
 use Objection\Mappers;
 
@@ -11,6 +11,9 @@ use Squid\MySql\IMySqlConnector;
 use Squid\MySql\Impl\Connectors\Object\Generic\GenericIdConnector;
 
 
+/**
+ * @autoload
+ */
 class HandlerConnector extends GenericIdConnector implements IHandlerConnector
 {
 	private const TABLE = 'EddyHandler';

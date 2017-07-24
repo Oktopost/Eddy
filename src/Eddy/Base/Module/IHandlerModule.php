@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Module\Base;
+namespace Eddy\Base\Module;
 
 
 use Eddy\IHandlerConfig;
@@ -7,6 +7,9 @@ use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
 
+/**
+ * @skeleton
+ */
 interface IHandlerModule
 {
 	public function load(string $id): ?HandlerObject;

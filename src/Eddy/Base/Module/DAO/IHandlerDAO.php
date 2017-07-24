@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Module\Base\DAO;
+namespace Eddy\Base\Module\DAO;
 
 
 use Eddy\Object\EventObject;
@@ -8,12 +8,15 @@ use Eddy\Object\HandlerObject;
 use Squid\MySql\IMySqlConnector;
 
 
+/**
+ * @skeleton
+ */
 interface IHandlerDAO
 {
 	/**
 	 * @param array|IMySqlConnector $config
 	 */
-	public function initConnector($config): IEventDAO;
+	public function initConnector($config): IHandlerDAO;
 	
 	public function loadForEvent(EventObject $event): array;
 	public function load(string $id): ?HandlerObject;

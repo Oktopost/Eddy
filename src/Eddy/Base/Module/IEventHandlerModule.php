@@ -6,6 +6,9 @@ use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
 
+/**
+ * @skeleton
+ */
 interface IEventHandlerModule
 {
 	public function subscribe(EventObject $event, HandlerObject $handler): void;

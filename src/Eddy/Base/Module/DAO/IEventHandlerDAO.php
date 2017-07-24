@@ -4,6 +4,9 @@ namespace Eddy\Base\Module\DAO;
 use Squid\MySql\IMySqlConnector;
 
 
+/**
+ * @skeleton
+ */
 interface IEventHandlerDAO
 {
 	/**

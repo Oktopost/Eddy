@@ -1,21 +1,43 @@
 <?php
-namespace Eddy\DAO;
+namespace Eddy\Module\DAO;
 
 
 use Eddy\Object\EventObject;
-use Eddy\Module\Base\DAO\IEventDAO;
+use Eddy\Base\Module\DAO\IEventDAO;
+use Eddy\Base\Module\DAO\Connector\IEventConnector;
 
 use Squid\MySql\IMySqlConnector;
 
 
+/**
+ * @autoload
+ */
 class EventDAO implements IEventDAO
 {
+	/** @var IEventConnector */
+	private $connector;
+	
+	
+	public function __construct(IEventConnector $connector)
+	{
+		$this->connector = $connector;
+	}
+
+
 	/**
 	 * @param array|IMySqlConnector $config
 	 */
 	public function initConnector($config): IEventDAO
 	{
-		// TODO: Implement initConnector() method.
+		if (is_array($config))
+		{
+			$sql = \Squid::MySql();
+			$sql->config()->setConfig($config);
+			
+			$config = $sql->getConnector();
+		}
+		
+		$this->connector->setMySQL($config);
 	}
 
 	public function load(string $eventId): ?EventObject
