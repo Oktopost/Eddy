@@ -1,8 +1,10 @@
 <?php
-namespace Eddy\Crawler\Base;
+namespace Eddy\Crawler;
 
 
+use Eddy\Crawler\Base\ILoader;
 use Eddy\Crawler\Base\Utils\IDirectoryScanner;
+
 
 class Loader implements ILoader
 {
