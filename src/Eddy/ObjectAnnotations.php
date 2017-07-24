@@ -4,7 +4,7 @@ namespace Eddy;
 
 use Annotation\Flag;
 
-class EventAnnotations
+class ObjectAnnotations
 {
 	use \Objection\TStaticClass;
 	
