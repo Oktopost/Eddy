@@ -3,7 +3,7 @@ namespace Eddy;
 /** @var $this \Skeleton\Base\IBoneConstructor */
 
 
-use Eddy\Crawler\Base\Loader;
+use Eddy\Crawler\Loader; 
 use Eddy\Crawler\Utils\DirectoryScanner;
 
 

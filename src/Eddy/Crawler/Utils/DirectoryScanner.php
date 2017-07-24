@@ -3,6 +3,7 @@ namespace Eddy\Crawler\Utils;
 
 
 use Eddy\Crawler\Base\Utils\IDirectoryScanner;
+use Eddy\ObjectAnnotations;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
@@ -25,6 +26,7 @@ class DirectoryScanner implements IDirectoryScanner
 		{
 			//TODO: throw exception
 		}
-		var_dump($this->dir);
+
+		return [];
 	}
 }
