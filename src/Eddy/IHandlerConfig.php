@@ -2,7 +2,7 @@
 namespace Eddy;
 
 
-interface IHandler
+interface IHandlerConfig
 {
 	public function delay(): float;
 	public function initialState(): string;

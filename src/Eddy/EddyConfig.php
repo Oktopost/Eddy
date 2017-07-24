@@ -3,7 +3,7 @@ namespace Eddy;
 
 
 use Eddy\Base\IEddyConfig;
-use Eddy\Engine\Base\Publisher\IPublisher;
+use Eddy\Base\Engine\IPublisher;
 use Eddy\Engine\Base\Publisher\Locker\ILocker;
 
 use DeepQueue\DeepQueue;
