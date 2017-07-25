@@ -2,24 +2,25 @@
 namespace Eddy;
 
 
-use Eddy\Base\IEddyConfig;
+use Eddy\Base\IConfig;
 use Eddy\Crawler\Base\ICrawler;
 use Eddy\Crawler\Crawler;
+use Eddy\Utils\Config;
 
 
 class Eddy
 {
-	/** @var IEddyConfig */
+	/** @var IConfig */
 	private $config;
 	
 	
 	public function __construct()
 	{
-		$this->config = new EddyConfig();
+		$this->config = new Config();
 	}
 
 
-	public function config(): IEddyConfig
+	public function config(): Config
 	{
 		return $this->config;
 	}

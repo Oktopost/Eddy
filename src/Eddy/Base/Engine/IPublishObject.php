@@ -2,10 +2,10 @@
 namespace Eddy\Base\Engine;
 
 
-use Eddy\Base\IEventConfig;
+use Eddy\Base\Config\IConfigConsumer;
 
 
-interface IPublishObject extends IPublisher
+interface IPublishObject extends IPublisher, IConfigConsumer
 {
 	
 }
