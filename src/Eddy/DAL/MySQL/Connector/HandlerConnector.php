@@ -1,9 +1,9 @@
 <?php
-namespace Eddy\Module\DAO\Connector;
+namespace Eddy\DAL\MySQL\Connector;
 
 
 use Eddy\Object\EventObject;
-use Eddy\Base\Module\DAO\Connector\IEventConnector;
+use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;
 
 use Objection\Mappers;
 
@@ -14,9 +14,9 @@ use Squid\MySql\Impl\Connectors\Object\Generic\GenericIdConnector;
 /**
  * @autoload
  */
-class EventConnector extends GenericIdConnector implements IEventConnector
+class HandlerConnector extends GenericIdConnector implements IHandlerConnector
 {
-	private const TABLE = 'EddyEvent';
+	private const TABLE = 'EddyHandler';
 	
 	
 	public function __construct()
@@ -33,7 +33,7 @@ class EventConnector extends GenericIdConnector implements IEventConnector
 	}
 
 
-	public function setMySQL(IMySqlConnector $mysql): IEventConnector
+	public function setMySQL(IMySqlConnector $mysql): IHandlerConnector
 	{
 		$this->setConnector($mysql);
 		return $this;

@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Module\DAO\Connector;
+namespace Eddy\DAL\MySQL\Base\Connector;
 
 
 use Squid\MySql\IMySqlConnector;

@@ -2,10 +2,11 @@
 namespace Eddy\Module\DAO;
 
 
+use Eddy\Base\DAL\IEventDAO;
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
-use Eddy\Base\Module\DAO\IHandlerDAO;
-use Eddy\Base\Module\DAO\Connector\IHandlerConnector;
+use Eddy\Base\DAL\IHandlerDAO;
+use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;
 
 use Squid\MySql\IMySqlConnector;
 
@@ -23,22 +24,12 @@ class HandlerDAO implements IHandlerDAO
 	{
 		$this->connector = $connector;
 	}
+
 	
-	
-	/**
-	 * @param array|IMySqlConnector $config
-	 */
-	public function initConnector($config): IHandlerDAO
+	public function setConnector(IMySqlConnector $connector): IHandlerDAO
 	{
-		if (is_array($config))
-		{
-			$sql = \Squid::MySql();
-			$sql->config()->setConfig($config);
-			
-			$config = $sql->getConnector();
-		}
-		
-		$this->connector->setMySQL($config);
+		$this->connector->setMySQL($connector);
+		return $this;
 	}
 
 	public function loadForEvent(EventObject $event): array

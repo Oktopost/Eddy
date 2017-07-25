@@ -2,7 +2,7 @@
 namespace Eddy\Module\DAO;
 
 
-use Eddy\Base\Module\DAO\IEventHandlerDAO;
+use Eddy\Base\DAL\ISubscribersDAO;
 
 use Squid\MySql\IMySqlConnector;
 
@@ -10,7 +10,7 @@ use Squid\MySql\IMySqlConnector;
 /**
  * @autoload
  */
-class EventHandlerDAO implements IEventHandlerDAO
+class SubscribersDAO implements ISubscribersDAO
 {
 	private const SUBSCRIBERS_TABLE = 'EddySubscribers';
 	private const EXECUTORS_TABLE = 'EddyExecutors';
@@ -20,23 +20,13 @@ class EventHandlerDAO implements IEventHandlerDAO
 	private $connector = null;
 	
 	
-	/**
-	 * @param array|IMySqlConnector $config
-	 */
-	public function setConnector($config): IEventHandlerDAO
+	public function setConnector(IMySqlConnector $connector): ISubscribersDAO
 	{
-		if (is_array($config))
-		{
-			$sql = \Squid::MySql();
-			$sql->config()->setConfig($config);
-			
-			$config = $sql->getConnector();
-		}
-		
-		$this->connector = $config;
+		$this->connector = $connector;
+		return $this;
 	}
 
-	public function upsert(string $eventId, string $handlerId): void
+	public function subscribe(string $eventId, string $handlerId): void
 	{
 		$this->connector
 			->upsert()
@@ -51,7 +41,7 @@ class EventHandlerDAO implements IEventHandlerDAO
 			->setDuplicateKeys(['Id']);
 	}
 
-	public function delete(string $eventId, string $handlerId): void
+	public function unsubscribe(string $eventId, string $handlerId): void
 	{
 		$this->connector
 			->delete()
