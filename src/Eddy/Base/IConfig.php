@@ -3,7 +3,6 @@ namespace Eddy\Base;
 
 
 use Eddy\Base\Config\IEngineConfig;
-use Squid\MySql\IMySqlConnector;
 
 
 /**

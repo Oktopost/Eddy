@@ -7,5 +7,5 @@ use Eddy\Base\IConfig;
 
 interface IConfigConsumer
 {
-	public function setConfig(IConfig $config);
+	public function setConfig(IConfig $config): void;
 }
