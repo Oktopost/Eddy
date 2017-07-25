@@ -1,10 +1,8 @@
 <?php
-namespace Eddy\Module\DAO;
+namespace Eddy\DAL\MySQL;
 
 
-use Eddy\Base\DAL\IEventDAO;
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;

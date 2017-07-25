@@ -43,6 +43,18 @@ class EventDAO implements IEventDAO
 	{
 		return $this->connector->selectObjectsByFields(['Id' => $ids]);
 	}
+	
+	public function loadByIdentifier(string $identifier): ?EventObject
+	{
+		$event = $this->loadByInterfaceName($identifier);
+		
+		if (!$event)
+		{
+			$event = $this->loadByName($identifier);
+		}
+		
+		return $event;
+	}
 
 	public function loadByName(string $name): ?EventObject
 	{

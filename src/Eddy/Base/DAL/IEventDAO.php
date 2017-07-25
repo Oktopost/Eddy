@@ -16,6 +16,8 @@ interface IEventDAO
 	
 	public function load(string $eventId): ?EventObject;
 	public function loadMultiple(array $ids): array;
+	public function loadByIdentifier(string $identifier): ?EventObject;
+	
 	public function loadByName(string $name): ?EventObject;
 	public function loadByInterfaceName(string $interfaceName): ?EventObject;
 	

@@ -11,8 +11,8 @@ use Eddy\Module\HandlerModule;
 use Eddy\Module\EventHandlerModule;
 
 use Eddy\DAL\MySQL\EventDAO;
-use Eddy\Module\DAO\HandlerDAO;
-use Eddy\Module\DAO\SubscribersDAO;
+use Eddy\DAL\MySQL\HandlerDAO;
+use Eddy\DAL\MySQL\SubscribersDAO;
 
 use Eddy\DAL\MySQL\Connector\EventConnector;
 use Eddy\DAL\MySQL\Connector\HandlerConnector;
