@@ -17,7 +17,7 @@ use Objection\LiteObject;
  * @property string	$EventInterface
  * @property string	$ProxyClassName
  * @property string	$ConfigClassName
- * @property string	$HandlerClassName
+ * @property string	$HandlerInterface
  * @property float	$Delay
  * @property int	$MaxBulkSize
  */

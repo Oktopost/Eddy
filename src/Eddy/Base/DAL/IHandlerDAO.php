@@ -19,7 +19,6 @@ interface IHandlerDAO
 	public function loadMultiple(array $ids): array;
 	public function loadByClassName(string $className): ?HandlerObject;
 	
-	public function create(HandlerObject $handler): bool;
-	public function update(HandlerObject $handler): bool;
+	public function save(HandlerObject $handler): bool;
 	public function delete(HandlerObject $handler): bool;
 }

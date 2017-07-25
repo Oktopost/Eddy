@@ -52,14 +52,9 @@ class HandlerDAO implements IHandlerDAO
 		]);
 	}
 
-	public function create(HandlerObject $handler): bool
+	public function save(HandlerObject $event): bool
 	{
-		return $this->connector->insert($handler);
-	}
-
-	public function update(HandlerObject $handler): bool
-	{
-		return $this->connector->update($handler);
+		return $this->connector->save($event);
 	}
 
 	public function delete(HandlerObject $handler): bool

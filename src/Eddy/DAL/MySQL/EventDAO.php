@@ -72,16 +72,11 @@ class EventDAO implements IEventDAO
 		]);
 	}
 
-	public function create(EventObject $event): bool
+	public function save(EventObject $event): bool
 	{
-		return $this->connector->insert($event);
+		return $this->connector->save($event);
 	}
-
-	public function update(EventObject $event): bool
-	{
-		return $this->connector->update($event);
-	}
-
+	
 	public function delete(EventObject $event): bool
 	{
 		$event->State = EventState::DELETED;

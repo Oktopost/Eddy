@@ -23,13 +23,10 @@ class EventConnector extends GenericIdConnector implements IEventConnector
 	{
 		parent::__construct();
 		
-		$mapper = Mappers::simple();
-		$mapper->setDefaultClassName(EventObject::class);
-		
 		$this
 			->setTable(self::TABLE)
 			->setIdKey('Id')
-			->setObjectMap($mapper);
+			->setObjectMap(EventObject::class, ['Created', 'Modified']);
 	}
 
 

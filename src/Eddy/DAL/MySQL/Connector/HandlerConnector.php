@@ -5,6 +5,7 @@ namespace Eddy\DAL\MySQL\Connector;
 use Eddy\Object\EventObject;
 use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;
 
+use Eddy\Object\HandlerObject;
 use Objection\Mappers;
 
 use Squid\MySql\IMySqlConnector;
@@ -23,13 +24,10 @@ class HandlerConnector extends GenericIdConnector implements IHandlerConnector
 	{
 		parent::__construct();
 		
-		$mapper = Mappers::simple();
-		$mapper->setDefaultClassName(EventObject::class);
-		
 		$this
 			->setTable(self::TABLE)
 			->setIdKey('Id')
-			->setObjectMap($mapper);
+			->setObjectMap(HandlerObject::class, ['Created', 'Modified']);
 	}
 
 
