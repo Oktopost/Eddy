@@ -4,5 +4,5 @@ namespace Eddy\Base\Engine;
 
 interface IQueueProvider
 {
-	public function getQueue(): IQueue;
+	public function getQueue(string $name): IQueue;
 }

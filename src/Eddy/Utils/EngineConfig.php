@@ -5,8 +5,10 @@ namespace Eddy\Utils;
 use Eddy\Base\Config\IEngineConfig;
 use Eddy\Base\Engine\ILockProvider;
 use Eddy\Base\Engine\IQueueProvider;
+use Eddy\Engine\Queue\DeepQueue\DeepQueueProvider;
 use Eddy\Exceptions\UnexpectedException;
 
+use Eddy\Scope;
 use Objection\LiteSetup;
 use Objection\LiteObject;
 
@@ -37,13 +39,13 @@ class EngineConfig extends LiteObject implements IEngineConfig
 	 */
 	public function setQueueProvider($config): EngineConfig
 	{
-		if ($config instanceof DeepQueue) $this->QueueProvider = $config;
+		if ($config instanceof DeepQueue) $this->QueueProvider = new DeepQueueProvider($config);
 		else if ($config instanceof IQueueProvider) $this->QueueProvider = $config;
-		else if (is_string($config)) $this->QueueProvider = new $config;
+		else if (is_string($config)) return $this->setQueueProvider(Scope::skeleton($config));
 		else
 		{
 			throw new UnexpectedException('Invalid input. $config must be IQueueProvider, ' . 
-				'DeepQueue instance, or class name');
+				'DeepQueue instance, or interface name');
 		}
 		
 		return $this;
