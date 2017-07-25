@@ -12,7 +12,7 @@
     "minimum-stability": "stable",
     "require": {
         "oktopost/skeleton": "^1.0",
-        "oktopost/squid": "dev-master#caac9ef",
+        "oktopost/squid": "dev-master#bfc151a",
         "oktopost/annotation": "^1.0",
         "oktopost/deep-queue": "^1.0",
         "predis/predis": "^1.1"

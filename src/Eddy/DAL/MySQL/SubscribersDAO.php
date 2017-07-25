@@ -100,44 +100,44 @@ class SubscribersDAO implements ISubscribersDAO
 
 	public function addSubscribers(array $eventToHandlers): void
 	{		
-//		$preparedData = $this->prepareData($eventToHandlers);
-//		
-//		$table = $this->connector
-//			->create()
-//			->temporary()
-//			->table(self::TEMP_TABLE);
-//		
-//		$table->column('Id')->int()->autoIncrement();
-//		$table->column(self::EVENT_FIELD)->char(35)->notNull();
-//		$table->column(self::HANDLER_FIELD)->char(35)->notNull();
-//		
-//		$table->primary('Id');
-//		$table->execute();
-//		
-//		$this->connector
-//			->insert()
-//			->into(self::TEMP_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
-//			->valuesBulk($preparedData)
-//			->execute();
-//		
-//		$rows = $this->connector->select()->from(self::TEMP_TABLE)->queryAll(true);
-//		
-//		$existSelect = $this->connector->select()
-//			->from(self::TEMP_TABLE, 'tt')
-//			->where(self::EVENT_FIELD . ' = tt.' . self::EVENT_FIELD)
-//			->where(self::HANDLER_FIELD . ' = tt.' . self::HANDLER_FIELD);
-//		
-//		$result = $this->connector->delete()
-//					->from(self::SUBSCRIBERS_TABLE)
-//					->whereNotExists($existSelect)
-//					->executeDml();
-//		
-//		var_dump($result);
-//		
-//		$result = $this->connector->select()
-//			->from(self::SUBSCRIBERS_TABLE)
-//			->whereNotExists($existSelect)
-//			->queryAll(true);
+		$preparedData = $this->prepareData($eventToHandlers);
+		
+		$table = $this->connector
+			->create()
+			->temporary()
+			->table(self::TEMP_TABLE);
+		
+		$table->column(self::EVENT_FIELD)->char(35)->notNull();
+		$table->column(self::HANDLER_FIELD)->char(35)->notNull();
+		
+		$table->unique('k_EventId_HandlerId', [self::EVENT_FIELD, self::HANDLER_FIELD]);
+		$table->execute();
+		
+		$this->connector
+			->insert()
+			->into(self::TEMP_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
+			->valuesBulk($preparedData)
+			->execute();
+		
+		$rows = $this->connector->select()->from(self::TEMP_TABLE)->queryAll(true);
+		
+		$existSelect = $this->connector->select()
+			->column(self::EVENT_FIELD, self::HANDLER_FIELD)
+			->from(self::TEMP_TABLE, 'tt');
+		
+		$result = $this->connector->delete()
+					->from(self::SUBSCRIBERS_TABLE)
+					->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
+					->executeDml();
+		
+		var_dump($result);
+		
+		$result = $this->connector->select()
+			->from(self::SUBSCRIBERS_TABLE)
+			->whereNotExists($existSelect)
+			->queryAll(true);
+		
+		var_dump($result);
 	}
 
 	public function addExecutors(array $handlerToEvents): void
