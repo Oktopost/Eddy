@@ -3,6 +3,7 @@ namespace Eddy\Module\DAO;
 
 
 use Eddy\Base\DAL\IEventDAO;
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 use Eddy\Base\DAL\IHandlerDAO;
@@ -32,33 +33,40 @@ class HandlerDAO implements IHandlerDAO
 		return $this;
 	}
 
-	public function loadForEvent(EventObject $event): array
+	public function load(string $eventId): ?HandlerObject
 	{
-		// TODO: Implement loadForEvent() method.
+		return $this->connector->selectFirstObjectByFields([
+			'Id'	=> $eventId,
+			'State'	=> EventState::EXISTING
+		]);
+	}
+	
+	public function loadMultiple(array $ids): array
+	{
+		return $this->connector->selectObjectsByFields(['Id' => $ids]);
 	}
 
-	public function load(string $id): ?HandlerObject
+	public function loadByClassName(string $className): ?HandlerObject
 	{
-		// TODO: Implement load() method.
+		return $this->connector->selectFirstObjectByFields([
+			'HandlerClassName'	=> $className,
+			'State'	=> EventState::EXISTING
+		]);
 	}
 
-	public function loadByClassName(string $class): ?HandlerObject
+	public function create(HandlerObject $handler): bool
 	{
-		// TODO: Implement loadByClassName() method.
+		return $this->connector->insert($handler);
 	}
 
-	public function create(HandlerObject $handler): void
+	public function update(HandlerObject $handler): bool
 	{
-		// TODO: Implement create() method.
-	}
-
-	public function update(HandlerObject $handler): void
-	{
-		// TODO: Implement update() method.
+		return $this->connector->update($handler);
 	}
 
 	public function delete(HandlerObject $handler): bool
 	{
-		// TODO: Implement delete() method.
+		$handler->State = EventState::DELETED;
+		return $this->update($handler);
 	}
 }

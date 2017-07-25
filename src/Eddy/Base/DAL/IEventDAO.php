@@ -15,10 +15,11 @@ interface IEventDAO
 	public function setConnector(IMySqlConnector $connector): IEventDAO;
 	
 	public function load(string $eventId): ?EventObject;
+	public function loadMultiple(array $ids): array;
 	public function loadByName(string $name): ?EventObject;
-	public function loadByClassName(string $className): ?EventObject;
+	public function loadByInterfaceName(string $interfaceName): ?EventObject;
 	
-	public function create(EventObject $event): void;
-	public function update(EventObject $event): void;
+	public function create(EventObject $event): bool;
+	public function update(EventObject $event): bool;
 	public function delete(EventObject $event): bool;
 }

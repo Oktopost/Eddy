@@ -15,11 +15,11 @@ interface IHandlerDAO
 {
 	public function setConnector(IMySqlConnector $connector): IHandlerDAO;
 	
-	public function loadForEvent(EventObject $event): array;
 	public function load(string $id): ?HandlerObject;
-	public function loadByClassName(string $class): ?HandlerObject;
+	public function loadMultiple(array $ids): array;
+	public function loadByClassName(string $className): ?HandlerObject;
 	
-	public function create(HandlerObject $handler): void;
-	public function update(HandlerObject $handler): void;
+	public function create(HandlerObject $handler): bool;
+	public function update(HandlerObject $handler): bool;
 	public function delete(HandlerObject $handler): bool;
 }

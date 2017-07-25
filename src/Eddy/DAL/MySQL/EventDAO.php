@@ -2,6 +2,7 @@
 namespace Eddy\DAL\MySQL;
 
 
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\Base\DAL\IEventDAO;
 use Eddy\DAL\MySQL\Base\Connector\IEventConnector;
@@ -32,31 +33,46 @@ class EventDAO implements IEventDAO
 
 	public function load(string $eventId): ?EventObject
 	{
-		// TODO: Implement load() method.
+		return $this->connector->selectFirstObjectByFields([
+			'Id'	=> $eventId,
+			'State'	=> EventState::EXISTING
+		]);
+	}
+
+	public function loadMultiple(array $ids): array
+	{
+		return $this->connector->selectObjectsByFields(['Id' => $ids]);
 	}
 
 	public function loadByName(string $name): ?EventObject
 	{
-		// TODO: Implement loadByName() method.
+		return $this->connector->selectFirstObjectByFields([
+			'Name'	=> $name,
+			'State'	=> EventState::EXISTING
+		]);
 	}
 
-	public function loadByClassName(string $className): ?EventObject
+	public function loadByInterfaceName(string $interfaceName): ?EventObject
 	{
-		// TODO: Implement loadByClassName() method.
+		return $this->connector->selectFirstObjectByFields([
+			'EventInterface'	=> $interfaceName,
+			'State'	=> EventState::EXISTING
+		]);
 	}
 
-	public function create(EventObject $event): void
+	public function create(EventObject $event): bool
 	{
-		// TODO: Implement create() method.
+		return $this->connector->insert($event);
 	}
 
-	public function update(EventObject $event): void
+	public function update(EventObject $event): bool
 	{
-		// TODO: Implement update() method.
+		return $this->connector->update($event);
 	}
 
 	public function delete(EventObject $event): bool
 	{
-		// TODO: Implement delete() method.
+		$event->State = EventState::DELETED;
+		return $this->update($event);
 	}
 }
