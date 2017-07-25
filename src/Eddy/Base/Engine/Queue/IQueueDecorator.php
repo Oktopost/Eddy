@@ -1,6 +1,8 @@
 <?php
-namespace Eddy\Base\Engine;
+namespace Eddy\Base\Engine\Queue;
 
+
+use Eddy\Base\Engine\IQueue;
 
 interface IQueueDecorator extends IQueue
 {

@@ -4,7 +4,7 @@ namespace Eddy;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
-use Eddy\Base\Engine\IPublisher;
+use Eddy\Base\Engine\Publish\IPublisher;
 use Eddy\Engine\Proxy\DefaultProxy;
 use Eddy\Exceptions\InvalidEventException;
 

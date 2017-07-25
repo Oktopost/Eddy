@@ -3,7 +3,7 @@ namespace Eddy\Engine\Queue\DeepQueue;
 
 
 use Eddy\Base\Engine\IQueue;
-use Eddy\Base\Engine\IQueueProvider;
+use Eddy\Base\Engine\Queue\IQueueProvider;
 
 use DeepQueue\DeepQueue;
 

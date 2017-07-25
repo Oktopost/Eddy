@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Engine;
+namespace Eddy\Base\Engine\Publish;
 
 
 use Eddy\Base\Config\IConfigConsumer;

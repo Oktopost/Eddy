@@ -2,7 +2,7 @@
 namespace Eddy;
 
 
-use Eddy\Base\Engine\IPublisher;
+use Eddy\Base\Engine\Publish\IPublisher;
 
 
 interface IEventProxy

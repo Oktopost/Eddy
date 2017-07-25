@@ -3,7 +3,7 @@ namespace Eddy\Engine\Proxy;
 
 
 use Eddy\IEventProxy;
-use Eddy\Base\Engine\IPublisher;
+use Eddy\Base\Engine\Publish\IPublisher;
 
 
 class AbstractProxy implements IEventProxy
