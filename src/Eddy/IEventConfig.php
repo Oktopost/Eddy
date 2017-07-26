@@ -10,4 +10,5 @@ interface IEventConfig
 	public function eventClassName(): string;
 	public function proxyClassName(): ?string;
 	public function handlersInterface(): string;
+	public function prepare(array $data): ?array;
 }
