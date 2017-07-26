@@ -19,7 +19,7 @@ class DeepQueueProvider implements IQueueProvider
 		$this->deepQueue = $queue;
 	}
 	
-
+	
 	public function getQueue(string $name): IQueue
 	{
 		return new DeepQueueDecorator($this->deepQueue->get($name));

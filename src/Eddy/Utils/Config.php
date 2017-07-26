@@ -5,7 +5,6 @@ namespace Eddy\Utils;
 use Eddy\DAL\MySQLDAL;
 use Eddy\Base\IDAL;
 use Eddy\Base\IConfig;
-use Eddy\Base\Config\IEngineConfig;
 use Eddy\Exceptions\UnexpectedException;
 
 use Objection\LiteObject;
@@ -14,6 +13,10 @@ use Objection\LiteSetup;
 use Squid\MySql;
 
 
+/**
+ * @property EngineConfig	$Engine
+ * @property Naming			$Naming
+ */
 class Config extends LiteObject implements IConfig
 {
 	/** @var IDAL */
@@ -26,7 +29,8 @@ class Config extends LiteObject implements IConfig
 	protected function _setup()
 	{
 		return [
-			'Engine'	=> LiteSetup::createInstanceOf(IEngineConfig::class),
+			'Engine'	=> LiteSetup::createInstanceOf(new EngineConfig()),
+			'Naming'	=> LiteSetup::createInstanceOf(new Naming()),
 		];
 	}
 	

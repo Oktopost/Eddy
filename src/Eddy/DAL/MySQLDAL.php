@@ -29,30 +29,39 @@ class MySQLDAL implements IDAL
 	public function __construct(IMySqlConnector $connector)
 	{
 		$this->connector = $connector;
-		
-		$this->handlerDAO = Scope::skeleton(IHandlerDAO::class);
-		$this->handlerDAO->setConnector($connector);
-		
-		$this->eventDAO = Scope::skeleton(IEventDAO::class);
-		$this->eventDAO->setConnector($connector);
-		
-		$this->subscribersDAO = Scope::skeleton(ISubscribersDAO::class);
-		$this->subscribersDAO->setConnector($connector);
 	}
 
 	
 	public function handlers(): IHandlerDAO
 	{
+		if (!$this->handlerDAO)
+		{
+			$this->handlerDAO = Scope::skeleton(IHandlerDAO::class);
+			$this->handlerDAO->setConnector($this->connector);
+		}
+		
 		return $this->handlerDAO;
 	}
 
 	public function events(): IEventDAO
 	{
+		if (!$this->eventDAO)
+		{
+			$this->eventDAO = Scope::skeleton(IEventDAO::class);
+			$this->eventDAO->setConnector($this->connector);
+		}
+		
 		return $this->eventDAO;
 	}
 
 	public function subscribers(): ISubscribersDAO
 	{
+		if (!$this->subscribersDAO)
+		{
+			$this->subscribersDAO = Scope::skeleton(ISubscribersDAO::class);
+			$this->subscribersDAO->setConnector($this->connector);
+		}
+		
 		return $this->subscribersDAO;
 	}
 

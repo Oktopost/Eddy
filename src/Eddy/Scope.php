@@ -15,8 +15,7 @@ class Scope
 	
 	
 	/**
-	 * @return mixed
-	 * @return mixed|Skeleton
+	 * @return Skeleton|mixed
 	 */
 	public static function skeleton(?string $interface = null)
 	{

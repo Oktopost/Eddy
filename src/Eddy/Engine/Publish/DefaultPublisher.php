@@ -41,9 +41,9 @@ class DefaultPublisher implements IDefaultPublisher
 		$this->queueName = $this->config->Naming->EventQueuePrefix . $this->object->Name;
 	}
 	
-	private function locker(string $name): ILocker
+	private function locker(): ILocker
 	{
-		return $this->config->Engine->Locker->get($name);
+		return $this->config->Engine->Locker->get($this->queueName);
 	}
 	
 	private function enqueue(array $data): void
@@ -54,7 +54,7 @@ class DefaultPublisher implements IDefaultPublisher
 	
 	private function startQueue()
 	{
-		$locker = $this->locker($this->queueName);
+		$locker = $this->locker();
 			
 		if ($locker->isLocked())
 			return;
@@ -80,7 +80,7 @@ class DefaultPublisher implements IDefaultPublisher
 	{
 		$this->refreshObject();
 		
-		if ($this->object->State == EventState::STOPPED)
+		if (!in_array($this->object->State, EventState::ACTIVE_QUEUE_STATES))
 			return;
 		
 		$this->enqueue($data);

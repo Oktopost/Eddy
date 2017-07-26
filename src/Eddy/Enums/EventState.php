@@ -28,6 +28,11 @@ class EventState
 	public const DELETED	= 'deleted';
 	
 	
+	public const ACTIVE_QUEUE_STATES = [
+		self::RUNNING,
+		self::PAUSED
+	];
+	
 	public const EXISTING = [
 		self::RUNNING,
 		self::PAUSED,
