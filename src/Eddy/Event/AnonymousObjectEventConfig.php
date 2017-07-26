@@ -7,7 +7,7 @@ use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 
 
-class UnanimousObjectEventConfig implements IEventConfig
+class AnonymousObjectEventConfig implements IEventConfig
 {
 	/** @var EventObject */
 	private $object;

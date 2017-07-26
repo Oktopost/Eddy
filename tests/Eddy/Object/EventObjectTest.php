@@ -4,7 +4,7 @@ namespace Eddy\Object;
 
 use Eddy\IEventConfig;
 use Eddy\Utils\Naming;
-use Eddy\Event\UnanimousObjectEventConfig;
+use Eddy\Event\AnonymousObjectEventConfig;
 
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class EventObjectTest extends TestCase
 	{
 		$object = new EventObject();
 		
-		self::assertInstanceOf(UnanimousObjectEventConfig::class, $object->getConfig());
+		self::assertInstanceOf(AnonymousObjectEventConfig::class, $object->getConfig());
 	}
 
 	/**

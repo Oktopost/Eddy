@@ -6,7 +6,7 @@ use Eddy\IEventConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Config\INaming;
 use Eddy\Enums\EventState;
-use Eddy\Event\UnanimousObjectEventConfig;
+use Eddy\Event\AnonymousObjectEventConfig;
 
 use Eddy\Exceptions\ConfigMismatchException;
 
@@ -56,7 +56,7 @@ class EventObject extends LiteObject implements IEddyQueueObject
 	{
 		if (!$this->ConfigClassName)
 		{
-			return new UnanimousObjectEventConfig($this);
+			return new AnonymousObjectEventConfig($this);
 		}
 		else if (!class_exists($this->ConfigClassName))
 		{

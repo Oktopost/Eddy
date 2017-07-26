@@ -7,12 +7,12 @@ use Eddy\Object\EventObject;
 use PHPUnit\Framework\TestCase;
 
 
-class UnanimousObjectEventConfigTest extends TestCase
+class AnonymousObjectEventConfigTest extends TestCase
 {
 	public function test_sanity()
 	{
 		$object = new EventObject();
-		$config = new UnanimousObjectEventConfig($object);
+		$config = new AnonymousObjectEventConfig($object);
 		
 		$object->Name				= 'NAME';
 		$object->Delay				= 0.54;
