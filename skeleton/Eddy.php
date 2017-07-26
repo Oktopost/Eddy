@@ -34,11 +34,18 @@ $this->set(DAL\MySQL\Base\Connector\IEventConnector::class, EventConnector::clas
 $this->set(DAL\MySQL\Base\Connector\IHandlerConnector::class, HandlerConnector::class);
 
 
+use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Queue\IQueueBuilder;
-use Eddy\Base\Engine\Publish\IDefaultPublisher;
+use Eddy\Base\Engine\Publish\IPublisherObject;
+use Eddy\Base\Engine\Publish\IPublishBuilder;
 
+use Eddy\Engine\Queue\MainQueue;
 use Eddy\Engine\Queue\QueueBuilder;
-use Eddy\Engine\Publish\DefaultPublisher;
+use Eddy\Engine\Publish\PublisherObject;
+use Eddy\Engine\Publish\PublishBuilder;
 
-$this->set(IQueueBuilder::class,		QueueBuilder::class);
-$this->set(IDefaultPublisher::class,	DefaultPublisher::class);
+
+$this->set(IMainQueue::class,		MainQueue::class);
+$this->set(IQueueBuilder::class,	QueueBuilder::class);
+$this->set(IPublishBuilder::class,	PublishBuilder::class);
+$this->set(IPublisherObject::class,	PublisherObject::class);

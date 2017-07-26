@@ -6,6 +6,7 @@ use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
 use Eddy\Crawler\Base\ICrawler;
 use Eddy\Crawler\Crawler;
+use Eddy\Object\EventObject;
 use Eddy\Utils\Config;
 
 
@@ -37,7 +38,7 @@ class Eddy
 	 */
 	public function event(string $interface)
 	{
-		return $this->engine->event('1');
+		return $this->engine->event(new EventObject());
 	}
 	
 	public function crawler(): ICrawler

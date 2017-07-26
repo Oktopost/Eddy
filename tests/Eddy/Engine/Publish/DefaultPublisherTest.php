@@ -61,7 +61,7 @@ class DefaultPublisherTest extends TestCase
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		if ($isEnqueued)
 		{
@@ -82,7 +82,7 @@ class DefaultPublisherTest extends TestCase
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		if ($isCalled)
 		{
@@ -102,7 +102,7 @@ class DefaultPublisherTest extends TestCase
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		$this->locker->method('isLocked')->willReturn($isLocked);
 		
@@ -168,13 +168,13 @@ class DefaultPublisherTest extends TestCase
 		return $object;
 	}
 	
-	private function subject(): DefaultPublisher
+	private function subject(): PublisherObject
 	{
 		$this->mockIQueueBuilder();
 		$this->mockIMainQueue();
 		
-		/** @var DefaultPublisher $subject */
-		$subject = Scope::skeleton()->load(DefaultPublisher::class);
+		/** @var PublisherObject $subject */
+		$subject = Scope::skeleton()->load(PublisherObject::class);
 		$subject->setConfig($this->config);
 		
 		return $subject;
@@ -191,10 +191,10 @@ class DefaultPublisherTest extends TestCase
 		$builder = $this->getMockBuilder(IQueueBuilder::class)->getMock();
 		\UnitTestScope::override(IQueueBuilder::class, $builder);
 		
-		/** @var DefaultPublisher $subject */
-		$subject = Scope::skeleton()->load(DefaultPublisher::class);
+		/** @var PublisherObject $subject */
+		$subject = Scope::skeleton()->load(PublisherObject::class);
 		$subject->setConfig($this->config);
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		$builder->expects($this->once())->method('getQueue')->with($object)->willReturn($this->queue);
 		
@@ -208,7 +208,7 @@ class DefaultPublisherTest extends TestCase
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		$this->config->Engine->Locker = $this->mockILockProvider();
 		$this->config->Engine->Locker
@@ -227,7 +227,7 @@ class DefaultPublisherTest extends TestCase
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
-		$subject->setEventObject($object);
+		$subject->setObject($object);
 		
 		$this->locker->method('isLocked')->willReturn(false);
 		$this->main->expects($this->once())->method('schedule')->with($object);

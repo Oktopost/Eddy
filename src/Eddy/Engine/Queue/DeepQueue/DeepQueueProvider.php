@@ -3,6 +3,7 @@ namespace Eddy\Engine\Queue\DeepQueue;
 
 
 use Eddy\Base\Engine\IQueue;
+use Eddy\Base\Engine\Queue\IQueueManager;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 
 use DeepQueue\DeepQueue;
@@ -22,6 +23,11 @@ class DeepQueueProvider implements IQueueProvider
 	
 	public function getQueue(string $name): IQueue
 	{
-		return new DeepQueueDecorator($this->deepQueue, $name);
+		return new DeepQueueAdapter($this->deepQueue, $name);
+	}
+
+	public function getManager(string $name): IQueueManager
+	{
+		return new DeepQueueManagerAdapter($this->deepQueue, $name);
 	}
 }

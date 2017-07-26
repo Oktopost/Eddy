@@ -6,7 +6,7 @@ use DeepQueue\DeepQueue;
 use Eddy\Base\Engine\IQueue;
 
 
-class DeepQueueDecorator implements IQueue
+class DeepQueueAdapter implements IQueue
 {
 	private $name;
 	
@@ -33,11 +33,5 @@ class DeepQueueDecorator implements IQueue
 	public function dequeue(int $maxCount): array
 	{
 		return $this->queue->dequeue($maxCount);
-	}
-	
-	public function clear()
-	{
-		throw new \Exception('TODO');
-		// $this->deepQueue->manager($this->name)->clear();
 	}
 }

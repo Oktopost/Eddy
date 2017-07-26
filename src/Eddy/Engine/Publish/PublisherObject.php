@@ -3,16 +3,16 @@ namespace Eddy\Engine\Publish;
 
 
 use Eddy\Base\IConfig;
-use Eddy\Base\Engine\Lock\ILocker;
-use Eddy\Base\Engine\Publish\IDefaultPublisher;
 use Eddy\Base\IEddyQueueObject;
+use Eddy\Base\Engine\Lock\ILocker;
+use Eddy\Base\Engine\Publish\IPublisherObject;
 use Eddy\Enums\EventState;
 
 
 /**
  * @autoload
  */
-class DefaultPublisher implements IDefaultPublisher
+class PublisherObject implements IPublisherObject
 {
 	/**
 	 * @autoload
@@ -63,7 +63,7 @@ class DefaultPublisher implements IDefaultPublisher
 		$this->builder->setConfig($config);
 	}
 	
-	public function setEventObject(IEddyQueueObject $object): void
+	public function setObject(IEddyQueueObject $object): void
 	{
 		$this->object = $object;
 	}

@@ -8,4 +8,5 @@ use Eddy\Base\Engine\IQueue;
 interface IQueueProvider
 {
 	public function getQueue(string $name): IQueue;
+	public function getManager(string $name): IQueueManager;
 }
