@@ -118,26 +118,26 @@ class SubscribersDAO implements ISubscribersDAO
 			->into(self::TEMP_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
 			->valuesBulk($preparedData)
 			->execute();
-		
-		$rows = $this->connector->select()->from(self::TEMP_TABLE)->queryAll(true);
-		
+
 		$existSelect = $this->connector->select()
 			->column(self::EVENT_FIELD, self::HANDLER_FIELD)
 			->from(self::TEMP_TABLE, 'tt');
 		
-		$result = $this->connector->delete()
-					->from(self::SUBSCRIBERS_TABLE)
+		$this->connector->delete()
+				->from(self::SUBSCRIBERS_TABLE)
+				->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
+				->executeDml();
+		 
+		$this->connector->delete()
+					->from(self::EXECUTORS_TABLE)
 					->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
 					->executeDml();
-		
-		var_dump($result);
-		
-		$result = $this->connector->select()
-			->from(self::SUBSCRIBERS_TABLE)
-			->whereNotExists($existSelect)
-			->queryAll(true);
-		
-		var_dump($result);
+
+		$this->connector->insert()
+			->into(self::SUBSCRIBERS_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
+			->asSelect($existSelect)
+			->ignore()
+			->executeDml();
 	}
 
 	public function addExecutors(array $handlerToEvents): void
