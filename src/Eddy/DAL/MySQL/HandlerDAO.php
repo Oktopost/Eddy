@@ -43,6 +43,26 @@ class HandlerDAO implements IHandlerDAO
 	{
 		return $this->connector->selectObjectsByFields(['Id' => $ids]);
 	}
+	
+	public function loadByIdentifier(string $identifier): ?HandlerObject 
+	{
+		$handler = $this->loadByClassName($identifier);
+		
+		if (!$handler)
+		{
+			$handler = $this->loadByName($identifier);
+		}
+		
+		return $handler;
+	}
+	
+	public function loadByName(string $name): ?HandlerObject
+	{
+		return $this->connector->selectFirstObjectByFields([
+			'Name'	=> $name,
+			'State'	=> EventState::EXISTING
+		]);
+	}
 
 	public function loadByClassName(string $className): ?HandlerObject
 	{

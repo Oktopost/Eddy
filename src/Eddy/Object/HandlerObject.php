@@ -12,6 +12,7 @@ use Objection\LiteObject;
  * @property string	$Id
  * @property string $Created
  * @property string $Modified
+ * @property string	$Name
  * @property string	$State
  * @property string	$HandlerClassName,
  * @property float	$Delay,
@@ -25,6 +26,7 @@ class HandlerObject extends LiteObject
 			'Id'				=> LiteSetup::createString(),
 			'Created'			=> LiteSetup::createString(),
 			'Modified'			=> LiteSetup::createString(),
+			'Name'				=> LiteSetup::createString(),
 			'State'				=> LiteSetup::createString(EventState::RUNNING),
 			'HandlerClassName'	=> LiteSetup::createString(),
 			'ConfigClassName'	=> LiteSetup::createString(null),
