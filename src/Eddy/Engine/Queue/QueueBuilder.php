@@ -2,11 +2,12 @@
 namespace Eddy\Engine\Queue;
 
 
+use Eddy\Base\IConfig;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Config\IEngineConfig;
 use Eddy\Base\Engine\Queue\IQueueDecorator;
 use Eddy\Base\Engine\Queue\IQueueBuilder;
-use Eddy\Base\IConfig;
+
 use Eddy\Scope;
 
 
