@@ -80,6 +80,6 @@ class HandlerDAO implements IHandlerDAO
 	public function delete(HandlerObject $handler): bool
 	{
 		$handler->State = EventState::DELETED;
-		return $this->update($handler);
+		return $this->save($handler);
 	}
 }

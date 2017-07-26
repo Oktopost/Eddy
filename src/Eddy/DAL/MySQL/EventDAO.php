@@ -80,6 +80,6 @@ class EventDAO implements IEventDAO
 	public function delete(EventObject $event): bool
 	{
 		$event->State = EventState::DELETED;
-		return $this->update($event);
+		return $this->save($event);
 	}
 }
