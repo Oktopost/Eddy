@@ -17,7 +17,7 @@ use Eddy\Utils\Config;
 use PHPUnit\Framework\TestCase;
 
 
-class DefaultPublisherTest extends TestCase
+class PublisherObjectTest extends TestCase
 {
 	/** @var \PHPUnit_Framework_MockObject_MockObject|IQueue */
 	private $queue;
