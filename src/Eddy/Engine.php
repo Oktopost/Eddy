@@ -2,6 +2,7 @@
 namespace Eddy;
 
 
+use Eddy\Base\Engine\Publish\IPublishBuilder;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
 use Eddy\Base\Engine\Publish\IPublisher;
@@ -28,13 +29,12 @@ class Engine implements IEngine
 	 * @return mixed
 	 */
 	private function getPublisher(EventObject $object): IPublisher
-	{
-		/** @var IPublisherObject $publisher */
-		$publisher = Scope::skeleton(IPublisherObject::class);
-		$publisher->setConfig($this->config());
-		$publisher->setObject($object);
+	{ 
+		/** @var IPublishBuilder $publisher */
+		$publisher = Scope::skeleton(IPublishBuilder::class);
+		$publisher->setConfig($this->config);
 		
-		return $publisher;
+		return $publisher->getEventPublisher($object);
 	}
 	
 	
