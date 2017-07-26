@@ -37,17 +37,18 @@ class PublishBuilderTest extends TestCase
 	}
 	
 	
-	public function test_getEventPublisher_ReturnIPublisherObject()
+	public function test_getEventPublisher_ReturnPreparePayloadPublisherObject()
 	{
-		$mock = $this->mockIPublisherObject();
+		$this->mockIPublisherObject();
 		
 		$obj = new PublishBuilder();
 		$obj->setConfig(new Config());
 		
-		$publisher = $obj->getEventPublisher(new EventObject());
 		
-		
-		self::assertEquals($mock, $publisher);
+		self::assertInstanceOf(
+			PreparePayloadPublisher::class, 
+			$obj->getEventPublisher(new EventObject())
+		);
 	}
 	
 	public function test_getEventPublisher_ConfigPassedToPublisherObject()

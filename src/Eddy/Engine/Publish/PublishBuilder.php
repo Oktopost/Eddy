@@ -39,7 +39,12 @@ class PublishBuilder implements IPublishBuilder
 
 	public function getEventPublisher(EventObject $object): IPublisher
 	{
-		return $this->getPublisherFor($object);
+		$publisher = $this->getPublisherFor($object);
+		
+		$prepare = new PreparePayloadPublisher($publisher);
+		$prepare->setEventConfig($object->getConfig());
+		
+		return $prepare;
 	}
 
 	/**
