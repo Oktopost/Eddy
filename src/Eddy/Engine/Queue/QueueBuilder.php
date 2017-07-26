@@ -3,43 +3,57 @@ namespace Eddy\Engine\Queue;
 
 
 use Eddy\Base\IConfig;
+use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\IQueue;
-use Eddy\Base\Config\IEngineConfig;
-use Eddy\Base\Engine\Queue\IQueueDecorator;
 use Eddy\Base\Engine\Queue\IQueueBuilder;
+use Eddy\Base\Engine\Queue\IQueueDecorator;
+
+use Eddy\Exceptions\UnexpectedException;
 
 use Eddy\Scope;
 
 
 class QueueBuilder implements IQueueBuilder
 {
-	/** @var IEngineConfig */
+	/** @var IConfig */
 	private $config;
 	
 	
-	private function getDecorator($decorator, IQueue $child)
+	private function getDecorator($decorator): IQueueDecorator
 	{
-		if ($decorator instanceof IQueueDecorator) $decorator = clone $decorator;
-		else if (is_string($decorator)) $decorator = Scope::skeleton($decorator);
+		if ($decorator instanceof IQueueDecorator)
+		{
+			return clone $decorator;
+		}
+		else if (is_string($decorator))
+		{
+			return Scope::skeleton($decorator);
+		}
 		
-		$decorator->child($child);
+		throw new UnexpectedException('Expecting IQueueDecorator instance or class name.');
 	}
 	
 	
 	public function setConfig(IConfig $config): void
 	{
-		$this->config = $config->Engine;
+		$this->config = $config;
 	}
 	
-	
-	public function getQueue(string $name): IQueue
+	public function getQueue(IEddyQueueObject $object): IQueue
 	{
-		$queue = $this->config->QueueProvider->getQueue($name);
-		$decorators = $this->config->QueueDecorators;
+		$name = $object->getQueueNaming($this->config->Naming);
+		$engineConfig = $this->config->Engine;
+		
+		$queue = $engineConfig->QueueProvider->getQueue($name);
+		$decorators = $engineConfig->QueueDecorators;
 		
 		foreach ($decorators as $decorator)
 		{
-			$queue = $this->getDecorator($decorator, $queue);
+			$item = $this->getDecorator($decorator);
+			$item->child($queue);
+			$item->setObject($object);
+			
+			$queue = $item;
 		}
 		
 		return $queue;

@@ -2,6 +2,7 @@
 namespace Eddy\Base\Engine;
 
 
+use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Config\IConfigConsumer;
 
 
@@ -10,5 +11,5 @@ use Eddy\Base\Config\IConfigConsumer;
  */
 interface IMainQueue extends IConfigConsumer
 {
-	public function schedule(string $name): void;
+	public function schedule(IEddyQueueObject $object): void;
 }

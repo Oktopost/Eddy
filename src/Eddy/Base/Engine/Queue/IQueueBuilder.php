@@ -2,6 +2,7 @@
 namespace Eddy\Base\Engine\Queue;
 
 
+use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Config\IConfigConsumer;
 
@@ -11,5 +12,5 @@ use Eddy\Base\Config\IConfigConsumer;
  */
 interface IQueueBuilder extends IConfigConsumer
 {
-	public function getQueue(string $name): IQueue;
+	public function getQueue(IEddyQueueObject $object): IQueue;
 }

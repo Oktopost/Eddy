@@ -181,34 +181,12 @@ class DefaultPublisherTest extends TestCase
 	}
 	
 	
-	public function test_publish_ObjectReloadedByIdFromDAO()
-	{
-		$object1 = $this->object(11);
-		$object1->State = EventState::RUNNING;
-		
-		$object2 = $this->object();
-		$object2->State = EventState::STOPPED;
-		
-		$this->eventDAO = $this->getMockBuilder(IEventDAO::class)->getMock();
-		$this->eventDAO->expects($this->once())->method('load')->with(11)->willReturn($object2);
-		\UnitTestScope::override(IEventDAO::class, $this->eventDAO);
-		
-		$subject = $this->subject();
-		$subject->setEventObject($object1);
-		
-		
-		$subject->publish(['a']);
-	}
-	
-	public function test_publish_CorrectNameUsedForQueue()
+	public function test_publish_ObjectPassedToQueueBuilder()
 	{
 		$object = $this->object();
 		$this->mockIEventDAO();
 		$this->mockIMainQueue();
 		$this->mockIQueue();
-		
-		$this->config->Naming->EventQueuePrefix = '123:';
-		$object->Name = 'abc';
 		
 		$builder = $this->getMockBuilder(IQueueBuilder::class)->getMock();
 		\UnitTestScope::override(IQueueBuilder::class, $builder);
@@ -218,35 +196,32 @@ class DefaultPublisherTest extends TestCase
 		$subject->setConfig($this->config);
 		$subject->setEventObject($object);
 		
-		$builder->expects($this->once())->method('getQueue')->with('123:abc')->willReturn($this->queue);
+		$builder->expects($this->once())->method('getQueue')->with($object)->willReturn($this->queue);
 		
 		
 		$subject->publish(['a']);
 	}
 	
-	public function test_publish_CorrectNameUsedForLocker()
+	public function test_publish_ObjectPAssedToLocker()
 	{
 		$object = $this->object();
-		$object->Name = 'abc';
-		
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
 		$subject->setEventObject($object);
 		
-		$this->config->Naming->EventQueuePrefix = '123:';
 		$this->config->Engine->Locker = $this->mockILockProvider();
 		$this->config->Engine->Locker
 			->expects($this->once())
 			->method('get')
-			->with('123:abc')
+			->with($object)
 			->willReturn($this->locker);
 		
 		
 		$subject->publish(['a']);
 	}
 	
-	public function test_publish_CorrectEventNameScheduled()
+	public function test_publish_ObjectPassedToScheduled()
 	{
 		$object = $this->object();
 		$this->mockIEventDAO();
@@ -254,11 +229,8 @@ class DefaultPublisherTest extends TestCase
 		$subject = $this->subject();
 		$subject->setEventObject($object);
 		
-		$object->Name = 'abc';
-		$this->config->Naming->EventQueuePrefix = '123:';
-		
 		$this->locker->method('isLocked')->willReturn(false);
-		$this->main->expects($this->once())->method('schedule')->with('123:abc');
+		$this->main->expects($this->once())->method('schedule')->with($object);
 		
 		
 		$subject->publish(['a']);

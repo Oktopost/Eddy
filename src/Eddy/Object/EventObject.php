@@ -2,6 +2,8 @@
 namespace Eddy\Object;
 
 
+use Eddy\Base\IEddyQueueObject;
+use Eddy\Base\Config\INaming;
 use Eddy\Enums\EventState;
 
 use Objection\LiteSetup;
@@ -21,7 +23,7 @@ use Objection\LiteObject;
  * @property float	$Delay
  * @property int	$MaxBulkSize
  */
-class EventObject extends LiteObject
+class EventObject extends LiteObject implements IEddyQueueObject
 {
 	protected function _setup()
 	{
@@ -38,5 +40,11 @@ class EventObject extends LiteObject
 			'Delay'				=> LiteSetup::createDouble(),
 			'MaxBulkSize'		=> LiteSetup::createInt(255)
 		];
+	}
+	
+	
+	public function getQueueNaming(INaming $naming): string
+	{
+		return $naming->EventQueuePrefix . $this->Name;
 	}
 }

@@ -5,8 +5,8 @@ namespace Eddy\Engine\Publish;
 use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Lock\ILocker;
 use Eddy\Base\Engine\Publish\IDefaultPublisher;
+use Eddy\Base\IEddyQueueObject;
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
 
 
 /**
@@ -14,8 +14,6 @@ use Eddy\Object\EventObject;
  */
 class DefaultPublisher implements IDefaultPublisher
 {
-	private $queueName;
-	
 	/**
 	 * @autoload
 	 * @var \Eddy\Base\Engine\Queue\IQueueBuilder
@@ -31,24 +29,18 @@ class DefaultPublisher implements IDefaultPublisher
 	/** @var IConfig */
 	private $config;
 	
-	/** @var EventObject */
+	/** @var IEddyQueueObject */
 	private $object;
 	
 	
-	private function refreshObject(): void
-	{
-		$this->object = $this->config->DAL()->events()->load($this->object->Id);
-		$this->queueName = $this->config->Naming->EventQueuePrefix . $this->object->Name;
-	}
-	
 	private function locker(): ILocker
 	{
-		return $this->config->Engine->Locker->get($this->queueName);
+		return $this->config->Engine->Locker->get($this->object);
 	}
 	
 	private function enqueue(array $data): void
 	{
-		$queue = $this->builder->getQueue($this->queueName);
+		$queue = $this->builder->getQueue($this->object);
 		$queue->enqueue($data, $this->object->Delay);
 	}
 	
@@ -59,7 +51,7 @@ class DefaultPublisher implements IDefaultPublisher
 		if ($locker->isLocked())
 			return;
 		
-		$this->main->schedule($this->queueName);
+		$this->main->schedule($this->object);
 	}
 	
 	
@@ -71,15 +63,13 @@ class DefaultPublisher implements IDefaultPublisher
 		$this->builder->setConfig($config);
 	}
 	
-	public function setEventObject(EventObject $object): void
+	public function setEventObject(IEddyQueueObject $object): void
 	{
 		$this->object = $object;
 	}
 
 	public function publish(array $data): void
 	{
-		$this->refreshObject();
-		
 		if (!in_array($this->object->State, EventState::ACTIVE_QUEUE_STATES))
 			return;
 		
