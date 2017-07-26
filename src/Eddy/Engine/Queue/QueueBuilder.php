@@ -30,7 +30,7 @@ class QueueBuilder implements IQueueBuilder
 	{
 		$this->config = $config->Engine;
 	}
-
+	
 	
 	public function getQueue(string $name): IQueue
 	{

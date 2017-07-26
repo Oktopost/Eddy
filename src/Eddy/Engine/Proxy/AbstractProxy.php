@@ -17,7 +17,7 @@ class AbstractProxy implements IEventProxy
 		return $this->publisher;
 	}
 	
-	protected function publish(array $data)
+	protected function publish(array $data): void
 	{
 		$this->publisher->publish($data);
 	}

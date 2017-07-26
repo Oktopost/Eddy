@@ -24,6 +24,8 @@ class DefaultProxy extends AbstractProxy
 		if (count($arguments) != 1)
 			throw new UnexpectedException('Expecting only one parameter');
 		
+		$param = $arguments[0];
+		
 		if (!$this->reflection)
 			$this->reflection = new \ReflectionClass($this->className);
 		
@@ -39,13 +41,13 @@ class DefaultProxy extends AbstractProxy
 		
 		if (!$type || (string)$type != 'array')
 		{
-			$arguments = [$arguments];
+			$param = [$param];
 		}
-		else if (!is_array($arguments))
+		else if (!is_array($param))
 		{
 			throw new UnexpectedException('Parameter must be an array');
 		}
 		
-		$this->publish($arguments);
+		$this->publish($param);
 	}
 }
