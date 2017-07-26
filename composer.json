@@ -27,7 +27,7 @@
         "satooshi/php-coveralls": "^1.0"
     },
     "scripts": {
-        "test": "./vendor/phpunit/phpunit/phpunit",
-        "test-cover": "./vendor/phpunit/phpunit/phpunit --coverage-html ./build/cover"
+        "test": "./vendor/phpunit/phpunit/phpunit --dont-report-useless-tests",
+        "test-cover": "./vendor/phpunit/phpunit/phpunit --dont-report-useless-tests --coverage-html ./build/cover"
     }
 }

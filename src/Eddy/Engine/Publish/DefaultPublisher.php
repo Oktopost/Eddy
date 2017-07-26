@@ -8,8 +8,6 @@ use Eddy\Base\Engine\Publish\IDefaultPublisher;
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 
-use Eddy\Scope;
-
 
 /**
  * @autoload

@@ -32,3 +32,13 @@ $this->set(Base\DAL\ISubscribersDAO::class, SubscribersDAO::class);
 
 $this->set(DAL\MySQL\Base\Connector\IEventConnector::class, EventConnector::class);
 $this->set(DAL\MySQL\Base\Connector\IHandlerConnector::class, HandlerConnector::class);
+
+
+use Eddy\Base\Engine\Queue\IQueueBuilder;
+use Eddy\Base\Engine\Publish\IDefaultPublisher;
+
+use Eddy\Engine\Queue\QueueBuilder;
+use Eddy\Engine\Publish\DefaultPublisher;
+
+$this->set(IQueueBuilder::class,		QueueBuilder::class);
+$this->set(IDefaultPublisher::class,	DefaultPublisher::class);

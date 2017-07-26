@@ -4,6 +4,7 @@ namespace Eddy\Engine\Proxy;
 
 use Eddy\Exceptions\UnexpectedException;
 
+
 class DefaultProxy extends AbstractProxy
 {
 	private $className;

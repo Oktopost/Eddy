@@ -17,7 +17,7 @@ class DeepQueueDecorator implements IQueue
 	}
 
 
-	public function enqueue(array $data, ?float $secDelay): void
+	public function enqueue(array $data, float $secDelay = 0): void
 	{
 		$this->queue->enqueueAll($data, $secDelay);
 	}
