@@ -2,11 +2,10 @@
 namespace Eddy;
 
 
-use Eddy\Base\Engine\Publish\IPublishBuilder;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
 use Eddy\Base\Engine\Publish\IPublisher;
-use Eddy\Base\Engine\Publish\IPublisherObject;
+use Eddy\Base\Engine\Publish\IPublishBuilder;
 use Eddy\Engine\Proxy\DefaultProxy;
 
 use Eddy\Object\EventObject;
@@ -14,6 +13,7 @@ use Eddy\Object\EventObject;
 
 class Engine implements IEngine
 {
+	/** @var IConfig */
 	private $config;
 	
 	
