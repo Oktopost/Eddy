@@ -11,9 +11,12 @@ use Eddy\Engine\Proxy\DefaultProxy;
 use Eddy\Object\EventObject;
 
 
+/**
+ * @autoload
+ */
 class Engine implements IEngine
 {
-	/** @var IConfig */
+	/** @context */
 	private $config;
 	
 	
@@ -35,12 +38,6 @@ class Engine implements IEngine
 		$publisher->setConfig($this->config);
 		
 		return $publisher->getEventPublisher($object);
-	}
-	
-	
-	public function setConfig(IConfig $config): void
-	{
-		$this->config = $config;
 	}
 
 	public function config(): IConfig

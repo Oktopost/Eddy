@@ -23,8 +23,10 @@ class Eddy
 	{
 		$this->config = new Config();
 		
-		$this->engine = new Engine();
-		$this->engine->setConfig($this->config);
+		$context = Scope::skeleton()->context($this, 'Eddy');
+		$context->set('config', $this->config);
+		
+		$this->engine = Scope::skeleton()->for($this)->get(IEngine::class);
 	}
 
 
