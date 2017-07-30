@@ -23,7 +23,7 @@ class DeepQueueManagerAdapter implements IQueueManager
 	
 	public function clear()
 	{
-		throw new \Exception('TODO');
+		$this->deepQueue->manager($this->name)->clearQueue();
 	}
 
 	/**
@@ -33,6 +33,6 @@ class DeepQueueManagerAdapter implements IQueueManager
 	 */
 	public function getNextRuntime(): ?float
 	{
-		throw new \Exception('TODO');
+		return $this->deepQueue->manager($this->name)->getWaitingTime();
 	}
 }

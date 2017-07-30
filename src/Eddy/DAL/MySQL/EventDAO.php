@@ -2,6 +2,7 @@
 namespace Eddy\DAL\MySQL;
 
 
+use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\Base\DAL\IEventDAO;
@@ -74,6 +75,11 @@ class EventDAO implements IEventDAO
 
 	public function save(EventObject $event): bool
 	{
+		if (!$event->Id)
+		{
+			$event->Id = (new TimeBasedRandomIdGenerator())->get();
+		}
+		
 		return $this->connector->save($event);
 	}
 	

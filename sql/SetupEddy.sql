@@ -95,3 +95,26 @@ CREATE TABLE IF NOT EXISTS `EddyExecutors` (
 		ON UPDATE CASCADE
 ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `EddyEventSource` (
+	`Id`			INT NOT NULL AUTO_INCREMENT,
+	`Created`		DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`Source`		VARCHAR(255) NOT NULL,
+	`EddyEventId`	CHAR(35) NOT NULL,
+	`Status`		VARCHAR(32) NOT NULL,
+	
+	PRIMARY KEY (`Id`),
+	
+	INDEX `k_EddyEventId` (`EddyEventId`),
+	INDEX `k_Created` (`Created`),
+	
+	UNIQUE INDEX `k_EddyEventId_Source` (`EddyEventId`, `Source`),
+
+	CONSTRAINT `fk_EddyEventSource_EddyEventId`
+	FOREIGN KEY (`EddyEventId`)
+	REFERENCES `EddyEvent` (`Id`)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;

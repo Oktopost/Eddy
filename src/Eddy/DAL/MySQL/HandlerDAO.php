@@ -2,6 +2,7 @@
 namespace Eddy\DAL\MySQL;
 
 
+use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 use Eddy\Enums\EventState;
 use Eddy\Object\HandlerObject;
 use Eddy\Base\DAL\IHandlerDAO;
@@ -31,10 +32,10 @@ class HandlerDAO implements IHandlerDAO
 		return $this;
 	}
 
-	public function load(string $eventId): ?HandlerObject
+	public function load(string $handlerId): ?HandlerObject
 	{
 		return $this->connector->selectFirstObjectByFields([
-			'Id'	=> $eventId,
+			'Id'	=> $handlerId,
 			'State'	=> EventState::EXISTING
 		]);
 	}
@@ -72,9 +73,14 @@ class HandlerDAO implements IHandlerDAO
 		]);
 	}
 
-	public function save(HandlerObject $event): bool
+	public function save(HandlerObject $handler): bool
 	{
-		return $this->connector->save($event);
+		if (!$handler->Id)
+		{
+			$handler->Id = (new TimeBasedRandomIdGenerator())->get();
+		}
+		
+		return $this->connector->save($handler);
 	}
 
 	public function delete(HandlerObject $handler): bool

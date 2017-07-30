@@ -24,7 +24,7 @@ class SubscribersDAO implements ISubscribersDAO
 	private $connector = null;
 
 
-	private function prepareData(array $keyToArray): array
+	private function prepareData(array $keyToArray, bool $inverse = false): array
 	{
 		$plainArray = [];
 
@@ -32,11 +32,55 @@ class SubscribersDAO implements ISubscribersDAO
 		{
 			foreach ($items as $item)
 			{
-				$plainArray[] = [$key, $item];
+				$plainArray[] = !$inverse ? [$key, $item] : [$item, $key];
 			}
 		}
 		
 		return $plainArray;
+	}
+	
+	private function setupTempTable(array $data): void
+	{
+		$table = $this->connector
+			->create()
+			->ifNotExists()
+			->temporary()
+			->table(self::TEMP_TABLE);
+		
+		$this->connector->direct('TRUNCATE ' . self::TEMP_TABLE);
+		
+		$table->column(self::EVENT_FIELD)->char(35)->notNull();
+		$table->column(self::HANDLER_FIELD)->char(35)->notNull();
+		
+		$table->unique('k_EventId_HandlerId', [self::EVENT_FIELD, self::HANDLER_FIELD]);
+		$table->execute();
+		
+		$this->connector
+			->insert()
+			->into(self::TEMP_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
+			->valuesBulk($data)
+			->execute();
+	}
+	
+	private function updateExistingConnections(): void
+	{
+		$existSelect = $this->connector->select()
+			->column(self::EVENT_FIELD, self::HANDLER_FIELD)
+			->from(self::TEMP_TABLE, 'tt');
+		
+		foreach ([self::SUBSCRIBERS_TABLE, self::EXECUTORS_TABLE] as $tableName)
+		{
+			$this->connector->delete()
+				->from($tableName)
+				->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
+				->executeDml();
+			
+			$this->connector->insert()
+				->into($tableName, [self::EVENT_FIELD, self::HANDLER_FIELD])
+				->asSelect($existSelect)
+				->ignore()
+				->executeDml();
+		}
 	}
 
 
@@ -83,7 +127,7 @@ class SubscribersDAO implements ISubscribersDAO
 		return $this->connector
 			->select()
 			->from(self::SUBSCRIBERS_TABLE)
-			->column([self::HANDLER_FIELD])
+			->column(self::HANDLER_FIELD)
 			->byField(self::EVENT_FIELD, $eventId)
 			->queryColumn();
 	}
@@ -93,7 +137,7 @@ class SubscribersDAO implements ISubscribersDAO
 		return $this->connector
 			->select()
 			->from(self::SUBSCRIBERS_TABLE)
-			->column([self::EVENT_FIELD])
+			->column(self::EVENT_FIELD)
 			->byField(self::HANDLER_FIELD, $handlerId)
 			->queryColumn();
 	}
@@ -102,46 +146,17 @@ class SubscribersDAO implements ISubscribersDAO
 	{		
 		$preparedData = $this->prepareData($eventToHandlers);
 		
-		$table = $this->connector
-			->create()
-			->temporary()
-			->table(self::TEMP_TABLE);
+		$this->setupTempTable($preparedData);
 		
-		$table->column(self::EVENT_FIELD)->char(35)->notNull();
-		$table->column(self::HANDLER_FIELD)->char(35)->notNull();
-		
-		$table->unique('k_EventId_HandlerId', [self::EVENT_FIELD, self::HANDLER_FIELD]);
-		$table->execute();
-		
-		$this->connector
-			->insert()
-			->into(self::TEMP_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
-			->valuesBulk($preparedData)
-			->execute();
-
-		$existSelect = $this->connector->select()
-			->column(self::EVENT_FIELD, self::HANDLER_FIELD)
-			->from(self::TEMP_TABLE, 'tt');
-		
-		$this->connector->delete()
-				->from(self::SUBSCRIBERS_TABLE)
-				->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
-				->executeDml();
-		 
-		$this->connector->delete()
-					->from(self::EXECUTORS_TABLE)
-					->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
-					->executeDml();
-
-		$this->connector->insert()
-			->into(self::SUBSCRIBERS_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
-			->asSelect($existSelect)
-			->ignore()
-			->executeDml();
+		$this->updateExistingConnections();
 	}
 
 	public function addExecutors(array $handlerToEvents): void
 	{
-		$handlerToEvent = $this->prepareData($handlerToEvents);
+		$preparedData = $this->prepareData($handlerToEvents, true);
+		
+		$this->setupTempTable($preparedData);
+		
+		$this->updateExistingConnections();
 	}
 }

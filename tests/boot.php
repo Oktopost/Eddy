@@ -26,3 +26,7 @@ class UnitTestScope
 
 
 UnitTestScope::$unitSkeleton = new UnitTestSkeleton(Scope::skeleton());
+
+
+require_once 'lib/MySQLConfig.php';
+\lib\MySQLConfig::setup();
