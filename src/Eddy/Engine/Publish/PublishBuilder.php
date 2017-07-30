@@ -6,7 +6,6 @@ use Eddy\Base\IEddyQueueObject;
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
-use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Publish\IPublisher;
 use Eddy\Base\Engine\Publish\IPublishBuilder;
 use Eddy\Base\Engine\Publish\IPublisherObject;
@@ -14,9 +13,15 @@ use Eddy\Base\Engine\Publish\IPublisherObject;
 use Eddy\Scope;
 
 
+/**
+ * @context
+ */
 class PublishBuilder implements IPublishBuilder
 {
-	/** @var IConfig */
+	/** 
+	 * @context
+	 * @var \Eddy\Base\IConfig 
+	 */
 	private $config;
 	
 	
@@ -31,12 +36,7 @@ class PublishBuilder implements IPublishBuilder
 		return $publisher;
 	}
 	
-
-	public function setConfig(IConfig $config): void
-	{
-		$this->config = $config;
-	}
-
+	
 	public function getEventPublisher(EventObject $object): IPublisher
 	{
 		$publisher = $this->getPublisherFor($object);

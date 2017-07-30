@@ -21,12 +21,12 @@ class Eddy
 	
 	public function __construct()
 	{
-		$this->config = new Config();
-		
 		$context = Scope::skeleton()->context($this, 'Eddy');
+		
+		$this->config = new Config();
 		$context->set('config', $this->config);
 		
-		$this->engine = Scope::skeleton()->for($this)->get(IEngine::class);
+		$this->engine = Scope::skeleton($this, IEngine::class);
 	}
 
 

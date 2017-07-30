@@ -34,7 +34,7 @@ class Engine implements IEngine
 	private function getPublisher(EventObject $object): IPublisher
 	{ 
 		/** @var IPublishBuilder $publisher */
-		$publisher = Scope::skeleton(IPublishBuilder::class);
+		$publisher = Scope::skeleton($this, IPublishBuilder::class);
 		$publisher->setConfig($this->config);
 		
 		return $publisher->getEventPublisher($object);

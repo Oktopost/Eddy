@@ -12,19 +12,24 @@ class Scope
 	
 	/** @var Skeleton */
 	private static $skeleton;
-	
-	
+
+
 	/**
-	 * @return Skeleton|mixed
+	 * @param mixed|null $interface
+	 * @param string|null $name
+	 * @return mixed|Skeleton
 	 */
-	public static function skeleton(?string $interface = null)
+	public static function skeleton($interface = null, string $name = null)
 	{
 		if (!self::$skeleton)
 			self::$skeleton = SkeletonSetup::create();
 		
-		if (!$interface) 
-			return self::$skeleton;
+		if (is_object($interface))
+			self::$skeleton->for($interface)->get($name);
 		
-		return self::$skeleton->get($interface);
+		if (is_string($interface)) 
+			return self::$skeleton->get($interface);
+		
+		return self::$skeleton;
 	}
 }

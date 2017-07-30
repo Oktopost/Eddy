@@ -2,8 +2,6 @@
 namespace Eddy\Base\Engine\Publish;
 
 
-use Eddy\Base\Config\IConfigConsumer;
-
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
@@ -11,7 +9,7 @@ use Eddy\Object\HandlerObject;
 /**
  * @skeleton
  */
-interface IPublishBuilder extends IConfigConsumer
+interface IPublishBuilder
 {
 	public function getEventPublisher(EventObject $object): IPublisher;
 
