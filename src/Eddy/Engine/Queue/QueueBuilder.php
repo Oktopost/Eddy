@@ -15,7 +15,7 @@ use Eddy\Scope;
 
 class QueueBuilder implements IQueueBuilder
 {
-	/** @var IConfig */
+	/** @context IConfig */
 	private $config;
 	
 	
@@ -33,11 +33,6 @@ class QueueBuilder implements IQueueBuilder
 		throw new UnexpectedException('Expecting IQueueDecorator instance or class name.');
 	}
 	
-	
-	public function setConfig(IConfig $config): void
-	{
-		$this->config = $config;
-	}
 	
 	public function getQueue(IEddyQueueObject $object): IQueue
 	{

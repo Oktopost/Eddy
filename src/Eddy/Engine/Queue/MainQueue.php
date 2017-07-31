@@ -3,7 +3,6 @@ namespace Eddy\Engine\Queue;
 
 
 use Eddy\Base\Engine\Queue\IQueueManager;
-use Eddy\Base\IConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
@@ -11,7 +10,10 @@ use Eddy\Base\Engine\IMainQueue;
 
 class MainQueue implements IMainQueue
 {
-	/** @var IConfig */
+	/**
+	 * @context 
+	 * @var \Eddy\Base\IConfig 
+	 */
 	private $config;
 	
 	/** @var IQueue */
@@ -21,11 +23,6 @@ class MainQueue implements IMainQueue
 	private $manager = null;
 	
 	
-	public function setConfig(IConfig $config): void
-	{
-		$this->config = $config;
-	}
-
 	public function schedule(IEddyQueueObject $object): void
 	{
 		if (!$this->queue)

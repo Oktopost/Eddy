@@ -9,7 +9,7 @@ use Eddy\Base\Config\IConfigConsumer;
 /**
  * @skeleton
  */
-interface IMainQueue extends IConfigConsumer
+interface IMainQueue
 {
 	public function schedule(IEddyQueueObject $object): void;
 }
