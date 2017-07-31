@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS `EddyStatistics` (
+	`Id` 				INT NOT NULL AUTO_INCREMENT,
+	`Name`				VARCHAR(255) NOT NULL,
+	`Type`				VARCHAR(50) NOT NULL,
+	`Operation`			VARCHAR(50) NOT NULL,
+	`Amount`			INT NOT NULL,
+	`StartTime`			DATETIME NOT NULL,
+	`EndTime`			DATETIME NOT NULL,
+	
+	PRIMARY KEY (`Id`),
+
+	INDEX `k_Name` (`Name`)
+) 
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `EddyStatisticsSettings` (
+	`Id` 				INT NOT NULL AUTO_INCREMENT,
+	`Param`				VARCHAR(50) NOT NULL,
+	`Value`				VARCHAR(255) NOT NULL,
+	
+	PRIMARY KEY (`Id`)
+) 
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
