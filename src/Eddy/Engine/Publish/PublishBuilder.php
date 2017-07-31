@@ -18,21 +18,11 @@ use Eddy\Scope;
  */
 class PublishBuilder implements IPublishBuilder
 {
-	/** 
-	 * @context
-	 * @var \Eddy\Base\IConfig 
-	 */
-	private $config;
-	
-	
 	private function getPublisherFor(IEddyQueueObject $object): IPublisher
 	{
 		/** @var IPublisherObject $publisher */
-		$publisher = Scope::skeleton(IPublisherObject::class);
-		
-		$publisher->setConfig($this->config);
+		$publisher = Scope::skeleton($this, IPublisherObject::class);;
 		$publisher->setObject($object);
-		
 		return $publisher;
 	}
 	

@@ -9,6 +9,7 @@ use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Lock\ILocker;
 use Eddy\Base\Engine\Queue\IQueueBuilder;
 
+use Eddy\Base\IConfig;
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 
@@ -168,14 +169,14 @@ class PublisherObjectTest extends TestCase
 		return $object;
 	}
 	
+	
 	private function subject(): PublisherObject
 	{
 		$this->mockIQueueBuilder();
 		$this->mockIMainQueue();
 		
 		/** @var PublisherObject $subject */
-		$subject = Scope::skeleton()->load(PublisherObject::class);
-		$subject->setConfig($this->config);
+		$subject = Scope::skeleton()->load(PublisherObject::class, [IConfig::class => $this->config]);
 		
 		return $subject;
 	}
@@ -192,8 +193,7 @@ class PublisherObjectTest extends TestCase
 		\UnitTestScope::override(IQueueBuilder::class, $builder);
 		
 		/** @var PublisherObject $subject */
-		$subject = Scope::skeleton()->load(PublisherObject::class);
-		$subject->setConfig($this->config);
+		$subject = Scope::skeleton()->load(PublisherObject::class, [IConfig::class => $this->config]);
 		$subject->setObject($object);
 		
 		$builder->expects($this->once())->method('getQueue')->with($object)->willReturn($this->queue);

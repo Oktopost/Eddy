@@ -15,10 +15,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "oktopost/skeleton": "^1.1.1",
-        "oktopost/squid": "dev-master#bfc151a",
+        "oktopost/skeleton": "^1.1.2",
+        "oktopost/squid": "^1.0.24",
         "oktopost/annotation": "^1.0",
-        "oktopost/deep-queue": "^1.0",
+        "oktopost/deep-queue": "1.0.9",
         "predis/predis": "^1.1"
     },
     "autoload": {

@@ -2,7 +2,6 @@
 namespace Eddy\Engine\Publish;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\Lock\ILocker;
 use Eddy\Base\Engine\Publish\IPublisherObject;
@@ -26,7 +25,10 @@ class PublisherObject implements IPublisherObject
 	 */
 	private $main;
 	
-	/** @var IConfig */
+	/** 
+	 * @context
+	 * @var \Eddy\Base\IConfig 
+	 */
 	private $config;
 	
 	/** @var IEddyQueueObject */
@@ -54,14 +56,6 @@ class PublisherObject implements IPublisherObject
 		$this->main->schedule($this->object);
 	}
 	
-	
-	public function setConfig(IConfig $config): void
-	{
-		$this->config = $config;
-		
-		$this->main->setConfig($config);
-		$this->builder->setConfig($config);
-	}
 	
 	public function setObject(IEddyQueueObject $object): void
 	{

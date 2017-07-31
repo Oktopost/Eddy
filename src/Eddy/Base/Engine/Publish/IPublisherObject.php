@@ -9,7 +9,7 @@ use Eddy\Base\Config\IConfigConsumer;
 /**
  * @skeleton
  */
-interface IPublisherObject extends IPublisher, IConfigConsumer
+interface IPublisherObject extends IPublisher
 {
 	public function setObject(IEddyQueueObject $object): void;
 }

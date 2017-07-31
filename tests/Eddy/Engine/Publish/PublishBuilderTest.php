@@ -24,6 +24,13 @@ class PublishBuilderTest extends TestCase
 		return $obj;
 	}
 	
+	private function subject(): PublishBuilder
+	{
+		$obj = new PublishBuilder();
+		Scope::skeleton()->context($obj, 'test');
+		return $obj;
+	}
+	
 	
 	protected function setUp()
 	{
@@ -33,17 +40,17 @@ class PublishBuilderTest extends TestCase
 	
 	public function test_skeleton()
 	{
-		self::assertInstanceOf(PublishBuilder::class, Scope::skeleton(IPublishBuilder::class));
+		$obj = new \stdClass();
+		Scope::skeleton()->context($obj, 'test')->set('config', new Config());
+		
+		self::assertInstanceOf(PublishBuilder::class, Scope::skeleton($obj, IPublishBuilder::class));
 	}
 	
 	
 	public function test_getEventPublisher_ReturnPreparePayloadPublisherObject()
 	{
 		$this->mockIPublisherObject();
-		
-		$obj = new PublishBuilder();
-		$obj->setConfig(new Config());
-		
+		$obj = $this->subject();
 		
 		self::assertInstanceOf(
 			PreparePayloadPublisher::class, 
@@ -51,28 +58,12 @@ class PublishBuilderTest extends TestCase
 		);
 	}
 	
-	public function test_getEventPublisher_ConfigPassedToPublisherObject()
-	{
-		$mock = $this->mockIPublisherObject();
-		
-		$config = new Config();
-		$obj = new PublishBuilder();
-		$obj->setConfig($config);
-		
-		
-		$mock->expects($this->once())->method('setConfig')->with($config);
-		
-		
-		$obj->getEventPublisher(new EventObject());
-	}
-	
 	public function test_getEventPublisher_ObjectPassedToPublisher()
 	{
 		$mock = $this->mockIPublisherObject();
 		
 		$obj = new PublishBuilder();
-		$obj->setConfig(new Config());
-		
+		Scope::skeleton()->context($obj, 'test')->set('config', new Config());
 		$target = new EventObject();
 		
 		
@@ -89,7 +80,6 @@ class PublishBuilderTest extends TestCase
 		
 		
 		$obj = new PublishBuilder();
-		$obj->setConfig(new Config());
 		
 		
 		self::assertInstanceOf(PublishersCollection::class, $obj->getHandlersPublisher([]));
@@ -103,28 +93,13 @@ class PublishBuilderTest extends TestCase
 		$obj2 = new HandlerObject();
 		
 		$builder = new PublishBuilder();
-		$builder->setConfig(new Config());
+		Scope::skeleton()->context($builder, 'test');
 		
 		
-		$mock->expects($this->at(1))->method('setObject')->with($obj1);
-		$mock->expects($this->at(3))->method('setObject')->with($obj2);
+		$mock->expects($this->at(0))->method('setObject')->with($obj1);
+		$mock->expects($this->at(1))->method('setObject')->with($obj2);
 		
 		$builder->getHandlersPublisher([$obj1, $obj2]);
-	}
-	
-	public function test_getHandlersPublisher_ConfigPassedToPublisher()
-	{
-		$mock = $this->mockIPublisherObject();
-		
-		$config = new Config();
-		$builder = new PublishBuilder();
-		$builder->setConfig(new Config());
-		
-		
-		$mock->expects($this->at(0))->method('setConfig')->with($config);
-		$mock->expects($this->at(2))->method('setConfig')->with($config);
-		
-		$builder->getHandlersPublisher([new HandlerObject(), new HandlerObject()]);
 	}
 	
 	public function test_getHandlersPublisher_AllPublishersPassedToCollection()
@@ -132,11 +107,11 @@ class PublishBuilderTest extends TestCase
 		$mock = $this->mockIPublisherObject();
 		
 		$builder = new PublishBuilder();
-		$builder->setConfig(new Config());
+		Scope::skeleton()->context($builder, 'test');
 		
 		
-		$mock->expects($this->at(4))->method('publish')->with(['a']);
-		$mock->expects($this->at(5))->method('publish')->with(['a']);
+		$mock->expects($this->at(2))->method('publish')->with(['a']);
+		$mock->expects($this->at(3))->method('publish')->with(['a']);
 		
 		$builder->getHandlersPublisher([new HandlerObject(), new HandlerObject()])->publish(['a']);
 	}
