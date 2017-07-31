@@ -8,9 +8,6 @@ php:
 services:
   - mysql
 
-before_install:  
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS _eddy_test_;'
-
 before_script:
   - composer install --prefer-source --no-interaction
   

@@ -25,7 +25,6 @@ class MySQLConfig
 	public static function get() 
 	{
 		return [
-			'db'		=> '_eddy_test_',
 			'user'		=> 'root',
 			'password'	=> '',
 			'host'		=> 'localhost'
@@ -34,9 +33,9 @@ class MySQLConfig
 	
 	public static function initTables()
 	{
-		$tables = file_get_contents(__DIR__ . '/../../sql/SetupEddy.sql');
-		
-		self::$mysql->getConnector()->direct($tables)->executeDml();
+		$conn = new MySql\Impl\Connectors\FileConnector();
+		$conn->setConnector(self::$mysql->getConnector());
+		$conn->execute(__DIR__ . '/../../sql/SetupEddy.sql');
 	}
 
 	/**
@@ -49,22 +48,17 @@ class MySQLConfig
 	
 	public static function clearDB()
 	{
-		$conn = self::$mysql->getConnector();
-		$tables = $conn->db()->listTables();
-		$tables = array_filter($tables, function($value) { return in_array($value, self::TABLES); });
-		
-		foreach ($tables as $table)
-		{
-			$conn->db()->dropTable($table, false);
-		}
+		self::$mysql->getConnector()->direct()->command('DROP DATABASE IF EXISTS _eddy_test_')->executeDml();
+		self::$mysql->getConnector()->direct()->command('CREATE DATABASE IF NOT EXISTS _eddy_test_')->executeDml();
 	}
 
 	public static function setup()
 	{
 		self::$mysql = new MySql();
 		self::$mysql->config()->setConfig(self::get());
-		self::clearDB();
 		
+		self::clearDB();
+		self::$mysql->getConnector()->direct()->command('USE _eddy_test_')->executeDml();
 		self::initTables();
 	}
 }
