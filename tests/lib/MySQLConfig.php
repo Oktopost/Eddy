@@ -35,7 +35,7 @@ class MySQLConfig
 	{
 		$conn = new MySql\Impl\Connectors\FileConnector();
 		$conn->setConnector(self::$mysql->getConnector());
-		$conn->execute(__DIR__ . '/../../sql/SetupEddy.sql');
+		$conn->execute(__DIR__ . '/../sql/SetupEddy.sql');
 	}
 
 	/**
