@@ -3,7 +3,6 @@ namespace Eddy\Base\Engine;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Base\Config\IConfigConsumer;
 
 
 /**
