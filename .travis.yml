@@ -3,7 +3,14 @@ sudo: required
 language: php
 php:
   - '7.1'
-  
+
+
+services:
+  - mysql
+
+before_install:  
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS _eddy_test_;'
+
 before_script:
   - composer install --prefer-source --no-interaction
   
