@@ -2,10 +2,7 @@
 namespace Eddy;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
-use Eddy\Base\Engine\Publish\IPublisher;
-use Eddy\Base\Engine\Publish\IPublishBuilder;
 use Eddy\Engine\Proxy\DefaultProxy;
 
 use Eddy\Object\EventObject;
@@ -16,8 +13,11 @@ use Eddy\Object\EventObject;
  */
 class Engine implements IEngine
 {
-	/** @context */
-	private $config;
+	/**
+	 * @autoload
+	 * @var \Eddy\Base\Engine\Publish\IPublishBuilder
+	 */
+	private $publishBuilder;
 	
 	
 	private function getProxy(EventObject $object): IEventProxy
@@ -27,23 +27,6 @@ class Engine implements IEngine
 			new DefaultProxy($object->EventInterface));
 	}
 	
-	/**
-	 * @param EventObject $object
-	 * @return mixed
-	 */
-	private function getPublisher(EventObject $object): IPublisher
-	{ 
-		/** @var IPublishBuilder $publisher */
-		$publisher = Scope::skeleton($this, IPublishBuilder::class);
-		$publisher->setConfig($this->config);
-		
-		return $publisher->getEventPublisher($object);
-	}
-
-	public function config(): IConfig
-	{
-		return $this->config;
-	}
 	
 	/**
 	 * @param EventObject $object
@@ -52,7 +35,7 @@ class Engine implements IEngine
 	public function event(EventObject $object)
 	{
 		$proxy = $this->getProxy($object);
-		$publisher = $this->getPublisher($object);
+		$publisher = $this->publishBuilder->getEventPublisher($object);
 		
 		$proxy->setPublisher($publisher);
 		

@@ -23,7 +23,7 @@ class Naming extends LiteObject implements INaming
 	{
 		return [
 			'EventQueuePrefix'		=> LiteSetup::createString('Eddy:Event:'),
-			'HandlerQueuePrefix'	=> LiteSetup::createString('Eddy:Handler'),
+			'HandlerQueuePrefix'	=> LiteSetup::createString('Eddy:Handler:'),
 			'LockPrefix'			=> LiteSetup::createString('Eddy:Lock:'),
 			'MainQueueName'			=> LiteSetup::createString('Eddy:Main')
 		];

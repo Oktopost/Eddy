@@ -16,11 +16,6 @@ use Objection\LiteObject;
 use DeepQueue\DeepQueue;
 
 
-/**
- * @property IQueueProvider	$QueueProvider
- * @property ILockProvider	$Locker
- * @property []				$QueueDecorators
- */
 class EngineConfig extends LiteObject implements IEngineConfig
 {
 	/** @var IQueueDecorator[] */
@@ -41,7 +36,7 @@ class EngineConfig extends LiteObject implements IEngineConfig
 	
 	
 	/**
-	 * @param IQueueProvider|DeepQueue $config
+	 * @param IQueueProvider|DeepQueue|string $config
 	 * @return EngineConfig
 	 */
 	public function setQueueProvider($config): EngineConfig
