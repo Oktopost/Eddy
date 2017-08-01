@@ -12,5 +12,5 @@ use Squid\MySql\IMySqlConnector;
  */
 interface IStatsConfig
 {
-	
+	public function getRedisScope(): string;
 }

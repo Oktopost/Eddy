@@ -2,16 +2,18 @@
 namespace Eddy\Plugins\StatisticsCollector\Utils;
 
 
-use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
-
-
 class StatsKeyBuilder
 {
 	use \Objection\TStaticClass;
+
 	
-	
-	public static function get(StatsEntry $entry, int $time): string
+	public static function get(string $type, string $name, int $time): string
 	{
-		return "{$entry->Type}:{$entry->Name}:{$time}";
+		return "{$type}:{$name}:{$time}";
+	}
+	
+	public static function getForCombine(string $type, string $name): string
+	{
+		return "{$type}.{$name}";
 	}
 }

@@ -3,7 +3,6 @@ namespace Eddy\Plugins\StatisticsCollector\Base;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Plugins\StatisticsCollector\Object\StatsCachedEntry;
 
 
 /**

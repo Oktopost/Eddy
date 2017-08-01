@@ -11,7 +11,7 @@ use Squid\MySql\IMySqlConnector;
 
 class StatsConfig implements IStatsConfig
 {
-	public const MAIN_PREFIX = 'Eddy:Statistics:';
+	private const MAIN_PREFIX = 'Eddy:Statistics:';
 	
 	
 	public $mysqlConnector;
@@ -38,11 +38,6 @@ class StatsConfig implements IStatsConfig
 	{
 		$prefix = self::MAIN_PREFIX;
 		
-		if (isset($redisConfig['prefix']))
-		{
-			$prefix = $redisConfig['prefix'] . ':' . $prefix;
-		}
-		
 		return new Client($redisConfig, ['prefix' => $prefix]);
 	}
 
@@ -54,5 +49,11 @@ class StatsConfig implements IStatsConfig
 	{
 		$this->mysqlConnector = $this->getMySQLConnector($mysqlConfig);
 		$this->redisClient = $this->getRedisClient($redisConfig);
+	}
+	
+	
+	public function getRedisScope(): string
+	{
+		return self::MAIN_PREFIX;
 	}
 }
