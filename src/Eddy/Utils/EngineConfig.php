@@ -30,7 +30,8 @@ class EngineConfig extends LiteObject implements IEngineConfig
 		return [
 			'QueueProvider' 	=> LiteSetup::createInstanceOf(IQueueProvider::class),
 			'Locker'			=> LiteSetup::createInstanceOf(ILockProvider::class),
-			'QueueDecorators'	=> LiteSetup::createArray()
+			'QueueDecorators'	=> LiteSetup::createArray(),
+			'Controllers'		=> LiteSetup::createArray()
 		];
 	}
 	
@@ -53,11 +54,19 @@ class EngineConfig extends LiteObject implements IEngineConfig
 		return $this;
 	}
 	
-	public function addDecorator(...$decorators)
+	public function addDecorator(...$decorators): void
 	{
 		if (is_array($decorators[0]))
 			$decorators = $decorators[0];
 		
 		$this->QueueDecorators = array_merge($this->QueueDecorators, $decorators);
+	}
+	
+	public function addController(...$controllers): void
+	{
+		if (is_array($controllers[0]))
+			$controllers = $controllers[0];
+		
+		$this->Controllers = array_merge($this->Controllers, $controllers);
 	}
 }

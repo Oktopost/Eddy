@@ -2,60 +2,42 @@
 namespace Eddy\Plugins\StatisticsCollector;
 
 
-use Eddy\Base\IEddyQueueObject;
-use Eddy\Base\Engine\IQueue;
-use Eddy\Base\Engine\Queue\IQueueDecorator;
-use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollector;
+use Eddy\Scope;
+use Eddy\Base\Engine\Queue\AbstractQueueDecorator;
+use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsStatus;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
-use Eddy\Plugins\StatisticsCollector\Module\StatisticsCollector;
 
 
-class StatisticsCollectionDecorator implements IQueueDecorator
+class StatisticsCollectionDecorator extends AbstractQueueDecorator
 {
-	/** @var IQueue */
-	private $childQueue = null;
-	
-	/** @var IEddyQueueObject */
-	private $object = null;
-	
-	/** @var IStatisticsCollector */
+	/** @var IStatisticsCacheCollector */
 	private $collector;
 	
 	
 	private function collect(int $amount, string $operation, string $state): void
 	{
-		$this->collector->collect($this->object, $amount, $operation, $state);
+		$this->collector->collect($this->getObject(), $amount, $operation, $state);
 	}
 	
 	
 	public function __construct()
 	{
-		$this->collector = new StatisticsCollector();
+		$this->collector = Scope::skeleton(IStatisticsCacheCollector::class);
 	}
 
 
 	public function enqueue(array $data, float $secDelay = 0.0): void
 	{
 		$this->collect(sizeof($data), StatsOperation::ENQUEUE, StatsStatus::SUCCESS);
-		$this->childQueue->enqueue($data, $secDelay);
+		$this->getQueue()->enqueue($data, $secDelay);
 	}
 
 	public function dequeue(int $maxCount): array
 	{
-		$data = $this->childQueue->dequeue($maxCount);
+		$data = $this->getQueue()->dequeue($maxCount);
 		$this->collect(sizeof($data), StatsOperation::DEQUEUE, StatsStatus::SUCCESS);
 		
 		return $data;
-	}
-
-	public function child(IQueue $queue): void
-	{
-		$this->childQueue = $queue;
-	}
-
-	public function setObject(IEddyQueueObject $object): void
-	{
-		$this->object = $object;
 	}
 }

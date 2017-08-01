@@ -1,11 +1,11 @@
 <?php
-namespace Eddy\Plugins\StatisticsCollector\Module\Storage;
+namespace Eddy\Plugins\StatisticsCollector\Module;
 
 
-use Eddy\Plugins\StatisticsCollector\Base\IStatisticsDumpStorage;
+use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
 
 
-class MySQLStatsDumpStorage implements IStatisticsDumpStorage
+class MySQLStatsStorage implements IStatisticsStorage
 {
 	public function isTimeToDump(): bool
 	{

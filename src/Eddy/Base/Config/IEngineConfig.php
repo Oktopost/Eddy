@@ -16,5 +16,6 @@ use Eddy\Base\Engine\Queue\IQueueDecorator;
  */
 interface IEngineConfig
 {
-	public function addDecorator(...$decorators);
+	public function addDecorator(...$decorators): void;
+	public function addController(...$controllers): void;
 }

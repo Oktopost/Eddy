@@ -22,6 +22,7 @@ class Naming extends LiteObject implements INaming
 	protected function _setup()
 	{
 		return [
+			'MainPrefix'			=> LiteSetup::createString('Eddy:'),
 			'EventQueuePrefix'		=> LiteSetup::createString('Eddy:Event:'),
 			'HandlerQueuePrefix'	=> LiteSetup::createString('Eddy:Handler:'),
 			'LockPrefix'			=> LiteSetup::createString('Eddy:Lock:'),
