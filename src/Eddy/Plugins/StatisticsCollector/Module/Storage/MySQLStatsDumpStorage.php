@@ -9,12 +9,12 @@ class MySQLStatsDumpStorage implements IStatisticsDumpStorage
 {
 	public function isTimeToDump(): bool
 	{
-		// TODO: Implement isTimeToDump() method.
+		return true;
 	}
 
 	public function getEndTime(): int
 	{
-		// TODO: Implement getEndTime() method.
+		return time();
 	}
 
 	public function populate(array $data): void

@@ -69,10 +69,10 @@ class StatisticsCollector implements IStatisticsCollector
 		$entry = $this->prepareEntry($object, $amount, $operation, $status);
 		
 		$this->storage->save($entry);
-//		
-//		if ($this->dumpStorage->isTimeToDump())
-//		{
-//			$this->dumpData();	
-//		}
+		
+		if ($this->dumpStorage->isTimeToDump())
+		{
+			$this->dumpData();	
+		}
 	}
 }

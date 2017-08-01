@@ -22,6 +22,14 @@ class RedisStatsStorage implements IStatisticsStorage
 		return self::STATS_PREFIX . ":{$entry->Type}:{$entry->Name}:{$entry->Time}";
 	}
 	
+	private function getKeysToPull(int $endTime): array 
+	{
+		$cursor = 0;
+		$keys = [];
+		
+		var_dump($keys); die();
+	}
+	
 
 	public function __construct()
 	{
@@ -47,6 +55,6 @@ class RedisStatsStorage implements IStatisticsStorage
 
 	public function pullData(int $endTime): array
 	{
-		
+		$keys = $this->getKeysToPull($endTime);
 	}
 }
