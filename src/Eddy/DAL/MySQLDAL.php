@@ -64,9 +64,4 @@ class MySQLDAL implements IDAL
 		
 		return $this->subscribersDAO;
 	}
-
-	public function addInvoker(array $invokerToEvent): void
-	{
-		$this->subscribers()->addExecutors($invokerToEvent);
-	}
 }

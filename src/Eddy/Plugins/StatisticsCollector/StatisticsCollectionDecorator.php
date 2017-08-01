@@ -37,8 +37,8 @@ class StatisticsCollectionDecorator implements IQueueDecorator
 
 	public function enqueue(array $data, float $secDelay = 0.0): void
 	{
-		$this->childQueue->enqueue($data, $secDelay);
 		$this->collect(sizeof($data), StatsOperation::ENQUEUE, StatsStatus::SUCCESS);
+		$this->childQueue->enqueue($data, $secDelay);
 	}
 
 	public function dequeue(int $maxCount): array

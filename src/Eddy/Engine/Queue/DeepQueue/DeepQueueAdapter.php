@@ -27,6 +27,8 @@ class DeepQueueAdapter implements IQueue
 
 	public function enqueue(array $data, float $secDelay = 0): void
 	{
+		if (!$data)	return;
+		
 		$this->queue->enqueueAll($data, $secDelay);
 	}
 

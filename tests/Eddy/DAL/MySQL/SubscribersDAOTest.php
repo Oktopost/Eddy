@@ -67,13 +67,16 @@ class SubscribersDAOTest extends TestCase
 			->from(self::SUBSCRIBERS_TABLE)
 			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
 			->queryExists();
-		
-		$isExecuted = MySQLConfig::connector()->select()
+		return $isSubscribed;
+	}
+	
+	private function executorExists(string $eventId, string $handlerId): bool
+	{	
+		$isExecute = MySQLConfig::connector()->select()
 			->from(self::EXECUTORS_TABLE)
 			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
 			->queryExists();
-		
-		return $isSubscribed && $isExecuted;
+		return $isExecute;
 	}
 	
 	
@@ -201,50 +204,26 @@ class SubscribersDAOTest extends TestCase
 		self::assertFalse($this->connectionExist($event->Id, $handler3->Id));
 	}
 	
-	public function test_addExecutors_NoExecutors_NewAdded()
+	public function test_addExecutor()
 	{
 		$handler = $this->getHandler();
 		
 		$event = $this->getEvent();
-		$event2 = $this->getEvent();
 		
-		$this->getSubject()->addExecutors([$handler->Id => [$event->Id, $event2->Id]]);
+		$this->getSubject()->addExecutor($handler->Id, $event->Id);
 		
-		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
-		self::assertTrue($this->connectionExist($event2->Id, $handler->Id));
+		self::assertTrue($this->executorExists($event->Id, $handler->Id));
 	}
 	
-	public function test_addExecutors_ExecutorsExists_NewAdded()
+	public function test_addExecutors_SameExecutorTwoTimes_NoErrors()
 	{
 		$handler = $this->getHandler();
 		
 		$event = $this->getEvent();
-		$event2 = $this->getEvent();
-		$event3 = $this->getEvent();
 		
-		$this->getSubject()->subscribe($event3->Id, $handler->Id);
+		$this->getSubject()->addExecutor($handler->Id, $event->Id);
+		$this->getSubject()->addExecutor($handler->Id, $event->Id);
 		
-		$this->getSubject()->addExecutors([$handler->Id => [$event->Id, $event2->Id, $event3->Id]]);
-		
-		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
-		self::assertTrue($this->connectionExist($event2->Id, $handler->Id));
-		self::assertTrue($this->connectionExist($event3->Id, $handler->Id));
-	}
-	
-	public function test_addExecutors_ExecutorsExists_OldRemovedNewAdded()
-	{
-		$handler = $this->getHandler();
-		
-		$event = $this->getEvent();
-		$event2 = $this->getEvent();
-		$event3 = $this->getEvent();
-		
-		$this->getSubject()->subscribe($event3->Id, $handler->Id);
-		
-		$this->getSubject()->addExecutors([$handler->Id => [$event->Id, $event2->Id]]);
-		
-		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
-		self::assertTrue($this->connectionExist($event2->Id, $handler->Id));
-		self::assertFalse($this->connectionExist($event3->Id, $handler->Id));
+		self::assertTrue($this->executorExists($event->Id, $handler->Id));
 	}
 }

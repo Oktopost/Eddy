@@ -39,6 +39,6 @@ class MainQueue implements IMainQueue
 		if (is_null($delay)) return;
 		
 		$name = $object->getQueueNaming($this->config->Naming);
-		$this->queue->enqueue([$name => $name], $delay);
+		$this->queue->enqueue([[$name => $name]], $delay);
 	}
 }

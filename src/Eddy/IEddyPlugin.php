@@ -2,10 +2,10 @@
 namespace Eddy;
 
 
-use Eddy\Base\IConfig;
+use Eddy\Utils\Config;
 
 
 interface IEddyPlugin
 {
-	public function setup(IConfig $config): void;
+	public function setup(Config $config): void;
 }

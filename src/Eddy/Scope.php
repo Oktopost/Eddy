@@ -36,4 +36,12 @@ class Scope
 		
 		return self::$skeleton;
 	}
+	
+	public static function load($for, $item)
+	{
+		if (!self::$skeleton)
+			self::$skeleton = SkeletonSetup::create();
+		
+		return self::$skeleton->for($for)->load($item);
+	}
 }

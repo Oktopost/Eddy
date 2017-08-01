@@ -2,6 +2,8 @@
 namespace Eddy\Plugins\StatisticsCollector\Object;
 
 
+use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;
+
 use Objection\LiteSetup;
 use Objection\LiteObject;
 
@@ -19,12 +21,15 @@ class StatsDumpEntry extends LiteObject
 	protected function _setup()
 	{
 		return [
-			'Name'		=> LiteSetup::createString(),
-			'Type'		=> LiteSetup::createString(),
-			'Operation'	=> LiteSetup::createString(),
-			'Amount'	=> LiteSetup::createInt(),
-			'StartTime'	=> LiteSetup::createInt(),
-			'EndTime'	=> LiteSetup::createInt()
+			'Name'			=> LiteSetup::createString(),
+			'Type'			=> LiteSetup::createEnum(StatsObjectType::class),
+			'Enqueued'		=> LiteSetup::createInt(),
+			'Dequeued'		=> LiteSetup::createInt(),
+			'ErrorsCount'	=> LiteSetup::createInt(),
+			'Processed'		=> LiteSetup::createInt(),
+			'TotalRuntime'	=> LiteSetup::createDouble(),
+			'Granularity'	=> LiteSetup::createInt(),
+			'DataDate'		=> LiteSetup::createString()
 		];
 	}
 }

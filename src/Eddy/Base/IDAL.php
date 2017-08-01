@@ -12,6 +12,4 @@ interface IDAL
 	public function handlers(): IHandlerDAO;
 	public function events(): IEventDAO;
 	public function subscribers(): ISubscribersDAO;
-	
-	public function addInvoker(array $invokerToEvent): void;
 }
