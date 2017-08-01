@@ -2,6 +2,10 @@
 namespace Eddy\Plugins\StatisticsCollector\Object;
 
 
+use Eddy\Plugins\StatisticsCollector\Enum\StatsStatus;
+use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
+use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;
+
 use Objection\LiteSetup;
 use Objection\LiteObject;
 
@@ -19,12 +23,13 @@ class StatsCachedEntry extends LiteObject
 	protected function _setup()
 	{
 		return [
-			'Name'		=> LiteSetup::createString(),
-			'Type'		=> LiteSetup::createString(),
-			'Operation'	=> LiteSetup::createString(),
-			'Status'	=> LiteSetup::createString(),
-			'Amount'	=> LiteSetup::createInt(),
-			'Time'		=> LiteSetup::createInt()
+			'Name'			=> LiteSetup::createString(),
+			'Type'			=> LiteSetup::createEnum(StatsObjectType::class),
+			'Operation'		=> LiteSetup::createEnum(StatsOperation::class),
+			'Status'		=> LiteSetup::createEnum(StatsStatus::class),
+			'Amount'		=> LiteSetup::createInt(),
+			'DataTime'		=> LiteSetup::createInt(),
+			'TotalRuntime'	=> LiteSetup::createDouble(),
 		];
 	}
 }

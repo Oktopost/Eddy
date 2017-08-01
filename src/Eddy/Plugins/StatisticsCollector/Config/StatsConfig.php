@@ -28,9 +28,10 @@ class StatsConfig implements IStatsConfig
 			return $config;
 		}
 		
-		\Squid::MySql()->config()->setConfig($config);
+		$mysql = \Squid::MySql();
+		$mysql->config()->setConfig($config);
 		
-		return \Squid::MySql()->getConnector();
+		return $mysql->getConnector();
 	}
 	
 	private function getRedisClient(array $redisConfig): Client

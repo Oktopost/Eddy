@@ -2,7 +2,7 @@
 namespace Eddy\Plugins\StatisticsCollector\Utils;
 
 
-use Eddy\Plugins\StatisticsCollector\Object\StatsCachedEntry;
+use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
 
 
 class StatsKeyBuilder
@@ -10,8 +10,8 @@ class StatsKeyBuilder
 	use \Objection\TStaticClass;
 	
 	
-	public static function get(StatsCachedEntry $entry): string
+	public static function get(StatsEntry $entry, int $time): string
 	{
-		return "{$entry->Type}:{$entry->Name}:{$entry->Time}";
+		return "{$entry->Type}:{$entry->Name}:{$time}";
 	}
 }

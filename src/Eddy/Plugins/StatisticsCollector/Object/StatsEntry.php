@@ -11,10 +11,13 @@ use Objection\LiteObject;
 /**
  * @property string	$Name
  * @property string	$Type
- * @property string	$Operation
- * @property int	$Amount
- * @property int	$StartDate
- * @property int	$EndDate
+ * @property int	$Enqueued
+ * @property int	$Dequeued
+ * @property int	$ErrorsCount
+ * @property int	$Processed
+ * @property double	$TotalRuntime
+ * @property int	$Granularity
+ * @property string	$DataDate
  */
 class StatsEntry extends LiteObject
 {

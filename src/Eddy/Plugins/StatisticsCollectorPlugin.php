@@ -2,15 +2,16 @@
 namespace Eddy\Plugins;
 
 
-use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
+use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
 use Eddy\Scope;
 use Eddy\IEddyPlugin;
 use Eddy\Utils\Config;
+use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatsConfig;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
+use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Config\StatsConfig;
-use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
 
 use Squid\MySql\IMySqlConnector;
 

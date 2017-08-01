@@ -21,7 +21,7 @@ class PublishBuilder implements IPublishBuilder
 	private function getPublisherFor(IEddyQueueObject $object): IPublisher
 	{
 		/** @var IPublisherObject $publisher */
-		$publisher = Scope::skeleton($this, IPublisherObject::class);;
+		$publisher = Scope::skeleton($this, IPublisherObject::class);
 		$publisher->setObject($object);
 		return $publisher;
 	}

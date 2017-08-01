@@ -2,6 +2,9 @@
 namespace Eddy\Plugins\StatisticsCollector\Base;
 
 
+/**
+ * @skeleton
+ */
 interface IStatisticsStorage
 {
 	public function isTimeToDump(): bool;

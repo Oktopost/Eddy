@@ -204,6 +204,29 @@ class SubscribersDAOTest extends TestCase
 		self::assertFalse($this->connectionExist($event->Id, $handler3->Id));
 	}
 	
+	public function test_AddSubscribersWithPlainElements_SubscribersExists_NewAdded()
+	{
+		$event = $this->getEvent();
+		$event2 = $this->getEvent();
+		
+		$handler = $this->getHandler();
+		$handler2 = $this->getHandler();
+		$handler3 = $this->getHandler();
+		
+		$this->getSubject()->subscribe($event->Id, $handler3->Id);
+		
+		$this->getSubject()->addSubscribers(
+			[
+				$event->Id 	=> [$handler->Id, $handler2->Id], 
+				$event2->Id => $handler3->Id
+			]
+		);
+		
+		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
+		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
+		self::assertTrue($this->connectionExist($event2->Id, $handler3->Id));
+	}
+	
 	public function test_addExecutor()
 	{
 		$handler = $this->getHandler();

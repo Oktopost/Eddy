@@ -9,4 +9,6 @@ class StatsOperation
 	
 	public const ENQUEUE	= 'enqueue';
 	public const DEQUEUE	= 'dequeue';
+	
+	public const ERROR		= 'error';
 }
