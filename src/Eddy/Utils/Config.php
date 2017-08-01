@@ -5,6 +5,7 @@ namespace Eddy\Utils;
 use Eddy\DAL\MySQLDAL;
 use Eddy\Base\IDAL;
 use Eddy\Base\IConfig;
+use Eddy\Base\IExceptionHandler;
 use Eddy\Exceptions\UnexpectedException;
 
 use Objection\LiteObject;
@@ -13,10 +14,6 @@ use Objection\LiteSetup;
 use Squid\MySql;
 
 
-/**
- * @property EngineConfig	$Engine
- * @property Naming			$Naming
- */
 class Config extends LiteObject implements IConfig
 {
 	/** @var IDAL */
@@ -29,8 +26,9 @@ class Config extends LiteObject implements IConfig
 	protected function _setup()
 	{
 		return [
-			'Engine'	=> LiteSetup::createInstanceOf(new EngineConfig()),
-			'Naming'	=> LiteSetup::createInstanceOf(new Naming()),
+			'Engine'			=> LiteSetup::createInstanceOf(new EngineConfig()),
+			'Naming'			=> LiteSetup::createInstanceOf(new Naming()),
+ 			'ExceptionHandler'	=> LiteSetup::createInstanceOf(IExceptionHandler::class)
 		];
 	}
 	
@@ -38,6 +36,18 @@ class Config extends LiteObject implements IConfig
 	public function DAL(): IDAL
 	{
 		return $this->dal;
+	}
+	
+	public function handleError(\Throwable $t): void
+	{
+		if ($this->ExceptionHandler)
+		{
+			$this->ExceptionHandler->exception($t);
+		}
+		else
+		{
+			error_log('[Eddy]: Error not handle, setup an ExceptionHandler! Error: ' . $t->getMessage());
+		}
 	}
 	
 	public function setMainDataBase($setup)

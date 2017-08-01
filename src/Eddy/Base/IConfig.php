@@ -7,10 +7,12 @@ use Eddy\Base\Config\IEngineConfig;
 
 
 /**
- * @property IEngineConfig	$Engine
- * @property INaming		$Naming
+ * @property IEngineConfig			$Engine
+ * @property INaming				$Naming
+ * @property IExceptionHandler|null	$ExceptionHandler
  */
 interface IConfig
 {
 	public function DAL(): IDAL;
+	public function handleError(\Throwable $t): void;
 }

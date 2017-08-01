@@ -6,6 +6,10 @@ namespace Eddy;
 use Eddy\Crawler\Loader; 
 use Eddy\Crawler\Utils\DirectoryScanner;
 
+$this->set(Crawler\Base\ILoader::class, Loader::class);
+$this->set(Crawler\Base\Utils\IDirectoryScanner::class, DirectoryScanner::class);
+
+
 use Eddy\Module\EventModule;
 use Eddy\Module\HandlerModule;
 use Eddy\Module\EventHandlerModule;
@@ -16,11 +20,6 @@ use Eddy\DAL\MySQL\SubscribersDAO;
 
 use Eddy\DAL\MySQL\Connector\EventConnector;
 use Eddy\DAL\MySQL\Connector\HandlerConnector;
-
-
-$this->set(Crawler\Base\ILoader::class, Loader::class);
-$this->set(Crawler\Base\Utils\IDirectoryScanner::class, DirectoryScanner::class);
-
 
 $this->set(Base\Module\IEventModule::class, EventModule::class);
 $this->set(Base\Module\IHandlerModule::class, HandlerModule::class);
@@ -45,9 +44,18 @@ use Eddy\Engine\Queue\QueueBuilder;
 use Eddy\Engine\Publish\PublisherObject;
 use Eddy\Engine\Publish\PublishBuilder;
 
-
 $this->set(IEngine::class,			Engine::class);
 $this->set(IMainQueue::class,		MainQueue::class);
 $this->set(IQueueBuilder::class,	QueueBuilder::class);
 $this->set(IPublishBuilder::class,	PublishBuilder::class);
 $this->set(IPublisherObject::class,	PublisherObject::class);
+
+
+use Eddy\Base\Engine\IProcessor;
+use Eddy\Base\Engine\Processor\IProcessControlChain;
+
+use Eddy\Engine\Processor\MainProcessor;
+use Eddy\Engine\Processor\Control\ProcessControlChain;
+
+$this->set(IProcessor::class,			MainProcessor::class);
+$this->set(IProcessControlChain::class,	ProcessControlChain::class);
