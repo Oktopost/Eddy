@@ -2,11 +2,12 @@
 namespace Eddy\Plugins;
 
 
+use Eddy\Utils\Config;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
-use Eddy\Utils\Config;
+
 use lib\MySQLConfig;
 
 use PHPUnit\Framework\TestCase;
