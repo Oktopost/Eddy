@@ -15,6 +15,7 @@ class ObjectAnnotations
 	public const PROXY_ANNOTATION	= 'Proxy';
 	public const HANDLER_ANNOTATION	= 'Handler';
 	public const CONFIG_ANNOTATION	= 'Config';
+	public const UNIQUE_ANNOTATION	= 'Unique';
 	
 	
 	public static function isEvent($target): bool
@@ -25,6 +26,11 @@ class ObjectAnnotations
 	public static function getEventName($target): ?string
 	{
 		return Value::getValue($target, self::EVENT_ANNOTATION, null);
+	}
+	
+	public static function isUnique($target): bool
+	{
+		return Flag::hasFlag($target, self::UNIQUE_ANNOTATION);
 	}
 	
 	public static function isProxy($target): bool

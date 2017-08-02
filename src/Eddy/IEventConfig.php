@@ -5,7 +5,7 @@ namespace Eddy;
 interface IEventConfig
 {
 	public function name(): string;
-	public function delay(): ?float;
+	public function delay(): float;
 	public function maxBulkSize(): int;
 	public function initialState(): string;
 	public function eventClassName(): string;

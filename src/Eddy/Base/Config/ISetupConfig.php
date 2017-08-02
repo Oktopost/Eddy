@@ -13,7 +13,7 @@ interface ISetupConfig
 	public function addArraySetup(array $item): void;
 
 	/**
-	 * @param string|array $directories
+	 * @param string|array $config
 	 */
-	public function addCrawlerSetup($directories): void;
+	public function addCrawlerSetup($config): void;
 }

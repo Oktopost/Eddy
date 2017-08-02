@@ -84,7 +84,7 @@ class PayloadPreprocessorPublisherTestConfig implements IEventConfig
 	public $return = [];
 	
 	public function name(): string {}
-	public function delay(): ?float {}
+	public function delay(): float {}
 	public function initialState(): string {}
 	public function eventClassName(): string {}
 	public function proxyClassName(): ?string {}

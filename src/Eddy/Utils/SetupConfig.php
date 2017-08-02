@@ -26,11 +26,17 @@ class SetupConfig extends LiteObject implements ISetupConfig
 	{
 		$this->Loaders[] = new ArraySetup($item);
 	}
-
+	
+	public function addSetup($item): void
+	{
+		$item = is_array($item) ? $item : [$item];
+		$this->Loaders[] = new ArraySetup($item);
+	}
+	
 	/**
-	 * @param string|array $directories
+	 * @param string|array|\Itarator $config
 	 */
-	public function addCrawlerSetup($directories): void
+	public function addCrawlerSetup($config): void
 	{
 		// TODO: 
 	}
