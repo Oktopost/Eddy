@@ -7,5 +7,5 @@ use Eddy\Object\HandlerObject;
 
 interface IHandlerLoader
 {
-	public function tryLoad($item): HandlerObject;
+	public function tryLoad($item): ?HandlerObject;
 }
