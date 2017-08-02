@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Crawler;
+namespace Eddy\Base\Setup;
 
 
 use Eddy\Object\HandlerObject;
