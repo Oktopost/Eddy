@@ -17,8 +17,14 @@ class StatsConfig implements IStatsConfig
 	private $scope = '';
 	
 	
+	/** @var IMySqlConnector */
 	public $mysqlConnector;
+	
+	/** @var Client */
 	public $redisClient;
+	
+	/** @var int Time period to dump statistics to MySQL */
+	public $granularity = 300; 
 
 	
 	/**

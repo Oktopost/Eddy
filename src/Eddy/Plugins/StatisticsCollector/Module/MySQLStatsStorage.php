@@ -15,6 +15,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 	private const SETTINGS_TABLE_NAME	= 'EddyStatisticsSettings';
 	private const DUMP_TIME				= 'NextDumpTime';
 	
+	
 	/**
 	 * @context
 	 * @var \Eddy\Plugins\StatisticsCollector\Base\IStatsConfig
@@ -24,7 +25,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 	
 	private function getGranularity(): int 
 	{
-		return 60 * 5;
+		return $this->config->granularity;
 	}
 	
 	private function save(array $data): void

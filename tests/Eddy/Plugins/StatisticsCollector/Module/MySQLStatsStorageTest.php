@@ -93,7 +93,7 @@ class MySQLStatsStorageTest extends TestCase
 	
 	public function test_getEndTime_NoSettings_ReturnGranularityBeforeNow()
 	{
-		self::assertEquals(time() - 60 * 5, $this->getSubject()->getEndTime());
+		self::assertEquals(time() - $this->config->granularity, $this->getSubject()->getEndTime());
 	}
 	
 	public function test_getEndTime_SettingExists_GotParam()
@@ -106,7 +106,7 @@ class MySQLStatsStorageTest extends TestCase
 	
 	public function test_isTimeToDump_DiffEndNowTimeLessThanGranularity_GotFalse()
 	{
-		$time = time() - 60 * 4;
+		$time = time() - $this->config->granularity + ($this->config->granularity / 10);
 		$this->setEndTime($time);
 		
 		self::assertFalse($this->getSubject()->isTimeToDump());
@@ -114,7 +114,7 @@ class MySQLStatsStorageTest extends TestCase
 	
 	public function test_isTimeToDump_DiffEndNowTimeMoreThanGranularity_GotTrue()
 	{
-		$time = time() - 60 * 5;
+		$time = time() - $this->config->granularity;
 		$this->setEndTime($time);
 		
 		self::assertTrue($this->getSubject()->isTimeToDump());
@@ -127,7 +127,7 @@ class MySQLStatsStorageTest extends TestCase
 		
 		$this->getSubject()->populate([], $time);
 		
-		self::assertEquals($time + 60 * 5, $this->getSubject()->getEndTime());
+		self::assertEquals($time + $this->config->granularity, $this->getSubject()->getEndTime());
 	}
 	
 	public function test_populate_passData_DataCombinedAndSaved()

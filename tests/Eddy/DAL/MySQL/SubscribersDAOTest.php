@@ -66,8 +66,9 @@ class SubscribersDAOTest extends TestCase
 		$isSubscribed = MySQLConfig::connector()->select()
 			->from(self::SUBSCRIBERS_TABLE)
 			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
-			->queryExists();
-		return $isSubscribed;
+			->queryRow();
+		
+		return (bool)$isSubscribed;
 	}
 	
 	private function executorExists(string $eventId, string $handlerId): bool
@@ -75,8 +76,9 @@ class SubscribersDAOTest extends TestCase
 		$isExecute = MySQLConfig::connector()->select()
 			->from(self::EXECUTORS_TABLE)
 			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
-			->queryExists();
-		return $isExecute;
+			->queryRow();
+
+		return (bool)$isExecute;
 	}
 	
 	

@@ -49,7 +49,9 @@ CREATE TEMPORARY TABLE IF NOT EXISTS `EddySubscribers` (
 	
 	INDEX `k_EddyEventId` (`EddyEventId`),
 	INDEX `k_EddyHandlerId` (`EddyHandlerId`),
-	INDEX `k_Created` (`Created`)
+	INDEX `k_Created` (`Created`),
+	
+	UNIQUE INDEX `k_EddyHandlerId_EddyEventId` (`EddyHandlerId`, `EddyEventId`)
 ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

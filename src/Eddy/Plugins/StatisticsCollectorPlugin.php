@@ -24,11 +24,12 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	/**
 	 * @param IMySqlConnector|array $mysqlConfig
 	 */
-	public function __construct($mysqlConfig, array $redisConfig)
+	public function __construct($mysqlConfig, array $redisConfig, int $granularity = 300)
 	{
 		$context = Scope::skeleton()->context($this, 'Eddy::StatisticsCollectorPlugin');
 		
 		$config = new StatsConfig($mysqlConfig, $redisConfig);
+		$config->granularity = $granularity;
 		
 		$this->config = $config;
 		$context->set(IStatsConfig::class, $config);
@@ -43,7 +44,6 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 		$processController = Scope::skeleton($this, IProcessStatistics::class);
 		$config->Engine->addController($processController);
 	}
-	
 	
 	public function dump(): void
 	{

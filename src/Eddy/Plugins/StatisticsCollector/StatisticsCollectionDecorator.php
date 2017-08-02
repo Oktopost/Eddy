@@ -2,11 +2,9 @@
 namespace Eddy\Plugins\StatisticsCollector;
 
 
-use Eddy\Scope;
 use Eddy\Base\Engine\Queue\AbstractQueueDecorator;
-use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
-use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
+use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 
 
 /**

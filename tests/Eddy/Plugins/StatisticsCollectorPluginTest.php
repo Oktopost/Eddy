@@ -92,6 +92,8 @@ class StatisticsCollectorPluginTest extends TestCase
 	public function test_setup()
 	{
 		$config = new Config();
+		$config->Engine->QueueDecorators = [];
+		$config->Engine->Controllers = [];
 		
 		$this->getSubject()->setup($config);
 		

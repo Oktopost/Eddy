@@ -15,12 +15,12 @@ class StatsDataCombinerTest extends TestCase
 		return new StatsDataCombiner();
 	}
 	
-	private function createEntry(string $name = 'test', string $type = StatsObjectType::EVENT): StatsEntry
+	private function createEntry(int $time, string $name = 'test', string $type = StatsObjectType::EVENT): StatsEntry
 	{
 		$data = new StatsEntry();
 		$data->Name = $name;
 		$data->Type = $type;
-		$data->DataDate = date('Y-m-d H:i:s');
+		$data->DataDate = date('Y-m-d H:i:s', $time);
 		$data->WithErrors = 1;
 		$data->ErrorsTotal = 1;
 		$data->Granularity = 1;
@@ -58,7 +58,7 @@ class StatsDataCombinerTest extends TestCase
 	
 	public function test_combine_sanity()
 	{
-		$data = $this->createEntry();
+		$data = $this->createEntry(time());
 		
 		$combined = $this->getSubject()->combine($data->toArray(), $data->toArray(), ['Granularity']);
 		
@@ -67,14 +67,13 @@ class StatsDataCombinerTest extends TestCase
 	
 	public function test_combineAll_sanity()
 	{
-		$eventEntry = $this->createEntry();
-		
-		$eventEntry2 = $this->createEntry('test2');
-		
-		$handlerEntry = $this->createEntry('h1', StatsObjectType::HANDLER);
-		
 		$time = time();
-		$granularity = 300;
+		
+		$eventEntry = $this->createEntry($time);
+		$eventEntry2 = $this->createEntry($time, 'test2');
+		$handlerEntry = $this->createEntry($time, 'h1', StatsObjectType::HANDLER);
+
+		$granularity = 100;
 		
 		$combined = $this->getSubject()->combineAll([
 			$eventEntry->toArray(), $eventEntry->toArray(), 
