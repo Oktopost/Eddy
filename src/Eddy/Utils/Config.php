@@ -47,7 +47,7 @@ class Config extends LiteObject implements IConfig
 		}
 		else
 		{
-			error_log('[Eddy]: Error not handle, setup an ExceptionHandler! Error: ' . $t->getMessage());
+			throw $t;
 		}
 	}
 	

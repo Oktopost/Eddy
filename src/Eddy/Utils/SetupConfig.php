@@ -5,6 +5,7 @@ namespace Eddy\Utils;
 use Eddy\Base\Config\ISetupConfig;
 use Eddy\Setup\ArraySetup;
 
+use Eddy\Setup\CrawlerSetup;
 use Objection\LiteObject;
 use Objection\LiteSetup;
 
@@ -38,6 +39,6 @@ class SetupConfig extends LiteObject implements ISetupConfig
 	 */
 	public function addCrawlerSetup($config): void
 	{
-		// TODO: 
+		$this->Loaders[] = new CrawlerSetup($config);
 	}
 }

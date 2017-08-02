@@ -39,6 +39,35 @@ class EngineConfigTest extends TestCase
 	}
 	
 	
+	public function test_addController_PassSingleInstance()
+	{
+		$config = new EngineConfig();
+		$config->addController('a');
+		
+		self::assertEquals(['a'], $config->Controllers);
+	}
+	
+	public function test_addController_QueueNotEmpty()
+	{
+		$config = new EngineConfig();
+		
+		$config->addController('a');
+		$config->addController('b');
+		
+		self::assertEquals(['a', 'b'], $config->Controllers);
+	}
+	
+	public function test_addController_AddArray()
+	{
+		$config = new EngineConfig();
+		
+		$config->addController('a');
+		$config->addController(['b', 'c']);
+		
+		self::assertEquals(['a', 'b', 'c'], $config->Controllers);
+	}
+	
+	
 	public function test_setQueueProvider_PassDeepQueueInstance()
 	{
 		$config = new EngineConfig();

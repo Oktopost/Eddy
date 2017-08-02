@@ -9,5 +9,9 @@ interface IHandlerConfig
 	public function maxBulkSize(): int;
 	public function initialState(): string;
 	public function handlerClassName(): string;
-	public function getInstance(): string;
+
+	/**
+	 * @return mixed
+	 */
+	public function getInstance();
 }
