@@ -26,7 +26,7 @@ abstract class AbstractAnnotationStrategy implements ILoaderStrategy
 	
 	public function tryLoad(string $item): ?IEddyQueueObject
 	{
-		if (!ObjectAnnotations::isEvent($item)) return null;
+		if (!ObjectAnnotations::isEvent($item) || !ObjectAnnotations::isHandler($item)) return null;
 		
 		$configName = ObjectAnnotations::getConfigName($item);
 		

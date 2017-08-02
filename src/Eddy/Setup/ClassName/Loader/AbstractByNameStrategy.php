@@ -33,7 +33,7 @@ abstract class AbstractByNameStrategy implements ILoaderStrategy
 
 	public function tryLoad(string $item): ?IEddyQueueObject
 	{
-		if (!ObjectAnnotations::isEvent($item) ||  
+		if ((!ObjectAnnotations::isEvent($item) && !ObjectAnnotations::isHandler($item)) ||  
 			substr($item, strlen($item) - strlen($this->suffix)) != $this->suffix)
 		{
 			return null;
