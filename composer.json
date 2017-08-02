@@ -15,7 +15,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "oktopost/skeleton": "^1.1.2",
+        "oktopost/skeleton": "^1.1.3",
         "oktopost/squid": "^1.0.24",
         "oktopost/annotation": "^1.0",
         "oktopost/deep-queue": "1.0.9",
