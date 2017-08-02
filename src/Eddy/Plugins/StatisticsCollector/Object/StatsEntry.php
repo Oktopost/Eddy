@@ -13,7 +13,8 @@ use Objection\LiteObject;
  * @property string	$Type
  * @property int	$Enqueued
  * @property int	$Dequeued
- * @property int	$ErrorsCount
+ * @property int	$WithErrors
+ * @property int	$ErrorsTotal
  * @property int	$Processed
  * @property double	$TotalRuntime
  * @property int	$Granularity
@@ -28,7 +29,8 @@ class StatsEntry extends LiteObject
 			'Type'			=> LiteSetup::createEnum(StatsObjectType::class),
 			'Enqueued'		=> LiteSetup::createInt(),
 			'Dequeued'		=> LiteSetup::createInt(),
-			'ErrorsCount'	=> LiteSetup::createInt(),
+			'WithErrors'	=> LiteSetup::createInt(),
+			'ErrorsTotal'	=> LiteSetup::createInt(),
 			'Processed'		=> LiteSetup::createInt(),
 			'TotalRuntime'	=> LiteSetup::createDouble(),
 			'Granularity'	=> LiteSetup::createInt(),

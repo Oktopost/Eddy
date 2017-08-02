@@ -10,6 +10,7 @@ use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
 use Eddy\Plugins\StatisticsCollector\Utils\StatsDataCombiner;
 use Eddy\Plugins\StatisticsCollector\Utils\StatsKeyBuilder;
+
 use Predis\Collection\Iterator\Keyspace;
 
 
@@ -53,7 +54,7 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 				break;
 				
 			case StatsOperation::ERROR:
-				$entry->ErrorsCount = $amount;
+				$entry->WithErrors = $amount;
 				break;
 		}
 		
@@ -111,8 +112,11 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		return $result ?: [];
 	}
 
-	private function save($key, array $data): void
+	private function save(StatsEntry $entry, int $time): void
 	{
+		$key = StatsKeyBuilder::get($entry->Type, $entry->Name, $time);
+		$data = $entry->toArray();
+		
 		$oldData = $this->config->redisClient->hgetall($key);
 		
 		if ($oldData)
@@ -124,30 +128,27 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 	}
 
 	
-	public function collectData(IEddyQueueObject $object, int $amount, string $operation): void
+	public function collectData(IEddyQueueObject $object, int $amount, string $operation, int $time): void
 	{
-		$time = time();
-		
 		$entry = $this->prepareEntry($object, $amount, $operation, $time);
 		
-		$this->save(StatsKeyBuilder::get($entry->Type, $entry->Name, $time),  $entry->toArray());
+		$this->save($entry, $time);
 	}
 	
-	public function collectError(IEddyQueueObject $object, int $amount): void
+	public function collectError(IEddyQueueObject $object, int $amount, int $time): void
 	{
-		$time = time();
-		
 		$entry = $this->prepareEntry($object, $amount, StatsOperation::ERROR, $time);
+		$entry->ErrorsTotal = 1;
 		
-		$this->save(StatsKeyBuilder::get($entry->Type, $entry->Name, $time),  $entry->toArray());
+		$this->save($entry, $time);
 	}
 	
-	public function collectExecutionTime(IEddyQueueObject $object, float $executionTime): void
+	public function collectExecutionTime(IEddyQueueObject $object, float $executionTime, int $time): void
 	{
-		$this->save(
-			StatsKeyBuilder::get($this->getObjectType($object), $object->Name, time()),
-			['TotalRuntime' => $executionTime]
-			);
+		$entry = $this->prepareEntry($object, 0, StatsOperation::EXECUTION_TIME, $time);
+		$entry->TotalRuntime = $executionTime;
+		
+		$this->save($entry, $time);
 	}
 
 	public function pullData(int $endTime): array

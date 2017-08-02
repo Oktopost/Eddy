@@ -64,16 +64,16 @@ class MySQLStatsStorage implements IStatisticsStorage
 			->setDuplicateKeys(['Param'])
 			->executeDml();
 	}
-	
-	
-	public function isTimeToDump(): bool
-	{
-		return (time() - $this->getNextTime() <= $this->getGranularity());
-	}
+
 
 	public function getEndTime(): int
 	{
 		return $this->getNextTime();
+	}
+
+	public function isTimeToDump(): bool
+	{
+		return ($this->getGranularity() <= time() - $this->getNextTime());
 	}
 
 	public function populate(array $data, int $endTime): void

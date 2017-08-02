@@ -53,13 +53,16 @@ $this->set(IProcessor::class,			MainProcessor::class);
 $this->set(IProcessControlChain::class,	ProcessControlChain::class);
 
 
+use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
+use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
-use Eddy\Plugins\StatisticsCollector\Module\RedisStatsCacheCollector;
+use Eddy\Plugins\StatisticsCollector\Module\RedisStatsCacheCollectorTest;
 use Eddy\Plugins\StatisticsCollector\Module\MySQLStatsStorage;
 
 $this->set(IStatisticsStorage::class, MySQLStatsStorage::class);
-$this->set(IStatisticsCacheCollector::class, RedisStatsCacheCollector::class);
+$this->set(IStatisticsCacheCollector::class, RedisStatsCacheCollectorTest::class);
 $this->set(IStatisticsCollectionDecorator::class, StatisticsCollectionDecorator::class);
+$this->set(IProcessStatistics::class, ProcessStatistics::class);

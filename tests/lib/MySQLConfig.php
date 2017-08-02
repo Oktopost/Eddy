@@ -14,7 +14,9 @@ class MySQLConfig
 		'EddySubscribers',
 		'EddyExecutors',
 		'EddyEvent',
-		'EddyHandler'
+		'EddyHandler',
+		'EddyStatistics',
+		'EddyStatisticsSettings'
 	];
 
 

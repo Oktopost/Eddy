@@ -14,6 +14,9 @@ class StatsConfig implements IStatsConfig
 	private const MAIN_PREFIX = 'Eddy:Statistics:';
 	
 	
+	private $scope = '';
+	
+	
 	public $mysqlConnector;
 	public $redisClient;
 
@@ -38,6 +41,13 @@ class StatsConfig implements IStatsConfig
 	{
 		$prefix = self::MAIN_PREFIX;
 		
+		if (isset($redisConfig['prefix'])) 
+		{
+			$prefix = $redisConfig['prefix'] . $prefix;
+		}
+		
+		$this->scope = $prefix;
+		
 		return new Client($redisConfig, ['prefix' => $prefix]);
 	}
 
@@ -54,6 +64,6 @@ class StatsConfig implements IStatsConfig
 	
 	public function getRedisScope(): string
 	{
-		return self::MAIN_PREFIX;
+		return $this->scope;
 	}
 }

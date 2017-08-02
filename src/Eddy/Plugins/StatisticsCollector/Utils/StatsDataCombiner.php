@@ -22,9 +22,6 @@ class StatsDataCombiner
 	{
 		$firstEntry = array_shift($entries);
 		
-		if (!$entries)
-			return $firstEntry;
-		
 		foreach ($entries as $entry)
 		{
 			$firstEntry = $this->combine($firstEntry, $entry);

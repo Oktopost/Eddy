@@ -10,30 +10,27 @@ use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
 
 
 /**
- * @context
+ * @autoload
  */
 class StatisticsCollectionDecorator extends AbstractQueueDecorator implements IStatisticsCollectionDecorator
 {
-	/** @var IStatisticsCacheCollector */
+	/** 
+	 * @autoload
+	 * @var \Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector 
+	 */
 	private $collector;
-
-	
-	public function __construct()
-	{
-		$this->collector = Scope::skeleton($this, IStatisticsCacheCollector::class);
-	}
 	
 
 	public function enqueue(array $data, float $secDelay = 0.0): void
 	{
-		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::ENQUEUE);
+		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::ENQUEUE, time());
 		$this->getQueue()->enqueue($data, $secDelay);
 	}
 
 	public function dequeue(int $maxCount): array
 	{
 		$data = $this->getQueue()->dequeue($maxCount);
-		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::DEQUEUE);
+		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::DEQUEUE, time());
 		
 		return $data;
 	}

@@ -5,11 +5,11 @@ namespace Eddy\Plugins;
 use Eddy\Scope;
 use Eddy\IEddyPlugin;
 use Eddy\Utils\Config;
-use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatsConfig;
+use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
-use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
+use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Config\StatsConfig;
 
 use Squid\MySql\IMySqlConnector;
@@ -37,10 +37,10 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	
 	public function setup(Config $config): void
 	{
-		$decorator = Scope::load($this, StatisticsCollectionDecorator::class);
+		$decorator = Scope::skeleton($this, IStatisticsCollectionDecorator::class);
 		$config->Engine->addDecorator($decorator);
 		
-		$processController = Scope::load($this, ProcessStatistics::class);
+		$processController = Scope::skeleton($this, IProcessStatistics::class);
 		$config->Engine->addController($processController);
 	}
 	
@@ -48,17 +48,15 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	public function dump(): void
 	{
 		/** @var IStatisticsStorage $storage */
-		$storage = Scope::skeleton(IStatisticsStorage::class);
+		$storage = Scope::skeleton($this, IStatisticsStorage::class);
 		
 		/** @var IStatisticsCacheCollector $cache */
-		$cache = Scope::skeleton(IStatisticsCacheCollector::class);
+		$cache = Scope::skeleton($this,IStatisticsCacheCollector::class);
 		
 		$endTime = $storage->getEndTime();
+		
 		$data = $cache->pullData($endTime);
 		
-		if ($data)
-		{
-			$storage->populate($data, $endTime);
-		}
+		$storage->populate($data, $endTime);
 	}
 }
