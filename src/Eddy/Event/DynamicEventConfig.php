@@ -46,6 +46,19 @@ class DynamicEventConfig implements IEventConfig
 	}
 	
 	
+	protected function isUnique(): bool
+	{
+		if (is_null($this->isUnique))
+		{
+			$this->isUnique = 
+				ObjectAnnotations::isUnique($this) || 
+				ObjectAnnotations::isUnique($this->eventClassName());
+		}
+		
+		return $this->isUnique;
+	}
+	
+	
 	public function __construct(?string $eventInterface = null)
 	{
 		if ($eventInterface)
@@ -55,9 +68,20 @@ class DynamicEventConfig implements IEventConfig
 	}
 	
 
-	public function delay(): float { return 0; }
-	public function maxBulkSize(): int { return 256; }
-	public function initialState(): string { return EventState::PAUSED; }
+	public function delay(): float 
+	{
+		return 0;
+	}
+	
+	public function maxBulkSize(): int
+	{
+		return 256;
+	}
+	
+	public function initialState(): string
+	{
+		return EventState::PAUSED;
+	}
 	
 
 	public function name(): string
@@ -84,16 +108,17 @@ class DynamicEventConfig implements IEventConfig
 
 	public function prepare(array $data): ?array
 	{
-		if (is_null($this->isUnique))
+		if (!$this->isUnique() || count($data) == 1)
+			return null;
+		
+		$unique = array_unique($data);
+		
+		if (count($unique) != count($data))
 		{
-			$this->isUnique = 
-				ObjectAnnotations::isUnique($this) || 
-				ObjectAnnotations::isUnique($this->eventClassName());
+			$data = array_values($unique);
 		}
 		
-		return ($this->isUnique ? 
-			array_unique($data) : 
-			null);
+		return $data;
 	}
 
 	public function eventClassName(): string
@@ -111,10 +136,9 @@ class DynamicEventConfig implements IEventConfig
 			$this->proxyClassName = null;
 			$name = $this->replaceNameSuffix($this->name(), self::PROXY_SUFFIX);
 			
-			if (!class_exists($name))
-			{
-				$this->proxyClassName = $this->tryGetAnnotation(ObjectAnnotations::PROXY_ANNOTATION);
-			}
+			$this->proxyClassName = (!class_exists($name) ?
+				$this->tryGetAnnotation(ObjectAnnotations::PROXY_ANNOTATION) :
+				$name);
 		}
 		
 		return $this->proxyClassName;
@@ -127,10 +151,12 @@ class DynamicEventConfig implements IEventConfig
 			$this->handlerClassName = null;
 			$name = $this->replaceNameSuffix($this->name(), self::HANDLER_SUFFIX);
 			
-			if (!class_exists($name))
-			{
-				$this->handlerClassName = $this->tryGetAnnotation(ObjectAnnotations::HANDLER_ANNOTATION);
-			}
+			$this->handlerClassName = (!class_exists($name) ?
+				$this->tryGetAnnotation(ObjectAnnotations::HANDLER_ANNOTATION) :
+				$name);
+			
+			if (!$this->handlerClassName)
+				$this->handlerClassName = $this->eventClassName;
 		}
 		
 		return $this->handlerClassName;
