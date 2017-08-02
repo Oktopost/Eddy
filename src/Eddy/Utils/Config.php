@@ -28,6 +28,7 @@ class Config extends LiteObject implements IConfig
 		return [
 			'Engine'			=> LiteSetup::createInstanceOf(new EngineConfig()),
 			'Naming'			=> LiteSetup::createInstanceOf(new Naming()),
+			'Setup'				=> LiteSetup::createInstanceOf(new SetupConfig()),
  			'ExceptionHandler'	=> LiteSetup::createInstanceOf(IExceptionHandler::class)
 		];
 	}

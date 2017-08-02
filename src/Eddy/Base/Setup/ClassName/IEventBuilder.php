@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Setup;
+namespace Eddy\Base\Setup\ClassName;
 
 
 use Eddy\Object\EventObject;
@@ -10,5 +10,5 @@ use Eddy\Object\EventObject;
  */
 interface IEventBuilder
 {
-	public function tryLoad($item): ?EventObject;
+	public function tryBuild($item): ?EventObject;
 }

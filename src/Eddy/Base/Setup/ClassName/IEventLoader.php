@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Setup;
+namespace Eddy\Base\Setup\ClassName;
 
 
 use Eddy\Object\EventObject;

@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Base\Setup;
+namespace Eddy\Base\Setup\ClassName;
 
 
 use Eddy\Object\HandlerObject;
@@ -10,5 +10,5 @@ use Eddy\Object\HandlerObject;
  */
 interface IHandlerBuilder
 {
-	public function buildHandler($item): ?HandlerObject;
+	public function tryBuild($item): ?HandlerObject;
 }
