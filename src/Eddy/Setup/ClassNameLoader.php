@@ -60,7 +60,7 @@ class ClassNameLoader implements IClassNameLoader
 		
 		if (!$result)
 		{
-			throw new ClassNameIsNotASetupObjectException($className, 'Target is not an Event');
+			throw new ClassNameIsNotASetupObjectException($className, 'Target is not an Event or Handler');
 		}
 		
 		return $result;

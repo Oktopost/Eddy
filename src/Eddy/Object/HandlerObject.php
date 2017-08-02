@@ -17,6 +17,7 @@ use Objection\LiteObject;
  * @property string	$Name
  * @property string	$State
  * @property string	$HandlerClassName,
+ * @property string	$ConfigClassName,
  * @property float	$Delay,
  * @property int	$MaxBulkSize
  */

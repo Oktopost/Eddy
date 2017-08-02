@@ -10,5 +10,5 @@ use Eddy\Object\EventObject;
  */
 interface IEventBuilder
 {
-	public function tryBuild($item): ?EventObject;
+	public function tryBuild(string $item): ?EventObject;
 }

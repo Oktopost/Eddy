@@ -2,30 +2,34 @@
 namespace Eddy\Setup\ClassName;
 
 
-use Eddy\Base\Setup\ClassName\IEventLoader;
 use Eddy\Base\Setup\ClassName\IEventBuilder;
+use Eddy\Base\Setup\ClassName\ILoaderStrategy;
 
+use Eddy\IEventConfig;
 use Eddy\Object\EventObject;
 
 
 class EventBuilder implements IEventBuilder
 {
-	/** @var IEventLoader[] */
+	/** @var ILoaderStrategy[] */
 	private $loaders;
 	
 	
 	private function __construct()
 	{
 		$this->loaders = [
-			
+			new Loader\ConfigObjectLoaderStrategy(IEventConfig::class),
+			new Loader\EventAnnotationStrategy(),
+			new Loader\ByEventNameStrategy()
 		];
 	}
 
 
-	public function tryBuild($item): ?EventObject
+	public function tryBuild(string $item): ?EventObject
 	{
 		foreach ($this->loaders as $loader)
 		{
+			/** @var EventObject|null $result */
 			$result = $loader->tryLoad($item);
 			
 			if ($result) return $result;

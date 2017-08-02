@@ -89,10 +89,12 @@ class PayloadPreprocessorPublisherTestConfig implements IEventConfig
 	public function eventClassName(): string {}
 	public function proxyClassName(): ?string {}
 	public function handlersInterface(): string {}
+	public function maxBulkSize(): int {}
 
 	public function prepare(array $data): ?array
 	{
 		$this->calledWith = $data;
 		return $this->return;
 	}
+
 }

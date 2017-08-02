@@ -17,10 +17,11 @@ class AnonymousObjectEventConfig implements IEventConfig
 	{
 		$this->object = $object;
 	}
-
-
+	
+	
 	public function name(): string { return $this->object->Name; }
 	public function delay(): ?float { return $this->object->Delay; }
+	public function maxBulkSize(): int { return $this->object->MaxBulkSize; }
 	public function initialState(): string { return EventState::RUNNING; }
 	public function eventClassName(): string { return $this->object->EventInterface; }
 	public function proxyClassName(): ?string { return $this->object->ProxyClassName; }

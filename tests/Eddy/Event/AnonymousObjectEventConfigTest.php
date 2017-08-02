@@ -19,12 +19,14 @@ class AnonymousObjectEventConfigTest extends TestCase
 		$object->ProxyClassName		= 'abc';
 		$object->EventInterface		= 'evn';
 		$object->HandlerInterface	= 'hand';
+		$object->MaxBulkSize		= 230;
 		
 		self::assertEquals($config->name(),					$object->Name);
 		self::assertEquals($config->delay(),				$object->Delay);
 		self::assertEquals($config->proxyClassName(),		$object->ProxyClassName);
 		self::assertEquals($config->eventClassName(),		$object->EventInterface);
 		self::assertEquals($config->handlersInterface(),	$object->HandlerInterface);
+		self::assertEquals($config->maxBulkSize(),			$object->MaxBulkSize);
 		
 		self::assertEquals($config->initialState(),	EventState::RUNNING);
 		

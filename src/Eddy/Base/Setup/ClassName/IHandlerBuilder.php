@@ -10,5 +10,5 @@ use Eddy\Object\HandlerObject;
  */
 interface IHandlerBuilder
 {
-	public function tryBuild($item): ?HandlerObject;
+	public function tryBuild(string $item): ?HandlerObject;
 }
