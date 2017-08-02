@@ -19,7 +19,8 @@
         "oktopost/squid": "^1.0.24",
         "oktopost/annotation": "^1.0",
         "oktopost/deep-queue": "1.0.9",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "unstable-cacao/itarator": "^1.0"
     },
     "autoload": {
         "psr-0": {
