@@ -15,7 +15,7 @@ class EventBuilder implements IEventBuilder
 	private $loaders;
 	
 	
-	private function __construct()
+	public function __construct()
 	{
 		$this->loaders = [
 			new Loader\ConfigObjectLoaderStrategy(IEventConfig::class),
