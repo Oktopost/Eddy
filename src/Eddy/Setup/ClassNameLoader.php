@@ -8,8 +8,6 @@ use Eddy\Object\HandlerObject;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Setup\IClassNameLoader;
 
-use Eddy\Exceptions\ClassNameIsNotASetupObjectException;
-
 
 /**
  * @autoload
@@ -29,40 +27,19 @@ class ClassNameLoader implements IClassNameLoader
 	private $handlerBuilder;
 	
 	
-	public function loadEvent(string $className): EventObject
+	public function loadEvent(string $className): ?EventObject
 	{
-		$result = $this->eventBuilder->tryBuild($className);
-		
-		if (!$result)
-			throw new ClassNameIsNotASetupObjectException($className, 'Target is not an Event');
-		
-		return $result;
+		return $this->eventBuilder->tryBuild($className);
 	}
 
-	public function loadHandler(string $className): HandlerObject
+	public function loadHandler(string $className): ?HandlerObject
 	{
-		$result = $this->handlerBuilder->tryBuild($className);
-		
-		if (!$result)
-			throw new ClassNameIsNotASetupObjectException($className, 'Target is not a Handler');
-		
-		return $result;
+		return $this->handlerBuilder->tryBuild($className);
 	}
 
-	public function load(string $className): IEddyQueueObject
+	public function load(string $className): ?IEddyQueueObject
 	{
 		$result = $this->eventBuilder->tryBuild($className);
-		
-		if (!$result)
-		{
-			$result = $this->handlerBuilder->tryBuild($className);
-		}
-		
-		if (!$result)
-		{
-			throw new ClassNameIsNotASetupObjectException($className, 'Target is not an Event or Handler');
-		}
-		
-		return $result;
+		return ($result ?: $this->handlerBuilder->tryBuild($className));
 	}
 }

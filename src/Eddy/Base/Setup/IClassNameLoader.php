@@ -9,7 +9,7 @@ use Eddy\Object\HandlerObject;
 
 interface IClassNameLoader
 {
-	public function loadEvent(string $className): EventObject;
-	public function loadHandler(string $className): HandlerObject;
-	public function load(string $className): IEddyQueueObject;
+	public function loadEvent(string $className): ?EventObject;
+	public function loadHandler(string $className): ?HandlerObject;
+	public function load(string $className): ?IEddyQueueObject;
 }

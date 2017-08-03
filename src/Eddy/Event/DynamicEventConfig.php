@@ -156,7 +156,7 @@ class DynamicEventConfig implements IEventConfig
 				$name);
 			
 			if (!$this->handlerClassName)
-				$this->handlerClassName = $this->eventClassName;
+				$this->handlerClassName = $this->eventClassName();
 		}
 		
 		return $this->handlerClassName;

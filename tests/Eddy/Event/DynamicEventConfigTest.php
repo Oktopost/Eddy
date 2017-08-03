@@ -209,6 +209,24 @@ class DynamicEventConfigTest extends TestCase
 		self::assertEquals($name, $subject->handlersInterface());
 	}
 	
+	public function test_handlersInterface_InterfaceNameMethodUsed_InterfaceNameUsed()
+	{
+		$name = 'Helpertest_handlersInterface_InterfaceNameMethodUsed_InterfaceNameUsed';
+		eval("interface {$name} {}");
+		
+		$subject = new class extends DynamicEventConfig 
+		{
+			public function eventClassName(): string 
+			{
+				return 'Helpertest_handlersInterface_InterfaceNameMethodUsed_InterfaceNameUsed';
+			}
+		};
+
+
+		/** @noinspection PhpUndefinedMethodInspection */
+		self::assertEquals($name, $subject->handlersInterface());
+	}
+	
 	public function test_handlersInterface_HandlerAnnotationInInterface_ProxyNameReturned()
 	{
 		$name = __FUNCTION__ . 'HandlerHelper';

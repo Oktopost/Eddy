@@ -34,7 +34,7 @@ class SetupConfigTest extends TestCase
 	public function test_addCrawlerSetup_CrawlerAdded()
 	{
 		$subject = new SetupConfig();
-		$subject->addCrawlerSetup('a');
+		$subject->addCrawlerSetup(__DIR__, 'b');
 		
 		self::assertCount(1, $subject->Loaders);
 		self::assertInstanceOf(CrawlerSetup::class, $subject->Loaders[0]);

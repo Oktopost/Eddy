@@ -24,10 +24,7 @@ class ClassNameLoaderTest extends TestCase
 	}
 	
 	
-	/**
-	 * @expectedException \Eddy\Exceptions\ClassNameIsNotASetupObjectException
-	 */
-	public function test_loadEvent_NoConfigurationLoaded_ExceptionThrown()
+	public function test_loadEvent_NoConfigurationLoaded_ReturnNull()
 	{
 		$mock = $this->getMockBuilder(IEventBuilder::class)->getMock();
 		
@@ -37,7 +34,7 @@ class ClassNameLoaderTest extends TestCase
 		/** @var ClassNameLoader $subject */
 		$subject = Scope::skeleton()->load(ClassNameLoader::class);
 		
-		$subject->loadEvent(__CLASS__);
+		self::assertNull($subject->loadEvent(__CLASS__));
 	}
 	
 	public function test_loadEvent_ConfigurationLoaded_ConfigurationReturned()
@@ -68,10 +65,7 @@ class ClassNameLoaderTest extends TestCase
 	}
 	
 	
-	/**
-	 * @expectedException \Eddy\Exceptions\ClassNameIsNotASetupObjectException
-	 */
-	public function test_loadHandler_NoConfigurationLoaded_ExceptionThrown()
+	public function test_loadHandler_NoConfigurationLoaded_ReturnNull()
 	{
 		$mock = $this->getMockBuilder(IHandlerBuilder::class)->getMock();
 		
@@ -81,7 +75,7 @@ class ClassNameLoaderTest extends TestCase
 		/** @var ClassNameLoader $subject */
 		$subject = Scope::skeleton()->load(ClassNameLoader::class);
 		
-		$subject->loadHandler(__CLASS__);
+		self::assertNull($subject->loadHandler(__CLASS__));
 	}
 	
 	public function test_loadHandler_ConfigurationLoaded_ConfigurationReturned()
@@ -112,10 +106,7 @@ class ClassNameLoaderTest extends TestCase
 	}
 	
 	
-	/**
-	 * @expectedException \Eddy\Exceptions\ClassNameIsNotASetupObjectException
-	 */
-	public function test_load_ObjectNotFound_ExceptionThrown()
+	public function test_load_ObjectNotFound_ReturnNull()
 	{
 		$mock = $this->getMockBuilder(IEventBuilder::class)->getMock();
 		\UnitTestScope::override(IEventBuilder::class, $mock);
@@ -128,7 +119,7 @@ class ClassNameLoaderTest extends TestCase
 		/** @var ClassNameLoader $subject */
 		$subject = Scope::skeleton()->load(ClassNameLoader::class);
 		
-		$subject->load(__CLASS__);
+		self::assertNull($subject->load(__CLASS__));
 	}
 	
 	public function test_load_ObjectIsHandler_ObjectReturned()
@@ -167,13 +158,8 @@ class ClassNameLoaderTest extends TestCase
 		self::assertEquals($result, $subject->load(__CLASS__));
 	}
 	
-	/**
-	 * @expectedException \Eddy\Exceptions\ClassNameIsNotASetupObjectException
-	 */
 	public function test_load_ItemPassedToLoaders()
 	{
-		$result = new EventObject();
-		
 		$mock = $this->getMockBuilder(IEventBuilder::class)->getMock();
 		\UnitTestScope::override(IEventBuilder::class, $mock);
 		$mock->expects($this->once())->method('tryBuild')->with(__CLASS__);

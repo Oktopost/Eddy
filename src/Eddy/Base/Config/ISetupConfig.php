@@ -14,6 +14,7 @@ interface ISetupConfig
 
 	/**
 	 * @param string|array $config
+	 * @param string $namespace
 	 */
-	public function addCrawlerSetup($config): void;
+	public function addCrawlerSetup($config, string $namespace): void;
 }
