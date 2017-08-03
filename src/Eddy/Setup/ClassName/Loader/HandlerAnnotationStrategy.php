@@ -2,11 +2,10 @@
 namespace Eddy\Setup\ClassName\Loader;
 
 
-use Eddy\IEventConfig;
+use Eddy\IHandlerConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Object\HandlerObject;
-
-use Eddy\Exceptions\ConfigMismatchException;
+use Eddy\Exceptions\HandlerMismatchConfiguration;
 
 
 class HandlerAnnotationStrategy extends AbstractAnnotationStrategy
@@ -16,16 +15,13 @@ class HandlerAnnotationStrategy extends AbstractAnnotationStrategy
 		/** @var HandlerObject $config */
 		if ($config->HandlerClassName != $item)
 		{
-			throw new ConfigMismatchException(
-				"The configuration defined by annotation for the handler $item, points " . 
-					"to a different interface {$config->HandlerClassName}. In config: {$config->ConfigClassName}", 
-				306);
+			throw new HandlerMismatchConfiguration($item, $config);
 		}
 	}
 	
 	
 	public function __construct()
 	{
-		parent::__construct(IEventConfig::class);
+		parent::__construct(IHandlerConfig::class);
 	}
 }

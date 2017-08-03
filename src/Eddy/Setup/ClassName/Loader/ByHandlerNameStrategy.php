@@ -5,7 +5,7 @@ namespace Eddy\Setup\ClassName\Loader;
 use Eddy\IHandlerConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Object\HandlerObject;
-use Eddy\Exceptions\ConfigMismatchException;
+use Eddy\Exceptions\HandlerMismatchConfiguration;
 
 
 class ByHandlerNameStrategy extends AbstractByNameStrategy
@@ -15,10 +15,7 @@ class ByHandlerNameStrategy extends AbstractByNameStrategy
 		/** @var HandlerObject $config */
 		if ($config->HandlerClassName != $item)
 		{
-			throw new ConfigMismatchException(
-				"The configuration defined for the handler $item, points " . 
-					"to a different class {$config->HandlerClassName}. In config: {$config->ConfigClassName}", 
-				302);
+			throw new HandlerMismatchConfiguration($item, $config);
 		}
 	}
 	

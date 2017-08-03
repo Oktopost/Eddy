@@ -5,12 +5,11 @@ namespace Eddy\Setup\ClassName\Loader;
 
 use Eddy\ObjectAnnotations;
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Base\Setup\ClassName\ILoaderStrategy;
 
 use Eddy\Exceptions\ConfigMismatchException;
 
 
-abstract class AbstractAnnotationStrategy implements ILoaderStrategy
+abstract class AbstractAnnotationStrategy extends AbstractLoaderStrategy
 {
 	/** @var ConfigObjectLoaderStrategy */
 	private $loader;
@@ -26,9 +25,15 @@ abstract class AbstractAnnotationStrategy implements ILoaderStrategy
 	
 	public function tryLoad(string $item): ?IEddyQueueObject
 	{
-		if (!ObjectAnnotations::isEvent($item) || !ObjectAnnotations::isHandler($item)) return null;
+		if (!$this->isEventOrHandler($item))
+			return null;
 		
 		$configName = ObjectAnnotations::getConfigName($item);
+		
+		if (is_null($configName))
+		{
+			return null;
+		}
 		
 		if (!class_exists($configName))
 		{
@@ -37,7 +42,7 @@ abstract class AbstractAnnotationStrategy implements ILoaderStrategy
 				303);
 		}
 		
-		$config = $this->loader->tryLoad($item);
+		$config = $this->loader->tryLoad($configName);
 		
 		if ($config)
 		{

@@ -5,7 +5,7 @@ namespace Eddy\Setup\ClassName\Loader;
 use Eddy\IEventConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Object\EventObject;
-use Eddy\Exceptions\ConfigMismatchException;
+use Eddy\Exceptions\InterfaceMismatchConfiguration;
 
 
 class ByEventNameStrategy extends AbstractByNameStrategy
@@ -15,10 +15,7 @@ class ByEventNameStrategy extends AbstractByNameStrategy
 		/** @var EventObject $config */
 		if ($config->EventInterface != $item)
 		{
-			throw new ConfigMismatchException(
-				"The configuration defined for the interface $item, points " . 
-					"to a different interface {$config->EventInterface}. In config: {$config->ConfigClassName}", 
-				301);
+			throw new InterfaceMismatchConfiguration($item, $config);
 		}
 	}
 	
