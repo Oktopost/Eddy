@@ -4,6 +4,7 @@ namespace Eddy\DAL\MySQL;
 
 use Eddy\Base\DAL\ISubscribersDAO;
 
+use Eddy\Exceptions\InvalidUsageException;
 use Squid\MySql\IMySqlConnector;
 
 
@@ -70,20 +71,34 @@ class SubscribersDAO implements ISubscribersDAO
 	
 	private function updateExistingConnections(): void
 	{
+		$transaction = $this->connector->transaction();
+		$transaction->startTransaction();
+
 		$existSelect = $this->connector->select()
 			->column(self::EVENT_FIELD, self::HANDLER_FIELD)
 			->from(self::TEMP_TABLE, 'tt');
-
-		$this->connector->delete()
-			->from(self::SUBSCRIBERS_TABLE)
-			->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
-			->executeDml();
 		
-		$this->connector->insert()
-			->into(self::SUBSCRIBERS_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
-			->asSelect($existSelect)
-			->ignore()
-			->executeDml();
+		try
+		{
+			$this->connector->delete()
+				->from(self::SUBSCRIBERS_TABLE)
+				->whereNotIn([self::EVENT_FIELD, self::HANDLER_FIELD], $existSelect)
+				->executeDml();
+			
+			$this->connector->insert()
+				->into(self::SUBSCRIBERS_TABLE, [self::EVENT_FIELD, self::HANDLER_FIELD])
+				->asSelect($existSelect)
+				->ignore()
+				->executeDml();
+			
+			$transaction->commit();
+		}
+		catch (\Throwable $e)
+		{
+			$transaction->rollback();
+			
+			throw $e;
+		}
 	}
 
 
@@ -134,6 +149,12 @@ class SubscribersDAO implements ISubscribersDAO
 
 	public function addSubscribers(array $eventToHandlers): void
 	{		
+		if (!$eventToHandlers)
+		{
+			throw new InvalidUsageException('Passing empty array is not allowed.
+			 It will remove all subscribers.');
+		}
+		
 		$preparedData = $this->prepareData($eventToHandlers);
 		
 		$this->setupTempTable($preparedData);

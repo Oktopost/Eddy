@@ -31,21 +31,22 @@ class EventDAOTest extends TestCase
 		$eventObject->Name = (new TimeBasedRandomIdGenerator())->get();
 		$eventObject->EventInterface = (new TimeBasedRandomIdGenerator())->get();
 		$eventObject->HandlerInterface = $eventObject->EventInterface;
+		$eventObject->Delay = 5;
 		
 		if ($saved)
 		{
-			$this->getSubject()->save($eventObject);
+			$this->getSubject()->saveSetup($eventObject);
 		}
 		
 		return $eventObject;
 	}
 	
 	
-	private function getNameById(string $id): string 
+	private function getColumnById(string $column, string $id): string 
 	{
 		$name = MySQLConfig::connector()->select()
 			->from(self::EVENT_TABLE)
-			->column('Name')
+			->column($column)
 			->byField('Id', $id)
 			->queryColumn(true);
 		
@@ -60,24 +61,44 @@ class EventDAOTest extends TestCase
 			->executeDml();
 	}
 
-	public function test_save_newEvent()
+	public function test_saveSetup_newEvent()
 	{
 		$eventObject = $this->getEvent();
 		
-		$this->getSubject()->save($eventObject);
+		$this->getSubject()->saveSetup($eventObject);
 		
 		self::assertNotNull($eventObject->Id);
-		self::assertEquals($eventObject->Name, $this->getNameById($eventObject->Id));
+		self::assertEquals($eventObject->Name, $this->getColumnById('Name', $eventObject->Id));
 	}
 
-	public function test_save_updateExistingEvent()
+	public function test_saveSetup_updateExistingEvent()
 	{
 		$eventObject = $this->getEvent(true);
 
 		$eventObject->Name = 'TestNewEvent';
-		$this->getSubject()->save($eventObject);
+		$eventObject->EventInterface = 'NewTestInterface';
+		$this->getSubject()->saveSetup($eventObject);
 		
-		self::assertEquals($eventObject->Name, $this->getNameById($eventObject->Id));
+		self::assertEquals($eventObject->EventInterface, 
+			$this->getColumnById('EventInterface', $eventObject->Id));
+		self::assertNotEquals($eventObject->Name, $this->getColumnById('Name', $eventObject->Id));
+	}
+	
+	public function test_updateSettings_newEvent_GotFalse()
+	{
+		self::assertFalse($this->getSubject()->updateSettings($this->getEvent()));
+	}
+	
+	public function test_updateSettings_existingEvent_EventSettingsUpdated()
+	{
+		$event = $this->getEvent(true);
+		$event->Delay = 10;
+		$event->EventInterface = 'newTest';
+		
+		$this->getSubject()->updateSettings($event);
+		
+		self::assertEquals($event->Delay, $this->getColumnById('Delay', $event->Id));
+		self::assertNotEquals($event->EventInterface, $this->getColumnById('EventInterface', $event->Id));
 	}
 
 	public function test_load_noEventExist_NullRetured()

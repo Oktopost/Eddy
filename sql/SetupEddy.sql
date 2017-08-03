@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS `EddyEvent` (
 	
 	PRIMARY KEY (`Id`),
 	
+	UNIQUE KEY `k_EddyEvent_Name` (`Name`),
+	
 	INDEX `k_Created` (`Created`),
-	INDEX `k_Modified` (`Modified`),
-	INDEX `k_Name` (`Name`)
+	INDEX `k_Modified` (`Modified`)
 ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -32,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `EddyHandler` (
 	`MaxBulkSize`		INT,
 	
 	PRIMARY KEY (`Id`),
+	
+	UNIQUE KEY `k_EddyHandler_Name` (`Name`),
 	
 	INDEX `k_Created` (`Created`),
 	INDEX `k_Modified` (`Modified`)

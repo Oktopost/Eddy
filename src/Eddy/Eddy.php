@@ -4,9 +4,9 @@ namespace Eddy;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
+use Eddy\Base\Module\IEventModule;
 use Eddy\Crawler\Base\ICrawler;
 use Eddy\Crawler\Crawler;
-use Eddy\Object\EventObject;
 use Eddy\Utils\Config;
 
 
@@ -40,7 +40,10 @@ class Eddy
 	 */
 	public function event(string $interface)
 	{
-		return $this->engine->event(new EventObject());
+		/** @var IEventModule $eventModule */
+		$eventModule = Scope::skeleton($this, IEventModule::class);
+		
+		return $this->engine->event($eventModule->loadByInterfaceName($interface));
 	}
 	
 	public function crawler(): ICrawler

@@ -4,6 +4,7 @@ namespace Eddy\Modules;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\Module\ISetupModule;
+use Eddy\Base\Setup\IEventsSetup;
 
 
 /**
@@ -24,6 +25,25 @@ class SetupModule implements ISetupModule
 	private $config;
 	
 	
+	private function save(IEventsSetup $setup): void
+	{
+		if ($setup->Events)
+		{
+			$this->config->DAL()->events()->saveSetupAll($setup->Events);
+		}
+		
+		if ($setup->Handlers)
+		{
+			$this->config->DAL()->handlers()->saveSetupAll($setup->Handlers);
+		}
+		
+		if ($setup->Subscribers)
+		{
+			$this->config->DAL()->subscribers()->addSubscribers($setup->Subscribers);
+		}
+	}
+	
+	
 	public function load(): void
 	{
 		$loaders = $this->config->Setup->Loaders;
@@ -36,6 +56,6 @@ class SetupModule implements ISetupModule
 		
 		$setup = $this->builder->get();
 		
-		// TODO: Save stuff
+		$this->save($setup);
 	}
 }

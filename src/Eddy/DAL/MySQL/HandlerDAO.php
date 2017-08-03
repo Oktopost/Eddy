@@ -73,19 +73,41 @@ class HandlerDAO implements IHandlerDAO
 		]);
 	}
 
-	public function save(HandlerObject $handler): bool
+	public function saveSetup(HandlerObject $handler): bool
 	{
-		if (!$handler->Id)
+		return $this->saveSetupAll([$handler]);
+	}
+
+	public function saveSetupAll(array $handlers): bool
+	{
+		foreach ($handlers as $handler)
 		{
-			$handler->Id = (new TimeBasedRandomIdGenerator())->get();
+			if (!$handler->Id)
+			{
+				$handler->Id = (new TimeBasedRandomIdGenerator())->get();
+			}
 		}
 		
-		return $this->connector->save($handler);
+		return $this->connector->upsertObjectsForValues($handlers, [
+			'HandlerClassName',
+			'ConfigClassName'
+		]);
+	}
+
+	public function updateSettings(HandlerObject $handler): bool
+	{
+		if (!$handler->Id) return false;
+		
+		return $this->connector->upsertObjectsForValues([$handler], [
+			'State',
+			'Delay',
+			'MaxBulkSize'
+		]);
 	}
 
 	public function delete(HandlerObject $handler): bool
 	{
 		$handler->State = EventState::DELETED;
-		return $this->save($handler);
+		return $this->connector->save($handler);
 	}
 }

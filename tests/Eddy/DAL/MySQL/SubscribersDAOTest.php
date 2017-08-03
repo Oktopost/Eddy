@@ -9,6 +9,13 @@ use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 use lib\MySQLConfig;
 use PHPUnit\Framework\TestCase;
+use Squid\MySql\Command\ICmdDelete;
+use Squid\MySql\Command\IDml;
+use Squid\MySql\Connection\IMySqlConnection;
+use Squid\MySql\Connection\IMySqlExecutor;
+use Squid\MySql\Impl\Connection\ConnectionBuilder;
+use Squid\MySql\Impl\Connection\MySqlConnectionDecorator;
+use Squid\MySql\IMySqlConnector;
 
 
 class SubscribersDAOTest extends TestCase
@@ -32,7 +39,7 @@ class SubscribersDAOTest extends TestCase
 		$eventObject->EventInterface = (new TimeBasedRandomIdGenerator())->get();
 		$eventObject->HandlerInterface = $eventObject->EventInterface;
 		
-		$dao->save($eventObject);
+		$dao->saveSetup($eventObject);
 		
 		return $eventObject;
 	}
@@ -48,7 +55,7 @@ class SubscribersDAOTest extends TestCase
 		$handlerObject->Name = (new TimeBasedRandomIdGenerator())->get();
 		$handlerObject->HandlerClassName = (new TimeBasedRandomIdGenerator())->get();
 		
-		$dao->save($handlerObject);
+		$dao->saveSetup($handlerObject);
 		
 		return $handlerObject;
 	}
@@ -81,6 +88,28 @@ class SubscribersDAOTest extends TestCase
 		return (bool)$isExecute;
 	}
 	
+	/**
+	 * @param bool $result
+	 * @return \PHPUnit_Framework_MockObject_MockObject|IMySqlConnection
+	 */
+	private function mockThrowableConnection(string $commandToThrow)
+	{
+		$mock = $this->getMockBuilder(IMySqlConnection::class)->getMock();
+		
+		$mock->method('execute')
+					->with($this->callback(function($value) use ($commandToThrow)
+					{
+						if (strpos($value, $commandToThrow) !== false)
+						{
+							throw new \Exception('error');
+						}
+						
+						return true;
+					}))
+					->willReturn(true);
+		return $mock;
+	}
+	
 	
 	public function setUp()
 	{
@@ -91,6 +120,8 @@ class SubscribersDAOTest extends TestCase
 			->from($table)
 			->executeDml();
 		}
+		
+		\UnitTestScope::clear();
 	}
 	
 	
@@ -158,7 +189,15 @@ class SubscribersDAOTest extends TestCase
 		self::assertEquals(2, sizeof($eventsIds));
 		self::assertEquals($event2->Id, $eventsIds[1]);
 	}
-	
+
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_addSubscribers_EmptyArrayPassed_ExceptionThrowed()
+	{
+		$this->getSubject()->addSubscribers([]);
+	}
+
 	public function test_addSubscribers_NoSubscribers_NewAdded()
 	{
 		$event = $this->getEvent();
@@ -171,7 +210,8 @@ class SubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
 	}
-	
+
+
 	public function test_addSubscribers_SubscribersExists_NewAdded()
 	{
 		$event = $this->getEvent();
@@ -188,7 +228,7 @@ class SubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
 		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
 	}
-	
+
 	public function test_addSubscribers_SubscribersExists_OldRemovedNewAdded()
 	{
 		$event = $this->getEvent();
@@ -205,7 +245,7 @@ class SubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
 		self::assertFalse($this->connectionExist($event->Id, $handler3->Id));
 	}
-	
+
 	public function test_AddSubscribersWithPlainElements_SubscribersExists_NewAdded()
 	{
 		$event = $this->getEvent();
@@ -228,7 +268,59 @@ class SubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
 		self::assertTrue($this->connectionExist($event2->Id, $handler3->Id));
 	}
+
+	/** 
+	 * @expectedException \Exception 
+	 */
+	public function test_addSubscribers_ExecptionThrowedInDeleteInTransaction_ExistingNotTouched()
+	{
+		$event = $this->getEvent();
+		
+		$handler = $this->getHandler();
+		$handler2 = $this->getHandler();
+		$handler3 = $this->getHandler();
+
+		$this->getSubject()->subscribe($event->Id, $handler3->Id);
+
+		$connector = clone MySQLConfig::connector();
+		$connector->setConnection($this->mockThrowableConnection('DELETE'));
+		
+		$dao = $this->getSubject();
+		$dao->setConnector($connector);
+		
+		$dao->addSubscribers([$event->Id => [$handler->Id, $handler2->Id]]);
+
+		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
+		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
+		self::assertFalse($this->connectionExist($event->Id, $handler2->Id));
+	}
 	
+	/** 
+	 * @expectedException \Exception 
+	 */
+	public function test_addSubscribers_ExecptionThrowedInInsertInTransaction_ExistingNotTouched()
+	{
+		$event = $this->getEvent();
+		
+		$handler = $this->getHandler();
+		$handler2 = $this->getHandler();
+		$handler3 = $this->getHandler();
+
+		$this->getSubject()->subscribe($event->Id, $handler3->Id);
+
+		$connector = clone MySQLConfig::connector();
+		$connector->setConnection($this->mockThrowableConnection('INSERT IGNORE'));
+		
+		$dao = $this->getSubject();
+		$dao->setConnector($connector);
+		
+		$dao->addSubscribers([$event->Id => [$handler->Id, $handler2->Id]]);
+
+		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
+		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
+		self::assertFalse($this->connectionExist($event->Id, $handler2->Id));
+	}
+
 	public function test_addExecutor()
 	{
 		$handler = $this->getHandler();

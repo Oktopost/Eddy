@@ -43,7 +43,7 @@ class ExecutorLoggerPluginTest extends TestCase
 		$event->Id = $id;
 		$event->Name = 'testEvent';
 		
-		$this->config->DAL()->events()->save($event);
+		$this->config->DAL()->events()->saveSetup($event);
 		
 		return $event;
 	}
@@ -54,7 +54,7 @@ class ExecutorLoggerPluginTest extends TestCase
 		$handler->Id = 'testEvent';
 		$handler->Name = 'testEvent';
 		
-		$this->config->DAL()->handlers()->save($handler);
+		$this->config->DAL()->handlers()->saveSetup($handler);
 		
 		return $handler;
 	}

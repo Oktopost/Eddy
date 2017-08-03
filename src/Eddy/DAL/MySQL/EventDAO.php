@@ -73,19 +73,43 @@ class EventDAO implements IEventDAO
 		]);
 	}
 
-	public function save(EventObject $event): bool
+	public function saveSetup(EventObject $event): bool
 	{
-		if (!$event->Id)
+		return $this->saveSetupAll([$event]);
+	}
+
+	public function saveSetupAll(array $events): bool
+	{
+		foreach ($events as $event)
 		{
-			$event->Id = (new TimeBasedRandomIdGenerator())->get();
+			if (!$event->Id)
+			{
+				$event->Id = (new TimeBasedRandomIdGenerator())->get();
+			}
 		}
 		
-		return $this->connector->save($event);
+		return $this->connector->upsertObjectsForValues($events, [
+			'EventInterface',
+			'ProxyClassName',
+			'ConfigClassName',
+			'HandlerInterface'
+		]);
 	}
-	
+
+	public function updateSettings(EventObject $event): bool
+	{
+		if (!$event->Id) return false;
+		
+		return $this->connector->upsertObjectsForValues([$event], [
+			'State',
+			'Delay',
+			'MaxBulkSize'
+		]);
+	}
+
 	public function delete(EventObject $event): bool
 	{
 		$event->State = EventState::DELETED;
-		return $this->save($event);
+		return $this->connector->save($event);
 	}
 }

@@ -21,6 +21,15 @@ interface IEventDAO
 	public function loadByName(string $name): ?EventObject;
 	public function loadByInterfaceName(string $interfaceName): ?EventObject;
 	
-	public function save(EventObject $event): bool;
+	public function saveSetup(EventObject $event): bool;
+
+	/**
+	 * @param EventObject[]|array $events
+	 * @return bool
+	 */
+	public function saveSetupAll(array $events): bool;
+	
+	public function updateSettings(EventObject $event): bool;
+	
 	public function delete(EventObject $event): bool;
 }

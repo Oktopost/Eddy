@@ -31,21 +31,22 @@ class HandlerDAOTest extends TestCase
 		$handlerObject = new HandlerObject();
 		$handlerObject->Name = (new TimeBasedRandomIdGenerator())->get();
 		$handlerObject->HandlerClassName = (new TimeBasedRandomIdGenerator())->get();
+		$handlerObject->Delay = 5;
 		
 		if ($saved)
 		{
-			$this->getSubject()->save($handlerObject);
+			$this->getSubject()->saveSetup($handlerObject);
 		}
 		
 		return $handlerObject;
 	}
 	
 	
-	private function getNameById(string $id): string 
+	private function getColumnById(string $column, string $id): string 
 	{
 		$name = MySQLConfig::connector()->select()
 			->from(self::HANDLER_TABLE)
-			->column('Name')
+			->column($column)
 			->byField('Id', $id)
 			->queryColumn(true);
 		
@@ -60,24 +61,46 @@ class HandlerDAOTest extends TestCase
 			->executeDml();
 	}
 
-	public function test_save_newHandler()
+	public function test_saveSetup_newHandler()
 	{
 		$handlerObject = $this->getHandler();
 		
-		$this->getSubject()->save($handlerObject);
+		$this->getSubject()->saveSetup($handlerObject);
 		
 		self::assertNotNull($handlerObject->Id);
-		self::assertEquals($handlerObject->Name, $this->getNameById($handlerObject->Id));
+		self::assertEquals($handlerObject->Name, $this->getColumnById('Name', $handlerObject->Id));
 	}
 
-	public function test_save_updateExistingHandler()
+	public function test_saveSetup_updateExistingHandler_OnlyExpectedFieldsUpdated()
 	{
 		$handlerObject = $this->getHandler(true);
 
-		$handlerObject->Name = 'TestNewHandler';
-		$this->getSubject()->save($handlerObject);
+		$handlerObject->HandlerClassName = 'TestNewHandler';
+		$handlerObject->Name = 'NewName';
+		$this->getSubject()->saveSetup($handlerObject);
 		
-		self::assertEquals($handlerObject->Name, $this->getNameById($handlerObject->Id));
+		self::assertEquals($handlerObject->HandlerClassName, 
+			$this->getColumnById('HandlerClassName', $handlerObject->Id));
+		
+		self::assertNotEquals($handlerObject->Name, $this->getColumnById('Name', $handlerObject->Id));
+	}
+	
+	public function test_updateSettings_newHandler_GotFalse()
+	{
+		self::assertFalse($this->getSubject()->updateSettings($this->getHandler()));
+	}
+	
+	public function test_updateSettings_newHandler_HandlerSettingsUpdated()
+	{
+		$handler = $this->getHandler(true);
+		$handler->Delay = 10;
+		$handler->HandlerClassName = 'TestNewHandler';
+		
+		$this->getSubject()->updateSettings($handler);
+		
+		self::assertEquals($handler->Delay, $this->getColumnById('Delay', $handler->Id));
+		self::assertNotEquals($handler->HandlerClassName, 
+			$this->getColumnById('HandlerClassName', $handler->Id));
 	}
 
 	public function test_load_noHandlerExist_NullReturned()
