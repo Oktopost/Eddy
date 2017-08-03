@@ -8,6 +8,9 @@ use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
 
 
+/**
+ * @context
+ */
 class MainQueue implements IMainQueue
 {
 	/**

@@ -13,9 +13,15 @@ use Eddy\Exceptions\UnexpectedException;
 use Eddy\Scope;
 
 
+/**
+ * @context
+ */
 class QueueBuilder implements IQueueBuilder
 {
-	/** @context IConfig */
+	/** 
+	 * @context
+	 * @var \Eddy\Base\IConfig 
+	 */
 	private $config;
 	
 	

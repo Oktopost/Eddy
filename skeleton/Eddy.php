@@ -66,3 +66,9 @@ $this->set(IStatisticsStorage::class, MySQLStatsStorage::class);
 $this->set(IStatisticsCacheCollector::class, RedisStatsCacheCollectorTest::class);
 $this->set(IStatisticsCollectionDecorator::class, StatisticsCollectionDecorator::class);
 $this->set(IProcessStatistics::class, ProcessStatistics::class);
+
+
+use Eddy\Base\Module\IEventModule;
+use Eddy\Modules\EventModule;
+
+$this->set(IEventModule::class, EventModule::class);

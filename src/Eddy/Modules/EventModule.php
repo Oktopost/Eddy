@@ -3,7 +3,6 @@ namespace Eddy\Modules;
 
 
 use Eddy\Scope;
-use Eddy\Base\IConfig;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Base\Setup\IClassNameLoader;
 use Eddy\Object\EventObject;
@@ -17,7 +16,7 @@ class EventModule implements IEventModule
 {
 	/**
 	 * @context 
-	 * @var IConfig 
+	 * @var \Eddy\Base\IConfig 
 	 */
 	private $config;
 	
