@@ -18,10 +18,16 @@ use PHPUnit\Framework\TestCase;
 
 class MainQueueTest extends TestCase
 {
+	/** @var IConfig */
+	private $config;
+	
+	
 	private function getSubject(): IMainQueue
 	{
+		$this->config = $this->createConfig();
+		
 		$obj = new \stdClass();
-		Scope::skeleton()->context($obj, 'test')->set(IConfig::class, $this->createConfig());
+		Scope::skeleton()->context($obj, 'test')->set(IConfig::class, $this->config);
 		
 		$mainQueue = Scope::skeleton($obj, IMainQueue::class);
 		
@@ -34,8 +40,10 @@ class MainQueueTest extends TestCase
 	private function getIQueueMock(): IQueue
 	{
 		$queue = $this->getMockBuilder(IQueue::class)->getMock();
-		$queue->expects($this->once())->method('enqueue')
-		->with($this->equalTo([0 => ['testNameEvent' => 'testNameEvent']], 1));
+		$queue
+			->expects($this->once())
+			->method('enqueue')
+			->with($this->equalTo([0 => ['testNameEvent' => 'testNameEvent']], 1));
 		
 		return $queue;
 	}
@@ -93,6 +101,6 @@ class MainQueueTest extends TestCase
 		$event = new EventObject();
 		$event->Name = 'Event';
 		
-		$this->getSubject()->schedule($event);
+		$this->getSubject()->schedule($event->getQueueNaming($this->config->Naming));
 	}
 }
