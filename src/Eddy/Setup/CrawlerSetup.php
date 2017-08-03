@@ -83,6 +83,7 @@ class CrawlerSetup implements ISetup, IConsumer
 		
 		$this->iterator->setFileConsumer($this);
 		$this->namespace = $namespacePrefix;
+		
 		$this->root = $this->iterator->getConfig()->RootDir;
 	}
 	

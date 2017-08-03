@@ -5,6 +5,7 @@ namespace Eddy\Setup;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Exceptions\CrawlException;
 
+use Itarator\Config;
 use PHPUnit\Framework\TestCase;
 
 
@@ -21,6 +22,27 @@ class CrawlerSetupTest extends TestCase
 	{
 		$namespace = $namespace . '\\' . $path; 
 		return new CrawlerSetup($this->getPath($path), $namespace);
+	}
+
+
+	/**
+	 * @expectedException \Eddy\Exceptions\EddyException
+	 */
+	public function test_constrct_InvalidParam_ExceptionThrown()
+	{
+		new CrawlerSetup(123, 'a');
+	}
+	
+	public function test_constrct_ItaratorPassed_PassedObjectUsed()
+	{
+		$mock = $this->getMockBuilder(\Itarator::class)->getMock();
+		$mock->method('getConfig')->willReturn(new Config());
+		
+		$subject = new CrawlerSetup($mock, '! invalid');
+		
+		$mock->expects($this->once())->method('execute');
+		
+		$subject->getSetup();
 	}
 	
 	
