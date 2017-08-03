@@ -14,7 +14,9 @@ class CrawlerSetupTest extends TestCase
 	private function getPath(string $name): string
 	{
 		$path = realpath(__DIR__ . '/_CrawlerSetupTest/' . $name);
-		self::assertNotNull($path, 'Invalid path passed. Make sure directory exists in _CrawlerSetupTest');
+		
+		self::assertNotFalse($path, 'Invalid path passed. Make sure directory exists in _CrawlerSetupTest');
+		
 		return $path;
 	}
 	
