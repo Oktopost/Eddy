@@ -32,8 +32,8 @@ class DeepQueueAdapter implements IQueue
 		$this->queue->enqueueAll($data, $secDelay);
 	}
 
-	public function dequeue(int $maxCount): array
+	public function dequeue(int $maxCount, float $waitSec = 0.0): array
 	{
-		return $this->queue->dequeue($maxCount);
+		return $this->queue->dequeue($maxCount, $waitSec);
 	}
 }

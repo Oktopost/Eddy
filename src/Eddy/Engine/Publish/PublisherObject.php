@@ -37,7 +37,10 @@ class PublisherObject implements IPublisherObject
 	
 	private function locker(): ILocker
 	{
-		return $this->config->Engine->Locker->get($this->object);
+		$naming = $this->config->Naming;
+		$queueName = $this->object->getQueueNaming($naming);
+		
+		return $this->config->Engine->Locker->get($queueName);
 	}
 	
 	private function enqueue(array $data): void
@@ -53,7 +56,10 @@ class PublisherObject implements IPublisherObject
 		if ($locker->isLocked())
 			return;
 		
-		$this->main->schedule($this->object);
+		$naming = $this->config->Naming;
+		$queueName = $this->object->getQueueNaming($naming);
+		
+		$this->main->schedule($queueName);
 	}
 	
 	

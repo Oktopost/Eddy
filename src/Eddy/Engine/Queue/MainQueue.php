@@ -2,10 +2,9 @@
 namespace Eddy\Engine\Queue;
 
 
-use Eddy\Base\Engine\Queue\IQueueManager;
-use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
+use Eddy\Base\Engine\Queue\IQueueManager;
 
 
 /**
@@ -26,7 +25,7 @@ class MainQueue implements IMainQueue
 	private $manager = null;
 	
 	
-	public function schedule(IEddyQueueObject $object): void
+	private function getQueue(): IQueue
 	{
 		if (!$this->queue)
 		{
@@ -37,11 +36,30 @@ class MainQueue implements IMainQueue
 			$this->manager = $queueProvider->getManager($mainQueueName);
 		}
 		
+		return $this->queue;
+	}
+	
+	
+	public function schedule(string $target): void
+	{
+		$queue = $this->getQueue();
 		$delay = $this->manager->getNextRuntime();
 		
 		if (is_null($delay)) return;
 		
-		$name = $object->getQueueNaming($this->config->Naming);
-		$this->queue->enqueue([[$name => $name]], $delay);
+		$queue->enqueue([[$target => $target]], $delay);
+	}
+	
+	public function dequeue(float $wait = 0): ?string
+	{
+		$queue = $this->getQueue();
+		$result = $queue->dequeue(1, $wait);
+		
+		if (!$result)
+			return null;
+		
+		$result = array_values($result);
+		
+		return $result[0];
 	}
 }

@@ -2,13 +2,11 @@
 namespace Eddy\Base\Engine;
 
 
-use Eddy\Base\IEddyQueueObject;
-
-
 /**
  * @skeleton
  */
 interface IMainQueue
 {
-	public function schedule(IEddyQueueObject $object): void;
+	public function schedule(string $queueName): void;
+	public function dequeue(float $waitSec = 0.0): ?string;
 }

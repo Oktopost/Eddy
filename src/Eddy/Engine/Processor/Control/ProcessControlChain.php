@@ -2,45 +2,104 @@
 namespace Eddy\Engine\Processor\Control;
 
 
-use Eddy\Base\Engine\Processor\IProcessControlChain;
+use Eddy\Base\IConfig;
 use Eddy\Base\IEddyQueueObject;
+use Eddy\Base\Config\IEngineConfig;
+use Eddy\Base\Engine\Processor\IProcessControlChain;
+
 use Eddy\Object\HandlerObject;
 
 
 class ProcessControlChain implements IProcessControlChain
 {
+	/** @var IEngineConfig */
+	private $config;
+
+
+	/**
+	 * @context
+	 * @param IConfig $config
+	 */
+	public function setConfig(IConfig $config)
+	{
+		$this->config = $config->Engine;
+	}
+
+
 	public function count(): int
 	{
-		// TODO: Implement count() method.
+		return count($this->config->Controllers);
+	}
+	
+
+	public function init(): void
+	{
+		foreach ($this->config->Controllers as $controller)
+		{
+			$controller->init(); 
+		}
 	}
 
 	public function start(): bool
 	{
-		// TODO: Implement start() method.
+		$result = true;
+		
+		foreach ($this->config->Controllers as $controller)
+		{
+			$result = $controller->start() && $result; 
+		}
+		
+		return $result;
 	}
 
 	public function waiting(): float
 	{
-		// TODO: Implement waiting() method.
+		$result = PHP_INT_MAX;
+		
+		foreach ($this->config->Controllers as $controller)
+		{
+			$result = min($controller->waiting(), $result); 
+		}
+		
+		return ($result == PHP_INT_MAX ? 60.0 : $result);
 	}
 
 	public function preProcess(IEddyQueueObject $target, array $payload): void
 	{
-		// TODO: Implement preProcess() method.
+		foreach ($this->config->Controllers as $controller)
+		{
+			$controller->preProcess($target, $payload); 
+		}
 	}
 
 	public function postProcess(IEddyQueueObject $target, array $payload): void
 	{
-		// TODO: Implement postProcess() method.
+		foreach ($this->config->Controllers as $controller)
+		{
+			$controller->postProcess($target, $payload); 
+		}
 	}
 
 	public function stopping(): void
 	{
-		// TODO: Implement stopping() method.
+		foreach ($this->config->Controllers as $controller)
+		{
+			$controller->stopping(); 
+		}
 	}
 
 	public function exception(HandlerObject $target, array $payload, \Throwable $t): bool
 	{
-		// TODO: Implement exception() method.
+		$result = false;
+		
+		foreach ($this->config->Controllers as $controller)
+		{
+			$result = $controller->exception($target, $payload, $t) || $result; 
+		}
+		
+		if (!$result)
+			throw $t;
+		
+		return true;
 	}
 }

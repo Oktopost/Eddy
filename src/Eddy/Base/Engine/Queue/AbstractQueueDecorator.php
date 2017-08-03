@@ -37,5 +37,5 @@ abstract class AbstractQueueDecorator implements IQueueDecorator
 	}
 
 	public abstract function enqueue(array $data, float $secDelay = 0.0): void;
-	public abstract function dequeue(int $maxCount): array;
+	public abstract function dequeue(int $maxCount, float $waitSec = 0.0): array;
 }

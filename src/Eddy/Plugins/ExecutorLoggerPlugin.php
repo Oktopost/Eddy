@@ -45,9 +45,9 @@ class ExecutorLoggerPlugin extends AbstractQueueDecorator implements IEddyPlugin
 		$this->getQueue()->enqueue($data, $secDelay);
 	}
 
-	public function dequeue(int $maxCount): array
+	public function dequeue(int $maxCount, float $waitSec = 0.0): array
 	{
-		$data = $this->getQueue()->dequeue($maxCount);
+		$data = $this->getQueue()->dequeue($maxCount, $waitSec);
 		$this->saveExecutor($this->getObject());
 		
 		return $data;
@@ -77,4 +77,6 @@ class ExecutorLoggerPlugin extends AbstractQueueDecorator implements IEddyPlugin
 	public function waiting(): float { return PHP_INT_MAX; }
 
 	public function stopping(): void {}
+	
+	public function init(): void {}
 }

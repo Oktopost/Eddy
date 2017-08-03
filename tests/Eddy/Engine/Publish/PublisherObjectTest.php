@@ -185,6 +185,7 @@ class PublisherObjectTest extends TestCase
 	public function test_publish_ObjectPassedToQueueBuilder()
 	{
 		$object = $this->object();
+		
 		$this->mockIEventDAO();
 		$this->mockIMainQueue();
 		$this->mockIQueue();
@@ -202,7 +203,7 @@ class PublisherObjectTest extends TestCase
 		$subject->publish(['a']);
 	}
 	
-	public function test_publish_ObjectPAssedToLocker()
+	public function test_publish_QueueNamePassedToLocker()
 	{
 		$object = $this->object();
 		$this->mockIEventDAO();
@@ -214,23 +215,25 @@ class PublisherObjectTest extends TestCase
 		$this->config->Engine->Locker
 			->expects($this->once())
 			->method('get')
-			->with($object)
+			->with($object->getQueueNaming($this->config->Naming))
 			->willReturn($this->locker);
 		
 		
 		$subject->publish(['a']);
 	}
 	
-	public function test_publish_ObjectPassedToScheduled()
+	public function test_publish_QueueNamePassedToScheduled()
 	{
 		$object = $this->object();
+		$name = $object->getQueueNaming($this->config->Naming);
+		
 		$this->mockIEventDAO();
 		
 		$subject = $this->subject();
 		$subject->setObject($object);
 		
 		$this->locker->method('isLocked')->willReturn(false);
-		$this->main->expects($this->once())->method('schedule')->with($object);
+		$this->main->expects($this->once())->method('schedule')->with($name);
 		
 		
 		$subject->publish(['a']);

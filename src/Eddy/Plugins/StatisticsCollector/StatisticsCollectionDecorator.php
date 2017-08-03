@@ -21,14 +21,14 @@ class StatisticsCollectionDecorator extends AbstractQueueDecorator implements IS
 
 	public function enqueue(array $data, float $secDelay = 0.0): void
 	{
-		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::ENQUEUE, time());
+		$this->collector->collectData($this->getObject(), count($data), StatsOperation::ENQUEUE, time());
 		$this->getQueue()->enqueue($data, $secDelay);
 	}
 
-	public function dequeue(int $maxCount): array
+	public function dequeue(int $maxCount, float $waitSec = 0.0): array
 	{
-		$data = $this->getQueue()->dequeue($maxCount);
-		$this->collector->collectData($this->getObject(), sizeof($data), StatsOperation::DEQUEUE, time());
+		$data = $this->getQueue()->dequeue($maxCount, $waitSec);
+		$this->collector->collectData($this->getObject(), count($data), StatsOperation::DEQUEUE, time());
 		
 		return $data;
 	}
