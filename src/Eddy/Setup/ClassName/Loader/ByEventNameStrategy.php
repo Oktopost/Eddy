@@ -10,6 +10,9 @@ use Eddy\Exceptions\InterfaceMismatchConfiguration;
 
 class ByEventNameStrategy extends AbstractByNameStrategy
 {
+	public const EVENT_SUFFIX	= 'Event';
+	
+	
 	protected function validate(string $item, IEddyQueueObject $config)
 	{
 		/** @var EventObject $config */

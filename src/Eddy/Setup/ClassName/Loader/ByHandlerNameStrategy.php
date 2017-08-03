@@ -10,6 +10,9 @@ use Eddy\Exceptions\HandlerMismatchConfiguration;
 
 class ByHandlerNameStrategy extends AbstractByNameStrategy
 {
+	public const HANDLER_SUFFIX	= 'Handler';
+	
+	
 	protected function validate(string $item, IEddyQueueObject $config)
 	{
 		/** @var HandlerObject $config */

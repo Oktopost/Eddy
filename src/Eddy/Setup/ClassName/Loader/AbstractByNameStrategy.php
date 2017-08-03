@@ -5,11 +5,10 @@ namespace Eddy\Setup\ClassName\Loader;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Setup\ClassName\ILoaderStrategy;
 
-use Eddy\ObjectAnnotations;
 
-
-abstract class AbstractByNameStrategy extends AbstractLoaderStrategy
+abstract class AbstractByNameStrategy implements ILoaderStrategy
 {
+	public const CONFIG_SUFFIX	= 'Config';
 	
 	
 	private $suffix;
@@ -44,9 +43,6 @@ abstract class AbstractByNameStrategy extends AbstractLoaderStrategy
 
 	public function tryLoad(string $item): ?IEddyQueueObject
 	{
-		if (!$this->isEventOrHandler($item))
-			return null;
-		
 		$configName = $this->replaceNameSuffix($item, self::CONFIG_SUFFIX);
 		
 		if (!class_exists($configName))
