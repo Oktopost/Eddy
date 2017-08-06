@@ -2,7 +2,6 @@
 namespace Eddy\Engine\Processor\ByTypeProcessors;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
 use Eddy\Object\EventObject;
@@ -21,8 +20,8 @@ class EventPayload implements IPayloadProcessor
 	private $subscribers;
 
 	/**
-	 * @context config
-	 * @var IConfig
+	 * @context
+	 * @var \Eddy\Base\IConfig
 	 */
 	private $config;
 	

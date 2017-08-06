@@ -4,6 +4,7 @@ namespace Eddy\Engine\Processor\ByTypeProcessors;
 
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\Queue\IQueueProvider;
+use Eddy\Base\IConfig;
 use Eddy\Base\Module\ISubscribersModule;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Enums\EventState;
@@ -59,7 +60,7 @@ class EventPayloadTest extends TestCase
 			$config->Engine->QueueProvider = $this->mockQueue();
 		}
 		
-		return \UnitTestScope::load(EventPayload::class, ['config' => $config]);
+		return \UnitTestScope::load(EventPayload::class, [IConfig::class => $config]);
 	}
 	
 	

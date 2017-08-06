@@ -4,7 +4,6 @@ namespace Eddy;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
-use Eddy\Base\Config\INaming;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Utils\Config;
 
@@ -23,7 +22,10 @@ class Eddy
 		$context = Scope::skeleton()->context($this, 'Eddy');
 		
 		$this->config = new Config();
-		$context->set('config', $this->config);
+		$context->set([
+			'config'		=> $this->config,
+			IConfig::class	=> $this->config
+		]);
 		
 		$this->engine = Scope::skeleton($this, IEngine::class);
 	}
