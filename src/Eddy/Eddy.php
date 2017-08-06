@@ -60,6 +60,8 @@ class Eddy
 			{
 				$this->addPlugin($pluginItem);
 			}
+			
+			return;
 		}
 		
 		$plugin->setup($this->config());
