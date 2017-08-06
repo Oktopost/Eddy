@@ -4,9 +4,8 @@ namespace Eddy;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
+use Eddy\Base\Config\INaming;
 use Eddy\Base\Module\IEventModule;
-use Eddy\Crawler\Base\ICrawler;
-use Eddy\Crawler\Crawler;
 use Eddy\Utils\Config;
 
 
@@ -24,7 +23,11 @@ class Eddy
 		$context = Scope::skeleton()->context($this, 'Eddy');
 		
 		$this->config = new Config();
-		$context->set('config', $this->config);
+		$context->set([
+			'config'		=> $this->config,
+			'names'			=> $this->config->Naming,
+			INaming::class	=> $this->config->Naming
+		]);
 		
 		$this->engine = Scope::skeleton($this, IEngine::class);
 	}
@@ -44,10 +47,5 @@ class Eddy
 		$eventModule = Scope::skeleton($this, IEventModule::class);
 		
 		return $this->engine->event($eventModule->loadByInterfaceName($interface));
-	}
-	
-	public function crawler(): ICrawler
-	{
-		return new Crawler();
 	}
 }

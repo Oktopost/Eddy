@@ -21,7 +21,7 @@ use Objection\LiteObject;
  * @property float	$Delay,
  * @property int	$MaxBulkSize
  */
-class HandlerObject extends LiteObject implements IEddyQueueObject
+class HandlerObject extends AEddyObject implements IEddyQueueObject
 {
 	protected function _setup()
 	{

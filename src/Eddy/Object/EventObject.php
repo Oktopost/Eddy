@@ -11,7 +11,6 @@ use Eddy\Event\AnonymousObjectEventConfig;
 use Eddy\Exceptions\ConfigMismatchException;
 
 use Objection\LiteSetup;
-use Objection\LiteObject;
 
 
 /**
@@ -27,7 +26,7 @@ use Objection\LiteObject;
  * @property float	$Delay
  * @property int	$MaxBulkSize
  */
-class EventObject extends LiteObject implements IEddyQueueObject
+class EventObject extends AEddyObject implements IEddyQueueObject
 {
 	protected function _setup()
 	{

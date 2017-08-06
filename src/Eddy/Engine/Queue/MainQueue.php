@@ -5,6 +5,7 @@ namespace Eddy\Engine\Queue;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Queue\IQueueManager;
+use Eddy\Exceptions\AbortException;
 
 
 /**
@@ -12,6 +13,9 @@ use Eddy\Base\Engine\Queue\IQueueManager;
  */
 class MainQueue implements IMainQueue
 {
+	const ABORT_INDICATOR	= 'Eddy:Command:00000000';
+	
+	
 	/**
 	 * @context 
 	 * @var \Eddy\Base\IConfig 
@@ -40,6 +44,14 @@ class MainQueue implements IMainQueue
 	}
 	
 	
+	public function sendAbort(int $count = 100): void
+	{
+		$queue = $this->getQueue();
+		
+		$data = array_fill(0, $count, [ self::ABORT_INDICATOR ]);
+		$queue->enqueue($data);
+	}
+	
 	public function schedule(string $target): void
 	{
 		$queue = $this->getQueue();
@@ -59,7 +71,11 @@ class MainQueue implements IMainQueue
 			return null;
 		
 		$result = array_values($result);
+		$result = $result[0];
 		
-		return $result[0];
+		if ($result == self::ABORT_INDICATOR)
+			throw new AbortException();
+		
+		return $result;
 	}
 }

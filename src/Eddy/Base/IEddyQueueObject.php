@@ -14,5 +14,6 @@ use Eddy\Base\Config\INaming;
  */
 interface IEddyQueueObject
 {
+	public function isActive(): bool;
 	public function getQueueNaming(INaming $naming): string;
 }

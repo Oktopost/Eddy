@@ -17,7 +17,7 @@ class IterationProcessor implements IIterationProcessor
 	 * @var \Eddy\Base\Engine\Processor\IProcessControlChain
 	 */
 	private $chain;
-
+	
 	/**
 	 * @autoload
 	 * @var \Eddy\Base\Engine\IMainQueue

@@ -7,5 +7,5 @@ namespace Eddy\Base\Engine\Processor;
  */
 interface IPayloadProcessor
 {
-	public function process(ProcessTarget $target);
+	public function process(ProcessTarget $target): void;
 }
