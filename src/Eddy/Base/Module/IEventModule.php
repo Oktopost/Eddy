@@ -2,9 +2,7 @@
 namespace Eddy\Base\Module;
 
 
-use Eddy\IEventConfig;
 use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
 
 
 /**

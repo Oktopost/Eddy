@@ -3,7 +3,9 @@ namespace Eddy;
 
 
 use DeepQueue\PreparedConfiguration\PreparedQueue;
+use Eddy\Plugins\DeepQueuePlugin;
 use Eddy\Plugins\ExecutorLoggerPlugin;
+use Eddy\Plugins\RedisLockerPlugin;
 use Eddy\Plugins\StatisticsCollectorPlugin;
 use Eddy\Plugins\Utils\LockProviders\RedisLockProvider;
 use lib\MySQLConfig;
@@ -27,10 +29,10 @@ class EddySanity extends TestCase
 		$eddy = new Eddy();
 
 		$eddy->config()->setMainDataBase(MySQLConfig::connector());
-		$eddy->config()->Engine->setQueueProvider(PreparedQueue::Redis($this->getRedisConfig()));
-		$eddy->config()->Engine->Locker = new RedisLockProvider($this->getRedisConfig());
-		
+
 		$eddy->addPlugin([
+				new DeepQueuePlugin(PreparedQueue::Redis($this->getRedisConfig())),
+				new RedisLockerPlugin($this->getRedisConfig()),
 				new StatisticsCollectorPlugin(MySQLConfig::connector(), $this->getRedisConfig(), 120),
 				new ExecutorLoggerPlugin()]);
 	}
