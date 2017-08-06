@@ -19,6 +19,22 @@ class EventModule implements IEventModule
 	 * @var \Eddy\Base\IConfig 
 	 */
 	private $config;
+
+
+	private function getEventFromLoader(string $interfaceName): ?EventObject
+	{
+		/** @var IClassNameLoader $loader */
+		$loader = Scope::skeleton(IClassNameLoader::class);
+		
+		$eventObject = $loader->loadEvent($interfaceName);
+		
+		if ($eventObject)
+		{
+			$this->config->DAL()->events()->saveSetup($eventObject);
+		}
+		
+		return $eventObject;
+	}
 	
 	
 	public function loadByInterfaceName(string $interfaceName): EventObject
@@ -27,10 +43,7 @@ class EventModule implements IEventModule
 		
 		if (!$eventObject)
 		{
-			/** @var IClassNameLoader $loader */
-			$loader = Scope::skeleton(IClassNameLoader::class);
-			
-			$eventObject = $loader->loadEvent($interfaceName);
+			$eventObject = $this->getEventFromLoader($interfaceName);
 		}
 		
 		if (!$eventObject)

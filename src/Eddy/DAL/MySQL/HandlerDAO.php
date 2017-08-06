@@ -42,7 +42,8 @@ class HandlerDAO implements IHandlerDAO
 	
 	public function loadMultiple(array $ids): array
 	{
-		return $this->connector->selectObjectsByFields(['Id' => $ids]);
+		$objects = $this->connector->selectObjectsByFields(['Id' => $ids]);
+		return $objects ?: [];
 	}
 	
 	public function loadByIdentifier(string $identifier): ?HandlerObject 

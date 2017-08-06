@@ -5,6 +5,7 @@ namespace Eddy\DAL\MySQL;
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
 use Eddy\Base\DAL\IHandlerDAO;
+use Eddy\Enums\EventState;
 use Eddy\Object\HandlerObject;
 use Eddy\DAL\MySQL\Connector\HandlerConnector;
 
@@ -95,12 +96,15 @@ class HandlerDAOTest extends TestCase
 		$handler = $this->getHandler(true);
 		$handler->Delay = 10;
 		$handler->HandlerClassName = 'TestNewHandler';
+		$handler->State = EventState::PAUSED;
 		
 		$this->getSubject()->updateSettings($handler);
 		
 		self::assertEquals($handler->Delay, $this->getColumnById('Delay', $handler->Id));
 		self::assertNotEquals($handler->HandlerClassName, 
 			$this->getColumnById('HandlerClassName', $handler->Id));
+		
+		self::assertEquals($handler->State, $this->getColumnById('State', $handler->Id));
 	}
 
 	public function test_load_noHandlerExist_NullReturned()
