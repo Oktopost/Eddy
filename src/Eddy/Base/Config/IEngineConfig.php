@@ -18,4 +18,6 @@ interface IEngineConfig
 {
 	public function addDecorator(...$decorators): void;
 	public function addController(...$controllers): void;
+	
+	public function setQueueProvider($config): IEngineConfig;
 }

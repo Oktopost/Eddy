@@ -33,7 +33,7 @@ class QueueBuilder implements IQueueBuilder
 		}
 		else if (is_string($decorator))
 		{
-			return Scope::skeleton($decorator);
+			return Scope::skeleton($this, $decorator);
 		}
 		
 		throw new UnexpectedException('Expecting IQueueDecorator instance or class name.');

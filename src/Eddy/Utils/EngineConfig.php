@@ -35,7 +35,7 @@ class EngineConfig extends LiteObject implements IEngineConfig
 	 * @param IQueueProvider|DeepQueue|string $config
 	 * @return EngineConfig
 	 */
-	public function setQueueProvider($config): EngineConfig
+	public function setQueueProvider($config): IEngineConfig
 	{
 		if ($config instanceof DeepQueue) $this->QueueProvider = new DeepQueueProvider($config);
 		else if ($config instanceof IQueueProvider) $this->QueueProvider = $config;

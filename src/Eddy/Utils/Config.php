@@ -60,7 +60,7 @@ class Config extends LiteObject implements IConfig
 		}
 	}
 	
-	public function setMainDataBase($setup)
+	public function setMainDataBase($setup): void
 	{
 		if (is_array($setup))
 		{

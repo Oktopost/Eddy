@@ -2,6 +2,7 @@
 namespace Eddy\Engine\Queue;
 
 
+use Eddy\Base\Engine\Queue\IQueueDecorator;
 use Eddy\Scope;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEddyQueueObject;
@@ -84,6 +85,9 @@ class QueueBuilderTest extends TestCase
 	
 	public function test_getQueue_WithDecorators()
 	{
+		\UnitTestScope::override(IStatisticsCollectionDecorator::class, 
+			QueueBuilderTest_DummyQueueDecorator::class);
+		
 		$this->getSubject([new ExecutorLoggerPlugin(), IStatisticsCollectionDecorator::class])
 			->getQueue($this->getEvent());
 	}
@@ -95,4 +99,15 @@ class QueueBuilderTest extends TestCase
 	{
 		$this->getSubject([1])->getQueue($this->getEvent());
 	}
+}
+
+class QueueBuilderTest_DummyQueueDecorator implements IQueueDecorator
+{
+	public function enqueue(array $data, float $secDelay = 0.0): void {	return;	}
+
+	public function dequeue(int $maxCount, float $waitSec = 0.0): array	{ return []; }
+
+	public function child(IQueue $queue): void { return; }
+
+	public function setObject(IEddyQueueObject $object): void {	return;	}
 }
