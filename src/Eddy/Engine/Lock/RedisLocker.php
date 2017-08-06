@@ -33,17 +33,7 @@ class RedisLocker implements ILocker
 
 	public function lock(float $timeoutSeconds = -1.0): bool
 	{
-		$ttl = $timeoutSeconds > 0 ? $timeoutSeconds * 1000 : null;
-		
-		if ($ttl)
-		{
-			$result = $this->client->set($this->getKey(), time(), 'PX', $ttl, 'NX');
-		}
-		else
-		{
-			$result = $this->client->set($this->getKey(), time(), 'NX');
-		}
-		
+		$result = $this->client->set($this->getKey(), time(), 'NX');
 		return (bool)$result;
 	}
 

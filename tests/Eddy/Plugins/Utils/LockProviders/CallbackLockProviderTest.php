@@ -38,7 +38,7 @@ class DummyTestCallbackLockProvider_Locker implements ILocker
 	}
 
 
-	public function lock(float $timeoutSeconds = -1.0): bool { return true; }
+	public function lock(): bool { return true; }
 
 	public function isLocked(): bool { return false; }
 

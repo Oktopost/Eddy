@@ -48,7 +48,7 @@ class MainQueue implements IMainQueue
 	{
 		$queue = $this->getQueue();
 		
-		$data = array_fill(0, $count, [ self::ABORT_INDICATOR ]);
+		$data = array_fill(0, $count, self::ABORT_INDICATOR);
 		$queue->enqueue($data);
 	}
 	

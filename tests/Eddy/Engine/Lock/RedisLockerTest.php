@@ -50,15 +50,6 @@ class RedisLockerTest extends TestCase
 		self::assertFalse($this->getSubject()->lock());
 	}
 	
-	public function test_lock_LockWithTTL_LockDisabled()
-	{
-		$this->getSubject()->lock(0.009);
-		
-		usleep(10000);
-		
-		self::assertTrue($this->getSubject()->lock());
-	}
-	
 	public function test_isLocked_LockNotExist_ReturnFalse()
 	{
 		self::assertFalse($this->getSubject()->isLocked());

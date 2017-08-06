@@ -12,21 +12,21 @@ class Eddy
 {
 	/** @var IConfig */
 	private $config;
-	
+
 	/** @var IEngine */
 	private $engine;
-	
-	
+
+
 	public function __construct()
 	{
 		$context = Scope::skeleton()->context($this, 'Eddy');
-		
+
 		$this->config = new Config();
 		$context->set([
-			'config'		=> $this->config,
-			IConfig::class	=> $this->config
+			'config' => $this->config,
+			IConfig::class => $this->config
 		]);
-		
+
 		$this->engine = Scope::skeleton($this, IEngine::class);
 	}
 
@@ -43,7 +43,23 @@ class Eddy
 	{
 		/** @var IEventModule $eventModule */
 		$eventModule = Scope::skeleton($this, IEventModule::class);
-		
+
 		return $this->engine->event($eventModule->loadByInterfaceName($interface));
+	}
+
+	/**
+	 * @param IEddyPlugin|IEddyPlugin[]|array $plugin
+	 */
+	public function addPlugin($plugin): void
+	{
+		if (is_array($plugin))
+		{
+			foreach ($plugin as $pluginItem)
+			{
+				$this->addPlugin($pluginItem);
+			}
+		}
+		
+		$plugin->setup($this->config());
 	}
 }

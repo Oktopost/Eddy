@@ -2,17 +2,16 @@
 namespace Eddy\Engine\Queue;
 
 
-use Eddy\Base\Config\INaming;
-use Eddy\Base\Engine\IMainQueue;
-
+use Eddy\Scope;
+use Eddy\Base\IConfig;
 use Eddy\Base\Engine\IQueue;
+use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Queue\IQueueManager;
 use Eddy\Base\Engine\Queue\IQueueProvider;
-use Eddy\Base\IConfig;
 use Eddy\Object\EventObject;
-use Eddy\Scope;
 use Eddy\Utils\Config;
 use Eddy\Utils\Naming;
+
 use PHPUnit\Framework\TestCase;
 
 
@@ -22,9 +21,9 @@ class MainQueueTest extends TestCase
 	private $config;
 	
 	
-	private function getSubject(): IMainQueue
+	private function getSubject(IQueue $queue, ?IQueueManager $manager = null): IMainQueue
 	{
-		$this->config = $this->createConfig();
+		$this->config = $this->createConfig($queue, $manager);
 		
 		$obj = new \stdClass();
 		Scope::skeleton()->context($obj, 'test')->set(IConfig::class, $this->config);
@@ -32,20 +31,6 @@ class MainQueueTest extends TestCase
 		$mainQueue = Scope::skeleton($obj, IMainQueue::class);
 		
 		return $mainQueue;
-	}
-	
-	/**
-	 * @return \PHPUnit_Framework_MockObject_MockObject|IQueue
-	 */
-	private function getIQueueMock(): IQueue
-	{
-		$queue = $this->getMockBuilder(IQueue::class)->getMock();
-		$queue
-			->expects($this->once())
-			->method('enqueue')
-			->with($this->equalTo([0 => ['testNameEvent' => 'testNameEvent']], 1));
-		
-		return $queue;
 	}
 	
 	/**
@@ -62,21 +47,25 @@ class MainQueueTest extends TestCase
 	/**
 	 * @return \PHPUnit_Framework_MockObject_MockObject|IQueueProvider
 	 */
-	private function getIQueueProviderMock(): IQueueProvider
+	private function getIQueueProviderMock(IQueue $queue, ?IQueueManager $manager = null): IQueueProvider
 	{
 		$provider = $this->getMockBuilder(IQueueProvider::class)->getMock();
 		$provider->expects($this->once())->method('getQueue')
 			->with($this->equalTo('testName'))
-			->willReturn($this->getIQueueMock());
+			->willReturn($queue);
 		
-		$provider->expects($this->once())->method('getManager')
-			->with($this->equalTo('testName'))
-			->willReturn($this->getIQueueManagerMock());
+		if ($manager)
+		{	
+			$provider->expects($this->once())->method('getManager')
+				->with($this->equalTo('testName'))
+				->willReturn($manager);
+		}
+		
 		
 		return $provider;
 	}
 	
-	private function createConfig(): IConfig
+	private function createConfig(IQueue $queue, ?IQueueManager $manager = null): IConfig
 	{
 		$config = new Config();
 		$config->Naming = $this->getMockBuilder(Naming::class)->getMock();
@@ -84,7 +73,7 @@ class MainQueueTest extends TestCase
 			->with($this->anything())
 			->willReturn('testName');
 		
-		$config->Engine->QueueProvider = $this->getIQueueProviderMock();
+		$config->Engine->QueueProvider = $this->getIQueueProviderMock($queue, $manager);
 		
 		return $config;
 	}
@@ -101,6 +90,78 @@ class MainQueueTest extends TestCase
 		$event = new EventObject();
 		$event->Name = 'Event';
 		
-		$this->getSubject()->schedule($event->getQueueNaming($this->config->Naming));
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('enqueue')
+			->with($this->equalTo([0 => ['testNameEvent' => 'testNameEvent']], 1));
+		
+		$this->getSubject($queue, $this->getIQueueManagerMock())
+			->schedule($event->getQueueNaming($this->config->Naming));
+	}
+	
+	public function test_dequeue()
+	{
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('dequeue')
+			->with($this->equalTo(1))
+			->willReturn([1 => 'a']);
+		
+		self::assertEquals('a', $this->getSubject($queue)->dequeue());
+	}
+	
+	public function test_dequeue_emptyArray()
+	{
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('dequeue')
+			->with($this->equalTo(1))
+			->willReturn([]);
+		
+		self::assertEmpty($this->getSubject($queue)->dequeue());
+	}
+
+	/**
+	 * @expectedException \Eddy\Exceptions\AbortException
+	 */
+	public function test_dequeue_withAbort()
+	{
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('dequeue')
+			->with($this->equalTo(1))
+			->willReturn([MainQueue::ABORT_INDICATOR]);
+		
+		$this->getSubject($queue)->dequeue();
+	}
+	
+	public function test_sendAbort()
+	{
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('enqueue')
+			->with($this->equalTo([MainQueue::ABORT_INDICATOR, MainQueue::ABORT_INDICATOR]));
+		
+		$this->getSubject($queue)->sendAbort(2);
 	}
 }
