@@ -47,10 +47,15 @@ class IterationProcessor implements IIterationProcessor
 		return $this->config->Engine->Locker->get($queueName)->lock(0.0);
 	}
 	
-	private function release(string $queueName): void
+	private function reschedule(string $queueName): void
+	{
+		$this->unlock($queueName);
+		$this->main->schedule($queueName);
+	}
+	
+	private function unlock(string $queueName): void
 	{
 		$this->config->Engine->Locker->get($queueName)->unlock();
-		$this->main->schedule($queueName);
 	}
 	
 	private function tryGetTargetOnce(float $maxWaitTime): ?ProcessTarget
@@ -58,15 +63,22 @@ class IterationProcessor implements IIterationProcessor
 		$queue = $this->main->dequeue($maxWaitTime);
 		
 		if (!$queue || !$this->locker($queue))
+		{
 			return null;
+		}
 		
 		try
 		{
-			return $this->payloadLoader->getPayloadFor($queue);
+			$result = $this->payloadLoader->getPayloadFor($queue);
+			
+			if (!$result)
+				$this->unlock($queue);
+			
+			return $result;
 		}
 		catch (\Throwable $e)
 		{
-			$this->release($queue);
+			$this->reschedule($queue);
 			throw $e;
 		}
 	}
@@ -78,11 +90,10 @@ class IterationProcessor implements IIterationProcessor
 		$firstTime	= true;
 		$target		= null;
 		
-		while ($firstTime || ($endTime <= $now && !$target))
+		while ($firstTime || ($endTime > $now && !$target))
 		{
 			$maxWaitTime = max($endTime - $now, 0.0);
 			$target = $this->tryGetTargetOnce($maxWaitTime);
-			
 			$firstTime = false;
 			$now = microtime(true);
 		}
@@ -98,7 +109,7 @@ class IterationProcessor implements IIterationProcessor
 		}
 		finally
 		{
-			$this->release($target->Object->getQueueNaming($this->config->Naming));
+			$this->reschedule($target->Object->getQueueNaming($this->config->Naming));
 		}
 	}
 	
