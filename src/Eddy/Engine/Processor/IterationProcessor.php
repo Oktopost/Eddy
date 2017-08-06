@@ -44,7 +44,7 @@ class IterationProcessor implements IIterationProcessor
 
 	private function locker(string $queueName): bool
 	{
-		return $this->config->Engine->Locker->get($queueName)->lock(0.0);
+		return $this->config->Engine->Locker->get($queueName)->lock();
 	}
 	
 	private function reschedule(string $queueName): void
