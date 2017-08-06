@@ -7,7 +7,7 @@ use Eddy\Exceptions\AbortException;
 
 
 /**
- * @context
+ * @autoload
  */
 class MainProcessor implements IProcessor
 {
@@ -15,13 +15,13 @@ class MainProcessor implements IProcessor
 	 * @autoload
 	 * @var \Eddy\Base\Engine\Processor\IProcessControlChain
 	 */
-	public $chain;
+	private $chain;
 	
 	/**
 	 * @autoload
 	 * @var \Eddy\Base\Engine\Processor\IIterationProcessor
 	 */
-	public $processor;
+	private $processor;
 	
 	
 	private function safeProcess(): bool

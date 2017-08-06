@@ -36,16 +36,6 @@ $this->set(IPublishBuilder::class,	PublishBuilder::class);
 $this->set(IPublisherObject::class,	PublisherObject::class);
 
 
-use Eddy\Base\Engine\IProcessor;
-use Eddy\Base\Engine\Processor\IProcessControlChain;
-
-use Eddy\Engine\Processor\MainProcessor;
-use Eddy\Engine\Processor\Control\ProcessControlChain;
-
-$this->set(IProcessor::class,			MainProcessor::class);
-$this->set(IProcessControlChain::class,	ProcessControlChain::class);
-
-
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;

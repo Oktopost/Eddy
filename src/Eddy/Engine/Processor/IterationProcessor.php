@@ -2,7 +2,6 @@
 namespace Eddy\Engine\Processor;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IIterationProcessor;
 
@@ -26,7 +25,7 @@ class IterationProcessor implements IIterationProcessor
 
 	/**
 	 * @context
-	 * @var IConfig
+	 * @var \Eddy\Base\IConfig
 	 */
 	private $config;
 

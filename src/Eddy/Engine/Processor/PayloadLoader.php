@@ -2,7 +2,6 @@
 namespace Eddy\Engine\Processor;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadLoader;
 use Eddy\Enums\EventState;
@@ -21,7 +20,7 @@ class PayloadLoader implements IPayloadLoader
 
 	/**
 	 * @context
-	 * @var IConfig
+	 * @var \Eddy\Base\IConfig
 	 */
 	private $config;
 	
