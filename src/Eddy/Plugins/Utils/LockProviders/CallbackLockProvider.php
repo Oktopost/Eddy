@@ -19,6 +19,6 @@ class CallbackLockProvider implements ILockProvider
 
 	public function get($queueName): ILocker
 	{
-		return call_user_func($this->callback, $queueName);
+		return ($this->callback)($queueName);
 	}
 }
