@@ -23,11 +23,7 @@ class Eddy
 		$context = Scope::skeleton()->context($this, 'Eddy');
 		
 		$this->config = new Config();
-		$context->set([
-			'config'		=> $this->config,
-			'names'			=> $this->config->Naming,
-			INaming::class	=> $this->config->Naming
-		]);
+		$context->set('config', $this->config);
 		
 		$this->engine = Scope::skeleton($this, IEngine::class);
 	}

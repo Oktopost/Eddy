@@ -22,6 +22,11 @@ class UnitTestScope
 	{
 		self::$unitSkeleton->clear();
 	}
+	
+	public static function load($item, $context = null)
+	{
+		return self::$unitSkeleton->load($item, $context);
+	}
 }
 
 

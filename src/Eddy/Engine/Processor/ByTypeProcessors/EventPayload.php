@@ -21,7 +21,7 @@ class EventPayload implements IPayloadProcessor
 	private $subscribers;
 
 	/**
-	 * @context
+	 * @context config
 	 * @var IConfig
 	 */
 	private $config;
