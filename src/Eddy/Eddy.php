@@ -5,6 +5,7 @@ namespace Eddy;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
 use Eddy\Base\Module\IEventModule;
+use Eddy\Base\Module\ISetupModule;
 use Eddy\Utils\Config;
 
 
@@ -37,6 +38,7 @@ class Eddy
 	}
 
 	/**
+	 * @param string $interface
 	 * @return mixed
 	 */
 	public function event(string $interface)
@@ -61,5 +63,12 @@ class Eddy
 		}
 		
 		$plugin->setup($this->config());
+	}
+	
+	public function runSetup(): void
+	{
+		/** @var ISetupModule $setup */
+		$setup = Scope::skeleton($this, ISetupModule::class);
+		$setup->load();
 	}
 }
