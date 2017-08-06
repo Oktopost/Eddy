@@ -68,7 +68,10 @@ $this->set(IStatisticsCollectionDecorator::class, StatisticsCollectionDecorator:
 $this->set(IProcessStatistics::class, ProcessStatistics::class);
 
 
+use Eddy\Base\Module\ISetupModule;
 use Eddy\Base\Module\IEventModule;
+use Eddy\Modules\SetupModule;
 use Eddy\Modules\EventModule;
 
 $this->set(IEventModule::class, EventModule::class);
+$this->set(ISetupModule::class, SetupModule::class);

@@ -18,7 +18,7 @@ class EventModuleTest extends TestCase
 {
 	private function getSubject(IEventDAO $dao, IClassNameLoader $loader): IEventModule
 	{
-		$config = new TestEventModule_Config($this->getDALMock($dao, $loader));
+		$config = new TestEventModule_Config($this->getDALMockAndSetLoader($dao, $loader));
 		
 		$obj = new \stdClass();
 		Scope::skeleton()->context($obj, 'test')->set(IConfig::class, $config);
@@ -31,7 +31,7 @@ class EventModuleTest extends TestCase
 	/**
 	 * @return \PHPUnit_Framework_MockObject_MockObject|IDAL
 	 */
-	private function getDALMock($dao, $loader): IDAL
+	private function getDALMockAndSetLoader($dao, $loader): IDAL
 	{
 		$dal = $this->getMockBuilder(IDAL::class)->getMock();
 		

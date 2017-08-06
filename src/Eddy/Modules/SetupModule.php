@@ -2,7 +2,6 @@
 namespace Eddy\Modules;
 
 
-use Eddy\Base\IConfig;
 use Eddy\Base\Module\ISetupModule;
 use Eddy\Base\Setup\IEventsSetup;
 
@@ -20,7 +19,7 @@ class SetupModule implements ISetupModule
 	
 	/**
 	 * @context 
-	 * @var IConfig 
+	 * @var \Eddy\Base\IConfig 
 	 */
 	private $config;
 	
