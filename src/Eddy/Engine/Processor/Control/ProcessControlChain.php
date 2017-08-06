@@ -12,6 +12,9 @@ use Eddy\Object\HandlerObject;
 
 class ProcessControlChain implements IProcessControlChain
 {
+	public const DEFAULT_WAIT_TIME = 60.0;
+	
+	
 	/** @var IEngineConfig */
 	private $config;
 
@@ -61,7 +64,7 @@ class ProcessControlChain implements IProcessControlChain
 			$result = min($controller->waiting(), $result); 
 		}
 		
-		return ($result == PHP_INT_MAX ? 60.0 : $result);
+		return ($result == PHP_INT_MAX ? self::DEFAULT_WAIT_TIME : $result);
 	}
 
 	public function preProcess(IEddyQueueObject $target, array $payload): void

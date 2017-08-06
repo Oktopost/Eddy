@@ -3,7 +3,7 @@ namespace Eddy\Plugins\StatisticsCollector;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Base\Engine\Processor\AbstractProcessController;
+use Eddy\Base\Engine\Processor\AProcessController;
 use Eddy\Object\HandlerObject;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 
@@ -11,7 +11,7 @@ use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 /**
  * @autoload
  */
-class ProcessStatistics extends AbstractProcessController implements IProcessStatistics
+class ProcessStatistics extends AProcessController implements IProcessStatistics
 {
 	/** 
 	 * @autoload

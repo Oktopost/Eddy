@@ -26,14 +26,23 @@ class Config extends LiteObject implements IConfig
 	protected function _setup()
 	{
 		return [
-			'Engine'			=> LiteSetup::createInstanceOf(new EngineConfig()),
-			'Naming'			=> LiteSetup::createInstanceOf(new Naming()),
-			'Setup'				=> LiteSetup::createInstanceOf(new SetupConfig()),
+			'Engine'			=> LiteSetup::createInstanceOf(EngineConfig::class),
+			'Naming'			=> LiteSetup::createInstanceOf(Naming::class),
+			'Setup'				=> LiteSetup::createInstanceOf(SetupConfig::class),
  			'ExceptionHandler'	=> LiteSetup::createInstanceOf(IExceptionHandler::class)
 		];
 	}
 	
 	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->Engine = new EngineConfig();
+		$this->Naming = new Naming();
+		$this->Setup = new SetupConfig();
+	}
+
+
 	public function DAL(): IDAL
 	{
 		return $this->dal;

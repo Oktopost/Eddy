@@ -6,7 +6,7 @@ use Eddy\Base\IEddyQueueObject;
 use Eddy\Object\HandlerObject;
 
 
-abstract class AbstractProcessController implements IProcessController
+abstract class AProcessController implements IProcessController
 {
 	public function init(): void {}
 	public function start(): bool {	return true; }
