@@ -5,7 +5,6 @@ namespace Eddy\Utils;
 use Eddy\Scope;
 use Eddy\Base\Config\IEngineConfig;
 use Eddy\Base\Engine\ILockProvider;
-use Eddy\Base\Engine\Queue\IQueueDecorator;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Engine\Queue\DeepQueue\DeepQueueProvider;
 use Eddy\Exceptions\UnexpectedException;
@@ -18,10 +17,6 @@ use DeepQueue\DeepQueue;
 
 class EngineConfig extends LiteObject implements IEngineConfig
 {
-	/** @var IQueueDecorator[] */
-	private $queueDecorators;
-	
-	
 	/**
 	 * @return array
 	 */
