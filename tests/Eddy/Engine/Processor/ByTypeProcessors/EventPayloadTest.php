@@ -2,6 +2,7 @@
 namespace Eddy\Engine\Processor\ByTypeProcessors;
 
 
+use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Base\IConfig;
@@ -12,20 +13,20 @@ use Eddy\Object\HandlerObject;
 use Eddy\Utils\Config;
 use Eddy\Object\EventObject;
 
+use Eddy\Utils\Naming;
 use PHPUnit\Framework\TestCase;
 
 
 class EventPayloadTest extends TestCase
 {
-	/**
-	 * @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule
-	 */
+	/** @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule */
 	private $subModule;
 	
-	/** 
-	 * @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule
-	 */
+	/** @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule */
 	private $queue;
+	
+	/** @var \PHPUnit_Framework_MockObject_MockObject|IMainQueue */
+	private $mainQueue;
 	
 	/** @var ProcessTarget */
 	private $target;
@@ -51,6 +52,20 @@ class EventPayloadTest extends TestCase
 		
 		return $providerMock;
 	}
+
+	/**
+	 * @return \PHPUnit_Framework_MockObject_MockObject|IMainQueue
+	 */
+	private function mockMainQueue(): IMainQueue
+	{
+		if (!$this->mainQueue)
+		{
+			$this->mainQueue = $this->getMockBuilder(IMainQueue::class)->getMock();
+			\UnitTestScope::override(IMainQueue::class, $this->mainQueue);
+		}
+		
+		return $this->mainQueue;
+	}
 	
 	private function subject($config = null): EventPayload
 	{
@@ -59,6 +74,8 @@ class EventPayloadTest extends TestCase
 			$config = new Config();
 			$config->Engine->QueueProvider = $this->mockQueue();
 		}
+		
+		$this->mockMainQueue();
 		
 		return \UnitTestScope::load(EventPayload::class, [IConfig::class => $config]);
 	}
@@ -157,6 +174,40 @@ class EventPayloadTest extends TestCase
 		$subject = $this->subject();
 		$this->queue->expects($this->exactly(2))->method('enqueue');
 		
+		$subject->process($this->target);
+	}
+	
+	
+	public function test_OneSubscriber_SubscriberScheduledInMainQueue()
+	{
+		$handler1 = new HandlerObject();
+		$handler1->Name = 'a';
+		
+		$main = $this->mockMainQueue();
+		$this->mockSubscribers([$handler1]);
+		
+		$main->expects($this->once())->method('schedule')->with($handler1->getQueueNaming(new Naming()));
+		
+		$subject = $this->subject();
+		$subject->process($this->target);
+	}
+	
+	public function test_NumberOfSubscribers_AllSubscribersScheduledInTheMainQueue()
+	{
+		$handler1 = new HandlerObject();
+		$handler1->Name = 'a';
+		
+		$handler2 = new HandlerObject();
+		$handler2->Name = 'b';
+		
+		
+		$main = $this->mockMainQueue();
+		$this->mockSubscribers([$handler1, $handler2]);
+		
+		$main->expects($this->at(0))->method('schedule')->with($handler1->getQueueNaming(new Naming()));
+		$main->expects($this->at(1))->method('schedule')->with($handler2->getQueueNaming(new Naming()));
+		
+		$subject = $this->subject();
 		$subject->process($this->target);
 	}
 	

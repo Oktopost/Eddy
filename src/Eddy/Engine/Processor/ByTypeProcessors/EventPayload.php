@@ -18,6 +18,12 @@ class EventPayload implements IPayloadProcessor
 	 * @var \Eddy\Base\Module\ISubscribersModule
 	 */
 	private $subscribers;
+	
+	/**
+	 * @autoload
+	 * @var \Eddy\Base\Engine\IMainQueue
+	 */
+	private $mainQueue;
 
 	/**
 	 * @context
@@ -48,6 +54,7 @@ class EventPayload implements IPayloadProcessor
 		foreach ($subscribers as $subscriber)
 		{
 			$this->enqueueOne($subscriber, $target->Payload);
+			$this->mainQueue->schedule($subscriber->getQueueNaming($this->config->Naming));
 		}
 	}
 }
