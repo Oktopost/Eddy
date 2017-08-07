@@ -23,7 +23,7 @@ class ClassNameSearch
 		return $source;
 	}
 	
-	private function splitName($source): array
+	private static function splitName($source): array
 	{
 		$lastSlash = strrpos($source, '\\');
 		
