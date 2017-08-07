@@ -30,7 +30,7 @@ class ProcessStatistics extends AProcessController implements IProcessStatistics
 	
 	public function postProcess(IEddyQueueObject $target, array $payload): void
 	{
-		$executionTime = $this->startTime = microtime(true);
+		$executionTime = microtime(true) - $this->startTime;
 		
 		$this->collector->collectExecutionTime($target, $executionTime, time());
 	}
