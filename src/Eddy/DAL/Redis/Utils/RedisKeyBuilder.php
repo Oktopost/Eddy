@@ -75,4 +75,9 @@ class RedisKeyBuilder
 	{
 		return self::HANDLER_EVENTS_PREFIX;
 	}
+	
+	public static function getExecutorsPrefix(): string
+	{
+		return self::EXECUTOR_PREFIX;
+	}
 }

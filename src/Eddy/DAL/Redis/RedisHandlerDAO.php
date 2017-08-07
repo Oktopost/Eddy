@@ -157,4 +157,17 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 		
 		return true;
 	}
+	
+	public function flushAll(): void
+	{
+		$transaction = $this->client->transaction();
+		
+		$transaction->del([
+			RedisKeyBuilder::handlerObject(), 
+			RedisKeyBuilder::handlerByName(), 
+			RedisKeyBuilder::handlerByClassName()
+		]);
+		
+		$transaction->execute();
+	}
 }

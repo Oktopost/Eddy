@@ -20,7 +20,13 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 	{
 		$prefix = $this->client->getOptions()->prefix->getPrefix();
 		
-		foreach ([RedisKeyBuilder::getEventHandlersPrefix(), RedisKeyBuilder::getHandlerEventsPrefix()] as $mapPrefix)
+		$keys = [
+			RedisKeyBuilder::getEventHandlersPrefix(), 
+			RedisKeyBuilder::getHandlerEventsPrefix(),
+			RedisKeyBuilder::getExecutorsPrefix()
+		];
+		
+		foreach ($keys as $mapPrefix)
 		{
 			$transaction->eval("return redis.call('del', 'defaultKey', unpack(redis.call('keys', ARGV[1])))", 
 			0, $prefix . $mapPrefix . '*');
@@ -157,5 +163,14 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 	public function addExecutor(string $handlerId, string $eventId): void
 	{
 		$this->client->hset(RedisKeyBuilder::executorsKey($handlerId), $eventId, time());
+	}
+
+	public function flushAll(): void
+	{
+		$transaction = $this->client->transaction();
+		
+		$this->prepareCleanUp($transaction);
+		
+		$transaction->execute();
 	}
 }

@@ -157,4 +157,17 @@ class RedisEventDAO implements IRedisEventDAO
 		
 		return true;
 	}
+
+	public function flushAll(): void
+	{
+		$transaction = $this->client->transaction();
+		
+		$transaction->del([
+			RedisKeyBuilder::eventObject(), 
+			RedisKeyBuilder::eventByName(), 
+			RedisKeyBuilder::eventByInterface()
+		]);
+		
+		$transaction->execute();
+	}
 }
