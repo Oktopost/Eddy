@@ -57,7 +57,7 @@ class MainQueueTest extends TestCase
 		if ($manager)
 		{	
 			$provider->expects($this->once())->method('getManager')
-				->with($this->equalTo('testName'))
+				->with($this->equalTo('testNameEvent'))
 				->willReturn($manager);
 		}
 		

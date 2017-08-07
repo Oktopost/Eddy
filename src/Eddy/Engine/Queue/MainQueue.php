@@ -25,9 +25,6 @@ class MainQueue implements IMainQueue
 	/** @var IQueue */
 	private $queue = null;
 	
-	/** @var IQueueManager */
-	private $manager = null;
-	
 	
 	private function getQueue(): IQueue
 	{
@@ -37,7 +34,6 @@ class MainQueue implements IMainQueue
 			$queueProvider = $this->config->Engine->QueueProvider;
 			
 			$this->queue = $queueProvider->getQueue($mainQueueName);
-			$this->manager = $queueProvider->getManager($mainQueueName);
 		}
 		
 		return $this->queue;
@@ -55,7 +51,9 @@ class MainQueue implements IMainQueue
 	public function schedule(string $target): void
 	{
 		$queue = $this->getQueue();
-		$delay = $this->manager->getNextRuntime();
+		
+		$manager = $this->config->Engine->QueueProvider->getManager($target);
+		$delay = $manager->getNextRuntime();
 		
 		if (is_null($delay)) return;
 		
