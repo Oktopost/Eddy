@@ -2,6 +2,7 @@
 namespace Eddy;
 
 
+use Eddy\Base\Engine\IProcessor;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
 use Eddy\Base\Module\IEventModule;
@@ -72,5 +73,12 @@ class Eddy
 		/** @var ISetupModule $setup */
 		$setup = Scope::skeleton($this, ISetupModule::class);
 		$setup->load();
+	}
+	
+	public function handle(): void
+	{
+		/** @var IProcessor $processor */
+		$processor = Scope::skeleton($this, IProcessor::class);
+		$processor->run();
 	}
 }

@@ -3,11 +3,13 @@ namespace Eddy;
 
 
 use Eddy\Base\IEngine;
+use Eddy\Base\Engine\IProcessor;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Base\Module\ISetupModule;
-use Eddy\Modules\SetupModule;
-use Eddy\Object\EventObject;
 use Eddy\Utils\Config;
+use Eddy\Object\EventObject;
+
+
 use PHPUnit\Framework\TestCase;
 
 
@@ -62,4 +64,15 @@ class EddyTest extends TestCase
 		
 		$this->getSubject()->runSetup();
 	}
+	
+	public function test_runHandle()
+	{
+		$mock = $this->getMockBuilder(IProcessor::class)->getMock();
+		$mock->expects($this->once())->method('run');
+		
+		\UnitTestScope::override(IProcessor::class, $mock);
+		
+		$this->getSubject()->handle();
+	}
+	
 }
