@@ -55,7 +55,7 @@ class SetupModuleTest extends TestCase
 			->willReturn($handlersDAO);
 		
 		$subscribersDAO = $this->getMockBuilder(ISubscribersDAO::class)->getMock();
-		$subscribersDAO->expects($this->once())->method('addSubscribers');
+		$subscribersDAO->expects($this->once())->method('addSubscribersByNames');
 		
 		$dal->method('subscribers')
 			->willReturn($subscribersDAO);
