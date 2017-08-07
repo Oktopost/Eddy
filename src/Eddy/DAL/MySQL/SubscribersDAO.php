@@ -13,6 +13,9 @@ use Squid\MySql\IMySqlConnector;
  */
 class SubscribersDAO implements ISubscribersDAO
 {
+	private const EVENT_TABLE		= 'EddyEvent';
+	private const HANDLER_TABLE		= 'EddyHandler';
+	
 	private const SUBSCRIBERS_TABLE = 'EddySubscribers';
 	private const EXECUTORS_TABLE 	= 'EddyExecutors';
 	private const TEMP_TABLE		= 'EddySubscribers_Temp';
@@ -39,11 +42,37 @@ class SubscribersDAO implements ISubscribersDAO
 			
 			foreach ($items as $item)
 			{
-				$plainArray[] =[$key, $item];
+				$plainArray[] = [$key, $item];
 			}
 		}
 		
 		return $plainArray;
+	}
+	
+	private function convertNamesToIds(array $keyNameToArrayNames): array 
+	{
+		 $flatArray = $this->prepareData($keyNameToArrayNames);
+		 
+		 if (!$flatArray) return [];
+		 
+		 $eventsIds = $this->connector->select()
+			 ->from(self::EVENT_TABLE)
+			 ->byField('Name', array_column($flatArray, 0))
+			 ->queryMap('Name', 'Id');
+		 
+		 $handlersIds = $this->connector->select()
+			 ->from(self::HANDLER_TABLE)
+			 ->byField('Name', array_column($flatArray, 1))
+			 ->queryMap('Name', 'Id');
+		 
+		 $idMappedArray = [];
+		 
+		 foreach ($flatArray as $item)
+		 {
+		 	$idMappedArray[] = [$eventsIds[$item[0]], $handlersIds[$item[1]]];
+		 }
+		 
+		 return $idMappedArray;
 	}
 	
 	private function setupTempTable(array $data): void
@@ -100,6 +129,17 @@ class SubscribersDAO implements ISubscribersDAO
 			throw $e;
 		}
 	}
+	
+	private function addMultipleSubscribers(array $items): void
+	{
+		if (!$items)
+		{
+			throw new InvalidUsageException('Passing empty array is not allowed. It will remove all subscribers.');
+		}
+		
+		$this->setupTempTable($items);
+		$this->updateExistingConnections();
+	}
 
 
 	public function setConnector(IMySqlConnector $connector): ISubscribersDAO
@@ -149,19 +189,16 @@ class SubscribersDAO implements ISubscribersDAO
 
 	public function addSubscribers(array $eventToHandlers): void
 	{		
-		if (!$eventToHandlers)
-		{
-			throw new InvalidUsageException('Passing empty array is not allowed.
-			 It will remove all subscribers.');
-		}
-		
 		$preparedData = $this->prepareData($eventToHandlers);
-		
-		$this->setupTempTable($preparedData);
-		
-		$this->updateExistingConnections();
+		$this->addMultipleSubscribers($preparedData);
 	}
-
+	
+	public function addSubscribersByNames(array $eventNamesToHandlers): void
+	{
+		$eventIdsToHandlers = $this->convertNamesToIds($eventNamesToHandlers);
+		$this->addMultipleSubscribers($eventIdsToHandlers);
+	}
+	
 	public function addExecutor(string $handlerId, string $eventId): void
 	{
 		$this->connector

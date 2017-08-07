@@ -35,5 +35,9 @@ class EddySanity extends TestCase
 				new RedisLockerPlugin($this->getRedisConfig()),
 				new StatisticsCollectorPlugin(MySQLConfig::connector(), $this->getRedisConfig(), 120),
 				new ExecutorLoggerPlugin()]);
+		
+		$eddy->config()->Setup->addCrawlerSetup(__DIR__ . '/TestEvents', 'SanityTestNS');
+		
+	//	$eddy->runSetup();
 	}
 }

@@ -19,6 +19,7 @@ interface ISubscribersDAO
 	public function getEventsIds(string $handlerId): array; 
 	
 	public function addSubscribers(array $eventToHandlers): void;
+	public function addSubscribersByNames(array $eventNamesToHandlers): void;
 	
 	public function addExecutor(string $handlerId, string $eventId): void;
 }

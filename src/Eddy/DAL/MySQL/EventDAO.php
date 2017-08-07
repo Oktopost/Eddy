@@ -2,11 +2,12 @@
 namespace Eddy\DAL\MySQL;
 
 
-use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\Base\DAL\IEventDAO;
 use Eddy\DAL\MySQL\Base\Connector\IEventConnector;
+
+use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
 use Squid\MySql\IMySqlConnector;
 

@@ -320,6 +320,45 @@ class SubscribersDAOTest extends TestCase
 		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
 		self::assertFalse($this->connectionExist($event->Id, $handler2->Id));
 	}
+	
+	public function test_addSubscribersByNames()
+	{
+		$event = $this->getEvent();
+		$event2 = $this->getEvent();
+		$event3 = $this->getEvent();
+		
+		$handler = $this->getHandler();
+		$handler2 = $this->getHandler();
+		$handler3 = $this->getHandler();
+		
+		$config = [
+			$event->Name => [
+				$handler->Name,
+				$handler2->Name
+			],
+			$event2->Name => $handler3->Name,
+			$event3->Name => [
+				$handler->Name,
+				$handler3->Name
+			]
+		];
+		
+		$this->getSubject()->addSubscribersByNames($config);
+		
+		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
+		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
+		self::assertTrue($this->connectionExist($event2->Id, $handler3->Id));
+		self::assertTrue($this->connectionExist($event3->Id, $handler->Id));
+		self::assertTrue($this->connectionExist($event3->Id, $handler3->Id));
+	}
+
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_addSubscribersByNames_EmptyArray()
+	{
+		$this->getSubject()->addSubscribersByNames([]);
+	}
 
 	public function test_addExecutor()
 	{

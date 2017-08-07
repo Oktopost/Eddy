@@ -38,7 +38,7 @@ class SetupModule implements ISetupModule
 		
 		if ($setup->Subscribers)
 		{
-			$this->config->DAL()->subscribers()->addSubscribers($setup->Subscribers);
+			$this->config->DAL()->subscribers()->addSubscribersByNames($setup->Subscribers);
 		}
 	}
 	
