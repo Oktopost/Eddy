@@ -159,4 +159,9 @@ class CachedHandlerDAO implements ICachedHandlerDAO
 		$this->cache->delete($handler);
 		return $this->main->delete($handler);
 	}
+	
+	public function flushAll(): void
+	{
+		$this->cache->flushAll();
+	}
 }

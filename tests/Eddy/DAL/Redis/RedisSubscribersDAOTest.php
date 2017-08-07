@@ -186,7 +186,7 @@ class RedisSubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
 	}
 
-	public function test_addSubscribers_SubscribersExists_OldRemovedNewAdded()
+	public function test_addSubscribers_SubscribersExists_OldNotRemovedNewAdded()
 	{
 		$event = $this->getEvent();
 		
@@ -200,7 +200,7 @@ class RedisSubscribersDAOTest extends TestCase
 		
 		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
-		self::assertFalse($this->connectionExist($event->Id, $handler3->Id));
+		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
 	}
 
 	public function test_AddSubscribersWithPlainElements_SubscribersExists_NewAdded()
@@ -286,5 +286,19 @@ class RedisSubscribersDAOTest extends TestCase
 		$this->getSubject()->addExecutor($handler->Id, $event->Id);
 		
 		self::assertTrue($this->executorExists($event->Id, $handler->Id));
+	}
+	
+	public function test_flushAll()
+	{
+		$event = $this->getEvent();
+		$handler = $this->getHandler();
+		
+		$this->getSubject()->addSubscribers([$event->Id => $handler->Id]);
+		
+		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
+		
+		$this->getSubject()->flushAll();
+		
+		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
 	}
 }

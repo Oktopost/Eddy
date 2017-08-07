@@ -197,4 +197,15 @@ class RedisHandlerDAOTest extends TestCase
 		
 		self::assertNull($this->getSubject()->load($handlerObject->Id));
 	}
+	
+	public function test_flushAll()
+	{
+		$handlerObject = $this->getHandler(true);
+		$handlerObject2 = $this->getHandler(true);
+		
+		$this->getSubject()->flushAll();
+		
+		self::assertNull($this->getSubject()->load($handlerObject->Id));
+		self::assertNull($this->getSubject()->load($handlerObject2->Id));
+	}
 }

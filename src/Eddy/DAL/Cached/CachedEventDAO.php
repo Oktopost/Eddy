@@ -20,15 +20,22 @@ class CachedEventDAO implements ICachedEventDAO
 	
 	private function loadAndCacheAdditional(array $ids, array $events): array 
 	{
-		$mapper = function ($o) { return $o->Id; };
+		$notLoaded = $ids;
 		
-		$loadedIds = array_map($mapper, $events);
-		
-		$notLoaded = array_diff($ids, $loadedIds);
+		if ($events)
+		{
+			$mapper = function ($o) { return $o->Id; };
+
+			$loadedIds = array_map($mapper, $events);
+			$notLoaded = array_diff($ids, $loadedIds);
+		}
 		
 		$additionalEvents = $this->main->loadMultiple($notLoaded);
 		
-		$this->cache->saveSetupAll($additionalEvents);
+		if ($additionalEvents)
+		{
+			$this->cache->saveSetupAll($additionalEvents);
+		}
 		
 		return array_merge($events, $additionalEvents);
 	}
@@ -159,5 +166,10 @@ class CachedEventDAO implements ICachedEventDAO
 	{
 		$this->cache->delete($event);
 		return $this->main->delete($event);
+	}
+
+	public function flushAll(): void
+	{
+		$this->cache->flushAll();
 	}
 }

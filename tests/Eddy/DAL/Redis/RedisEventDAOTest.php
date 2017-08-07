@@ -194,4 +194,15 @@ class RedisEventDAOTest extends TestCase
 		
 		self::assertNull($this->getSubject()->load($eventObject->Id));
 	}
+	
+	public function test_flushAll()
+	{
+		$eventObject = $this->getEvent(true);
+		$eventObject2 = $this->getEvent(true);
+		
+		$this->getSubject()->flushAll();
+		
+		self::assertNull($this->getSubject()->load($eventObject->Id));
+		self::assertNull($this->getSubject()->load($eventObject2->Id));
+	}
 }

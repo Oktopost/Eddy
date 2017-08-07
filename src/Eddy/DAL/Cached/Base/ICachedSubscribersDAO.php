@@ -6,7 +6,7 @@ use Eddy\Base\DAL\ICacheDAO;
 use Eddy\Base\DAL\ISubscribersDAO;
 
 
-interface ICachedSubscribersDAO extends ISubscribersDAO
+interface ICachedSubscribersDAO extends ISubscribersDAO, ICacheDAO
 {
 	public function setMain(ISubscribersDAO $dao): void;
 	public function setCache(ICacheDAO $dao): void;

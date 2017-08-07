@@ -148,7 +148,6 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 		
 		$transaction = $this->client->transaction();
 		
-		$this->prepareCleanUp($transaction);
 		$this->prepareSeedNewData($transaction, $data);
 		
 		$transaction->execute();

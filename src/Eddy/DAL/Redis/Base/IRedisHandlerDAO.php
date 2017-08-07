@@ -7,7 +7,7 @@ use Eddy\Base\DAL\IHandlerDAO;
 
 
 
-interface IRedisHandlerDAO extends IHandlerDAO, IRedisClientConsumer
+interface IRedisHandlerDAO extends IHandlerDAO, IRedisClientConsumer, ICacheDAO
 {
 	
 }

@@ -6,7 +6,7 @@ use Eddy\Base\DAL\ICacheDAO;
 use Eddy\Base\DAL\IEventDAO;
 
 
-interface ICachedEventDAO extends IEventDAO
+interface ICachedEventDAO extends IEventDAO, ICacheDAO
 {
 	public function setMain(IEventDAO $dao): void;
 	public function setCache(ICacheDAO $dao): void;
