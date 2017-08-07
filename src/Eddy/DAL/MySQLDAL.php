@@ -7,6 +7,9 @@ use Eddy\Base\IDAL;
 use Eddy\Base\DAL\IEventDAO;
 use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\Base\DAL\ISubscribersDAO;
+use Eddy\DAL\MySQL\Base\IMySQLEventDAO;
+use Eddy\DAL\MySQL\Base\IMySQLHandlerDAO;
+use Eddy\DAL\MySQL\Base\IMySQLSubscribersDAO;
 
 use Squid\MySql\IMySqlConnector;
 
@@ -36,7 +39,7 @@ class MySQLDAL implements IDAL
 	{
 		if (!$this->handlerDAO)
 		{
-			$this->handlerDAO = Scope::skeleton(IHandlerDAO::class);
+			$this->handlerDAO = Scope::skeleton(IMySQLHandlerDAO::class);
 			$this->handlerDAO->setConnector($this->connector);
 		}
 		
@@ -47,7 +50,7 @@ class MySQLDAL implements IDAL
 	{
 		if (!$this->eventDAO)
 		{
-			$this->eventDAO = Scope::skeleton(IEventDAO::class);
+			$this->eventDAO = Scope::skeleton(IMySQLEventDAO::class);
 			$this->eventDAO->setConnector($this->connector);
 		}
 		
@@ -58,7 +61,7 @@ class MySQLDAL implements IDAL
 	{
 		if (!$this->subscribersDAO)
 		{
-			$this->subscribersDAO = Scope::skeleton(ISubscribersDAO::class);
+			$this->subscribersDAO = Scope::skeleton(IMySQLSubscribersDAO::class);
 			$this->subscribersDAO->setConnector($this->connector);
 		}
 		

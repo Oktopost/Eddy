@@ -4,16 +4,12 @@ namespace Eddy\Base\DAL;
 
 use Eddy\Object\EventObject;
 
-use Squid\MySql\IMySqlConnector;
-
 
 /**
  * @skeleton
  */
 interface IEventDAO
 {
-	public function setConnector(IMySqlConnector $connector): IEventDAO;
-	
 	public function load(string $eventId): ?EventObject;
 	public function loadMultiple(array $ids): array;
 	public function loadByIdentifier(string $identifier): ?EventObject;

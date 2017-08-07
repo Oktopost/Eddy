@@ -2,10 +2,7 @@
 namespace Eddy\Base\DAL;
 
 
-use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
-
-use Squid\MySql\IMySqlConnector;
 
 
 /**
@@ -13,8 +10,6 @@ use Squid\MySql\IMySqlConnector;
  */
 interface IHandlerDAO
 {
-	public function setConnector(IMySqlConnector $connector): IHandlerDAO;
-	
 	public function load(string $id): ?HandlerObject;
 	public function loadMultiple(array $ids): array;
 	public function loadByIdentifier(string $identifier): ?HandlerObject;

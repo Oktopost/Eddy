@@ -14,7 +14,7 @@ use lib\MySQLConfig;
 use PHPUnit\Framework\TestCase;
 
 
-class HandlerDAOTest extends TestCase
+class MySQLHandlerDAOTest extends TestCase
 {
 	private const HANDLER_TABLE = 'EddyHandler';
 	
@@ -24,7 +24,7 @@ class HandlerDAOTest extends TestCase
 		$connector = new HandlerConnector();
 		$connector->setMySQL(MySQLConfig::connector());
 	
-		return new HandlerDAO($connector);
+		return new MySQLHandlerDAO($connector);
 	}
 	
 	private function getHandler(bool $saved = false): HandlerObject

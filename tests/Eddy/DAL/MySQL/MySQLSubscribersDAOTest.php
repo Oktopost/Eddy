@@ -18,7 +18,7 @@ use Squid\MySql\Impl\Connection\MySqlConnectionDecorator;
 use Squid\MySql\IMySqlConnector;
 
 
-class SubscribersDAOTest extends TestCase
+class MySQLSubscribersDAOTest extends TestCase
 {
 	private const SUBSCRIBERS_TABLE = 'EddySubscribers';
 	private const EXECUTORS_TABLE 	= 'EddyExecutors';
@@ -32,7 +32,7 @@ class SubscribersDAOTest extends TestCase
 		$connector = new EventConnector();
 		$connector->setMySQL(MySQLConfig::connector());
 	
-		$dao = new EventDAO($connector);
+		$dao = new MySQLEventDAO($connector);
 		
 		$eventObject = new EventObject();
 		$eventObject->Name = (new TimeBasedRandomIdGenerator())->get();
@@ -49,7 +49,7 @@ class SubscribersDAOTest extends TestCase
 		$connector = new HandlerConnector();
 		$connector->setMySQL(MySQLConfig::connector());
 	
-		$dao = new HandlerDAO($connector);
+		$dao = new MySQLHandlerDAO($connector);
 		
 		$handlerObject = new HandlerObject();
 		$handlerObject->Name = (new TimeBasedRandomIdGenerator())->get();
@@ -60,9 +60,9 @@ class SubscribersDAOTest extends TestCase
 		return $handlerObject;
 	}
 	
-	private function getSubject(): SubscribersDAO
+	private function getSubject(): MySQLSubscribersDAO
 	{
-		$dao = new SubscribersDAO();
+		$dao = new MySQLSubscribersDAO();
 		$dao->setConnector(MySQLConfig::connector());
 	
 		return $dao;

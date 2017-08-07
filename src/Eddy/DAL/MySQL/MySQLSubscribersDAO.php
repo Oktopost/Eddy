@@ -2,16 +2,16 @@
 namespace Eddy\DAL\MySQL;
 
 
-use Eddy\Base\DAL\ISubscribersDAO;
-
+use Eddy\DAL\MySQL\Base\IMySQLSubscribersDAO;
 use Eddy\Exceptions\InvalidUsageException;
+
 use Squid\MySql\IMySqlConnector;
 
 
 /**
  * @autoload
  */
-class SubscribersDAO implements ISubscribersDAO
+class MySQLSubscribersDAO implements IMySQLSubscribersDAO
 {
 	private const EVENT_TABLE		= 'EddyEvent';
 	private const HANDLER_TABLE		= 'EddyHandler';
@@ -142,7 +142,7 @@ class SubscribersDAO implements ISubscribersDAO
 	}
 
 
-	public function setConnector(IMySqlConnector $connector): ISubscribersDAO
+	public function setConnector(IMySqlConnector $connector): IMySQLSubscribersDAO
 	{
 		$this->connector = $connector;
 		return $this;

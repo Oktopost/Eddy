@@ -3,8 +3,8 @@ namespace Eddy\DAL\MySQL;
 
 
 use Eddy\Enums\EventState;
-use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\Object\HandlerObject;
+use Eddy\DAL\MySQL\Base\IMySQLHandlerDAO;
 use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
@@ -15,7 +15,7 @@ use Squid\MySql\IMySqlConnector;
 /**
  * @autoload
  */
-class HandlerDAO implements IHandlerDAO
+class MySQLHandlerDAO implements IMySQLHandlerDAO
 {
 	/** @var IHandlerConnector */
 	private $connector;
@@ -27,7 +27,7 @@ class HandlerDAO implements IHandlerDAO
 	}
 
 	
-	public function setConnector(IMySqlConnector $connector): IHandlerDAO
+	public function setConnector(IMySqlConnector $connector): IMySQLHandlerDAO
 	{
 		$this->connector->setMySQL($connector);
 		return $this;

@@ -12,7 +12,7 @@ use lib\MySQLConfig;
 use PHPUnit\Framework\TestCase;
 
 
-class EventDAOTest extends TestCase
+class MySQLEventDAOTest extends TestCase
 {
 	private const EVENT_TABLE = 'EddyEvent';
 	
@@ -22,7 +22,7 @@ class EventDAOTest extends TestCase
 		$connector = new EventConnector();
 		$connector->setMySQL(MySQLConfig::connector());
 	
-		return new EventDAO($connector);
+		return new MySQLEventDAO($connector);
 	}
 	
 	private function getEvent(bool $saved = false): EventObject

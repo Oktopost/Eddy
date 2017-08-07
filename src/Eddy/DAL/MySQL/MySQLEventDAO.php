@@ -4,7 +4,7 @@ namespace Eddy\DAL\MySQL;
 
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
-use Eddy\Base\DAL\IEventDAO;
+use Eddy\DAL\MySQL\Base\IMySQLEventDAO;
 use Eddy\DAL\MySQL\Base\Connector\IEventConnector;
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
@@ -15,7 +15,7 @@ use Squid\MySql\IMySqlConnector;
 /**
  * @autoload
  */
-class EventDAO implements IEventDAO
+class MySQLEventDAO implements IMySQLEventDAO
 {
 	/** @var IEventConnector */
 	private $connector;
@@ -27,7 +27,7 @@ class EventDAO implements IEventDAO
 	}
 
 	
-	public function setConnector(IMySqlConnector $connector): IEventDAO
+	public function setConnector(IMySqlConnector $connector): IMySQLEventDAO
 	{
 		$this->connector->setMySQL($connector);
 		return $this;
