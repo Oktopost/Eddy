@@ -57,7 +57,7 @@ class MainQueue implements IMainQueue
 		
 		if (is_null($delay)) return;
 		
-		$queue->enqueue([[$target => $target]], $delay);
+		$queue->enqueue([$target => $target], $delay);
 	}
 	
 	public function dequeue(float $wait = 0): ?string

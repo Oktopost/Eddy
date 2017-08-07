@@ -97,7 +97,7 @@ class MainQueueTest extends TestCase
 		$queue
 			->expects($this->once())
 			->method('enqueue')
-			->with($this->equalTo([0 => ['testNameEvent' => 'testNameEvent']], 1));
+			->with($this->equalTo(['testNameEvent' => 'testNameEvent'], 1));
 		
 		$this->getSubject($queue, $this->getIQueueManagerMock())
 			->schedule($event->getQueueNaming($this->config->Naming));
