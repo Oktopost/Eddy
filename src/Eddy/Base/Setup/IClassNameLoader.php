@@ -7,6 +7,9 @@ use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
 
+/**
+ * @skeleton
+ */
 interface IClassNameLoader
 {
 	public function loadEvent(string $className): ?EventObject;

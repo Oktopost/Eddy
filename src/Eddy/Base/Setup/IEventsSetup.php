@@ -13,5 +13,5 @@ use Eddy\Object\HandlerObject;
  */
 interface IEventsSetup
 {
-	
+	public function addSubscriber(string $event, string $handler): void;
 }

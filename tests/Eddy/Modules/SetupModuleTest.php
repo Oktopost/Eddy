@@ -149,4 +149,8 @@ class TestSetupModule_EventsConfig implements IEventsSetup
 	{
 		
 	}
+	public function addSubscriber(string $event, string $handler): void
+	{
+		
+	}
 }
