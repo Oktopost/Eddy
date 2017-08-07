@@ -4,6 +4,7 @@ namespace Eddy\DAL\Redis;
 
 use Eddy\Object\EventObject;
 use Eddy\DAL\Redis\Base\IRedisEventDAO;
+use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
 
 use Predis\Client;
 
@@ -12,11 +13,6 @@ use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
 class RedisEventDAO implements IRedisEventDAO
 {
-	private const EVENT_OBJECTS	= 'EventObjects';
-	private const BY_NAME		= 'EventObjectsByName';
-	private const BY_INTERFACE	= 'EventObjectsByInterface';
-	
-	
 	/** @var Client */
 	private $client;
 	
@@ -57,9 +53,9 @@ class RedisEventDAO implements IRedisEventDAO
 		
 		$transaction = $this->client->transaction();
 		
-		$transaction->hmset(self::EVENT_OBJECTS, $jsonData);
-		$transaction->hmset(self::BY_NAME, $nameToId);
-		$transaction->hmset(self::BY_INTERFACE, $interfaceToId);
+		$transaction->hmset(RedisKeyBuilder::eventObject(), $jsonData);
+		$transaction->hmset(RedisKeyBuilder::eventByName(), $nameToId);
+		$transaction->hmset(RedisKeyBuilder::eventByInterface(), $interfaceToId);
 		
 		$transaction->execute();
 	}
@@ -72,14 +68,14 @@ class RedisEventDAO implements IRedisEventDAO
 
 	public function load(string $eventId): ?EventObject
 	{
-		$data = $this->client->hget(self::EVENT_OBJECTS, $eventId);
+		$data = $this->client->hget(RedisKeyBuilder::eventObject(), $eventId);
 		
 		return $data ? $this->fromString($data) : null;
 	}
 
 	public function loadMultiple(array $ids): array
 	{
-		$entries = $this->client->hmget(self::EVENT_OBJECTS, $ids);
+		$entries = $this->client->hmget(RedisKeyBuilder::eventObject(), $ids);
 
 		$events = [];
 		
@@ -108,7 +104,7 @@ class RedisEventDAO implements IRedisEventDAO
 
 	public function loadByName(string $name): ?EventObject
 	{
-		$id = $this->client->hget(self::BY_NAME, $name);
+		$id = $this->client->hget(RedisKeyBuilder::eventByName(), $name);
 		
 		if (!$id) return null;
 		
@@ -117,7 +113,7 @@ class RedisEventDAO implements IRedisEventDAO
 
 	public function loadByInterfaceName(string $interfaceName): ?EventObject
 	{
-		$id = $this->client->hget(self::BY_INTERFACE, $interfaceName);
+		$id = $this->client->hget(RedisKeyBuilder::eventByInterface(), $interfaceName);
 		
 		if (!$id) return null;
 		
@@ -153,9 +149,9 @@ class RedisEventDAO implements IRedisEventDAO
 		
 		$transaction = $this->client->transaction();
 		
-		$transaction->hdel(self::EVENT_OBJECTS, [$event->Id]);
-		$transaction->hdel(self::BY_NAME, [$event->Name]);
-		$transaction->hdel(self::BY_INTERFACE, [$event->EventInterface]);
+		$transaction->hdel(RedisKeyBuilder::eventObject(), [$event->Id]);
+		$transaction->hdel(RedisKeyBuilder::eventByName(), [$event->Name]);
+		$transaction->hdel(RedisKeyBuilder::eventByInterface(), [$event->EventInterface]);
 		
 		$transaction->execute();
 		

@@ -3,41 +3,24 @@ namespace Eddy\DAL\Redis;
 
 
 use Eddy\DAL\Redis\Base\IRedisSubscribersDAO;
-
+use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
 use Eddy\Exceptions\InvalidUsageException;
+
 use Predis\Client;
 use Predis\Transaction\MultiExec;
 
 
 class RedisSubscribersDAO implements IRedisSubscribersDAO
 {
-	private const EVENT_HANDLERS_PREFIX	= 'EventHandlers:';
-	private const HANDLER_EVENTS_PREFIX	= 'HandlerEvents:';
-	
-	private const EVENT_BY_NAME_KEY		= 'EventObjectsByName';
-	private const HANDLER_BY_NAME_KEY	= 'HandlerObjectsByName';
-	private const EXECUTORS_KEY			= 'EventExecutors';
-	
-	
 	/** @var Client */
 	private $client;
 	
-	
-	private function getEventKey(string $eventId): string 
-	{
-		return self::EVENT_HANDLERS_PREFIX . $eventId;
-	}
-	
-	private function getHandlerKey(string $handlerId): string 
-	{
-		return self::HANDLER_EVENTS_PREFIX . $handlerId;
-	}
 	
 	private function prepareCleanUp(MultiExec $transaction): void
 	{
 		$prefix = $this->client->getOptions()->prefix->getPrefix();
 		
-		foreach ([self::EVENT_HANDLERS_PREFIX, self::HANDLER_EVENTS_PREFIX] as $mapPrefix)
+		foreach ([RedisKeyBuilder::getEventHandlersPrefix(), RedisKeyBuilder::getHandlerEventsPrefix()] as $mapPrefix)
 		{
 			$transaction->eval("return redis.call('del', 'defaultKey', unpack(redis.call('keys', ARGV[1])))", 
 			0, $prefix . $mapPrefix . '*');
@@ -53,16 +36,16 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 		{
 			if (!is_array($handler))
 			{
-				$eventHandlers[$this->getEventKey($eventId)][$handler] = time();
-				$handlerEvents[$this->getHandlerKey($handler)][$eventId] = time();
+				$eventHandlers[RedisKeyBuilder::eventHandlers($eventId)][$handler] = time();
+				$handlerEvents[RedisKeyBuilder::handlerEvents($handler)][$eventId] = time();
 				
 				continue;
 			}
 			
 			foreach ($handler as $handlerId)
 			{
-				$eventHandlers[$this->getEventKey($eventId)][$handlerId] = time();
-				$handlerEvents[$this->getHandlerKey($handlerId)][$eventId] = time();
+				$eventHandlers[RedisKeyBuilder::eventHandlers($eventId)][$handlerId] = time();
+				$handlerEvents[RedisKeyBuilder::handlerEvents($handlerId)][$eventId] = time();
 			}
 		}
 		
@@ -91,11 +74,11 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 		
 		foreach ($eventNamesToHandlers as $eventName => $handler)
 		{
-			$eventId = $this->client->hget(self::EVENT_BY_NAME_KEY, $eventName);
+			$eventId = $this->client->hget(RedisKeyBuilder::eventByName(), $eventName);
 			
 			if (!is_array($handler))
 			{
-				$handlerId = $this->client->hget(self::HANDLER_BY_NAME_KEY, $handler);
+				$handlerId = $this->client->hget(RedisKeyBuilder::handlerByName(), $handler);
 				
 				$eventIdsToHandlers[$eventId] = $handlerId;
 				
@@ -104,7 +87,7 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 			
 			foreach ($handler as $handlerName)
 			{
-				$handlerId = $this->client->hget(self::HANDLER_BY_NAME_KEY, $handlerName);
+				$handlerId = $this->client->hget(RedisKeyBuilder::handlerByName(), $handlerName);
 				$eventIdsToHandlers[$eventId][] = $handlerId;
 			}
 		}
@@ -122,8 +105,8 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 	{
 		$transaction = $this->client->transaction();
 		
-		$transaction->hset($this->getEventKey($eventId), $handlerId, time());
-		$transaction->hset($this->getHandlerKey($handlerId), $eventId, time());
+		$transaction->hset(RedisKeyBuilder::eventHandlers($eventId), $handlerId, time());
+		$transaction->hset(RedisKeyBuilder::handlerEvents($handlerId), $eventId, time());
 		
 		$transaction->execute();
 	}
@@ -132,20 +115,20 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 	{
 		$transaction = $this->client->transaction();
 		
-		$transaction->hdel($this->getEventKey($eventId), [$handlerId]);
-		$transaction->hdel($this->getHandlerKey($handlerId), [$eventId]);
+		$transaction->hdel(RedisKeyBuilder::eventHandlers($eventId), [$handlerId]);
+		$transaction->hdel(RedisKeyBuilder::handlerEvents($handlerId), [$eventId]);
 		
 		$transaction->execute();
 	}
 
 	public function getHandlersIds(string $eventId): array
 	{
-		return $this->client->hkeys($this->getEventKey($eventId));
+		return $this->client->hkeys(RedisKeyBuilder::eventHandlers($eventId));
 	}
 
 	public function getEventsIds(string $handlerId): array
 	{
-		return $this->client->hkeys($this->getHandlerKey($handlerId));
+		return $this->client->hkeys(RedisKeyBuilder::handlerEvents($handlerId));
 	}
 
 	public function addSubscribers(array $eventToHandlers): void
@@ -173,6 +156,6 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 
 	public function addExecutor(string $handlerId, string $eventId): void
 	{
-		// TODO: Implement addExecutor() method.
+		$this->client->hset(RedisKeyBuilder::executorsKey($handlerId), $eventId, time());
 	}
 }

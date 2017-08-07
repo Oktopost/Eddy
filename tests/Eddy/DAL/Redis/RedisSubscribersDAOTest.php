@@ -14,6 +14,7 @@ class RedisSubscribersDAOTest extends TestCase
 {
 	private const EVENT_HANDLERS_PREFIX	= 'EventHandlers:';
 	private const HANDLER_EVENTS_PREFIX	= 'HandlerEvents:';
+	private const EXECUTOR_PREFIX		= 'EventExecutor:';
 	
 	
 	private function getClient(): Client
@@ -68,7 +69,9 @@ class RedisSubscribersDAOTest extends TestCase
 	
 	private function executorExists(string $eventId, string $handlerId): bool
 	{	
-		return false;
+		$isExecutorExists = $this->getClient()->hexists(self::EXECUTOR_PREFIX . $handlerId, $eventId);
+		
+		return $isExecutorExists;
 	}
 	
 	

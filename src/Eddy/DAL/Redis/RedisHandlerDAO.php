@@ -4,6 +4,7 @@ namespace Eddy\DAL\Redis;
 
 use Eddy\Object\HandlerObject;
 use Eddy\DAL\Redis\Base\IRedisHandlerDAO;
+use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
 
 use Predis\Client;
 
@@ -12,11 +13,6 @@ use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
 class RedisHandlerDAO implements IRedisHandlerDAO
 {
-	private const HANDLER_OBJECTS 	= 'HandlerObjects';
-	private const BY_NAME			= 'HandlerObjectsByName';
-	private const BY_CLASSNAME		= 'HandlerObjectsByClassName';
-	
-	
 	/** @var Client */
 	private $client;
 	
@@ -57,9 +53,9 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 		
 		$transaction = $this->client->transaction();
 		
-		$transaction->hmset(self::HANDLER_OBJECTS, $jsonData);
-		$transaction->hmset(self::BY_NAME, $nameToId);
-		$transaction->hmset(self::BY_CLASSNAME, $classNameToId);
+		$transaction->hmset(RedisKeyBuilder::handlerObject(), $jsonData);
+		$transaction->hmset(RedisKeyBuilder::handlerByName(), $nameToId);
+		$transaction->hmset(RedisKeyBuilder::handlerByClassName(), $classNameToId);
 		
 		$transaction->execute();
 	}
@@ -72,14 +68,14 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 
 	public function load(string $handlerId): ?HandlerObject
 	{
-		$data = $this->client->hget(self::HANDLER_OBJECTS, $handlerId);
+		$data = $this->client->hget(RedisKeyBuilder::handlerObject(), $handlerId);
 		
 		return $data ? $this->fromString($data) : null;
 	}
 
 	public function loadMultiple(array $ids): array
 	{
-		$entries = $this->client->hmget(self::HANDLER_OBJECTS, $ids);
+		$entries = $this->client->hmget(RedisKeyBuilder::handlerObject(), $ids);
 
 		$handlers = [];
 		
@@ -108,7 +104,7 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 
 	public function loadByName(string $name): ?HandlerObject
 	{
-		$id = $this->client->hget(self::BY_NAME, $name);
+		$id = $this->client->hget(RedisKeyBuilder::handlerByName(), $name);
 		
 		if (!$id) return null;
 		
@@ -117,7 +113,7 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 
 	public function loadByClassName(string $className): ?HandlerObject
 	{
-		$id = $this->client->hget(self::BY_CLASSNAME, $className);
+		$id = $this->client->hget(RedisKeyBuilder::handlerByClassName(), $className);
 		
 		if (!$id) return null;
 		
@@ -153,9 +149,9 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 		
 		$transaction = $this->client->transaction();
 		
-		$transaction->hdel(self::HANDLER_OBJECTS, [$handler->Id]);
-		$transaction->hdel(self::BY_NAME, [$handler->Name]);
-		$transaction->hdel(self::BY_CLASSNAME, [$handler->HandlerClassName]);
+		$transaction->hdel(RedisKeyBuilder::handlerObject(), [$handler->Id]);
+		$transaction->hdel(RedisKeyBuilder::handlerByName(), [$handler->Name]);
+		$transaction->hdel(RedisKeyBuilder::handlerByClassName(), [$handler->HandlerClassName]);
 		
 		$transaction->execute();
 		
