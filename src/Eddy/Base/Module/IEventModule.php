@@ -10,5 +10,5 @@ use Eddy\Object\EventObject;
  */
 interface IEventModule
 {
-	public function loadByInterfaceName(string $interfaceName): ?EventObject;
+	public function loadByInterfaceName(string $interfaceName): EventObject;
 }
