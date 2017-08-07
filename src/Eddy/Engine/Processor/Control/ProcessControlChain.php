@@ -10,6 +10,9 @@ use Eddy\Base\Engine\Processor\IProcessControlChain;
 use Eddy\Object\HandlerObject;
 
 
+/**
+ * @autoload
+ */
 class ProcessControlChain implements IProcessControlChain
 {
 	public const DEFAULT_WAIT_TIME = 60.0;
