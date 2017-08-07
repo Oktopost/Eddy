@@ -1,36 +1,30 @@
 <?php
-namespace Eddy\DAL\MySQL;
+namespace Eddy\DAL\Redis;
 
-
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
-use Eddy\DAL\MySQL\Connector\EventConnector;
-use Eddy\DAL\MySQL\Connector\HandlerConnector;
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
-
-use lib\MySQLConfig;
-
+use Eddy\Object\EventObject;
+use Eddy\Object\HandlerObject;
 use PHPUnit\Framework\TestCase;
 
-use Squid\MySql\Connection\IMySqlConnection;
+use Predis\Client;
 
 
-class MySQLSubscribersDAOTest extends TestCase
+class RedisSubscribersDAOTest extends TestCase
 {
-	private const SUBSCRIBERS_TABLE = 'EddySubscribers';
-	private const EXECUTORS_TABLE 	= 'EddyExecutors';
+	private const EVENT_HANDLERS_PREFIX	= 'EventHandlers:';
+	private const HANDLER_EVENTS_PREFIX	= 'HandlerEvents:';
 	
-	private const EVENT_FIELD 		= 'EddyEventId';
-	private const HANDLER_FIELD		= 'EddyHandlerId';
 	
+	private function getClient(): Client
+	{
+		return new Client([], ['prefix' => 'redis.subscribers-test:']);
+	}
 	
 	private function getEvent(): EventObject
 	{
-		$connector = new EventConnector();
-		$connector->setMySQL(MySQLConfig::connector());
-	
-		$dao = new MySQLEventDAO($connector);
+		$dao = new RedisEventDAO();
+		$dao->setClient($this->getClient());
 		
 		$eventObject = new EventObject();
 		$eventObject->Name = (new TimeBasedRandomIdGenerator())->get();
@@ -44,10 +38,8 @@ class MySQLSubscribersDAOTest extends TestCase
 	
 	private function getHandler(): HandlerObject
 	{
-		$connector = new HandlerConnector();
-		$connector->setMySQL(MySQLConfig::connector());
-	
-		$dao = new MySQLHandlerDAO($connector);
+		$dao = new RedisHandlerDAO();
+		$dao->setClient($this->getClient());
 		
 		$handlerObject = new HandlerObject();
 		$handlerObject->Name = (new TimeBasedRandomIdGenerator())->get();
@@ -58,68 +50,32 @@ class MySQLSubscribersDAOTest extends TestCase
 		return $handlerObject;
 	}
 	
-	private function getSubject(): MySQLSubscribersDAO
+	private function getSubject(): RedisSubscribersDAO
 	{
-		$dao = new MySQLSubscribersDAO();
-		$dao->setConnector(MySQLConfig::connector());
+		$dao = new RedisSubscribersDAO();
+		$dao->setClient($this->getClient());
 	
 		return $dao;
 	}
 	
 	private function connectionExist(string $eventId, string $handlerId): bool
 	{
-		$isSubscribed = MySQLConfig::connector()->select()
-			->from(self::SUBSCRIBERS_TABLE)
-			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
-			->queryRow();
-		
-		return (bool)$isSubscribed;
+		$isEventHadlerSet = $this->getClient()->hexists(self::EVENT_HANDLERS_PREFIX . $eventId, $handlerId);
+		$isHandlerEventSet = $this->getClient()->hexists(self::HANDLER_EVENTS_PREFIX . $handlerId, $eventId);
+
+		return $isEventHadlerSet && $isHandlerEventSet;
 	}
 	
 	private function executorExists(string $eventId, string $handlerId): bool
 	{	
-		$isExecute = MySQLConfig::connector()->select()
-			->from(self::EXECUTORS_TABLE)
-			->byFields([self::EVENT_FIELD => $eventId, self::HANDLER_FIELD => $handlerId])
-			->queryRow();
-
-		return (bool)$isExecute;
-	}
-	
-	/**
-	 * @param bool $result
-	 * @return \PHPUnit_Framework_MockObject_MockObject|IMySqlConnection
-	 */
-	private function mockThrowableConnection(string $commandToThrow)
-	{
-		$mock = $this->getMockBuilder(IMySqlConnection::class)->getMock();
-		
-		$mock->method('execute')
-					->with($this->callback(function($value) use ($commandToThrow)
-					{
-						if (strpos($value, $commandToThrow) !== false)
-						{
-							throw new \Exception('error');
-						}
-						
-						return true;
-					}))
-					->willReturn(true);
-		return $mock;
+		return false;
 	}
 	
 	
 	public function setUp()
 	{
-		foreach (MySQLConfig::TABLES as $table)
-		{
-			MySQLConfig::connector()->delete()
-			->where('1 = 1')
-			->from($table)
-			->executeDml();
-		}
-		
-		\UnitTestScope::clear();
+		$this->getClient()->eval("return redis.call('del', 'defaultKey', unpack(redis.call('keys', ARGV[1])))", 
+			0, 'redis.subscribers-test:*');
 	}
 	
 	
@@ -265,58 +221,6 @@ class MySQLSubscribersDAOTest extends TestCase
 		self::assertTrue($this->connectionExist($event->Id, $handler->Id));
 		self::assertTrue($this->connectionExist($event->Id, $handler2->Id));
 		self::assertTrue($this->connectionExist($event2->Id, $handler3->Id));
-	}
-
-	/** 
-	 * @expectedException \Exception 
-	 */
-	public function test_addSubscribers_ExecptionThrowedInDeleteInTransaction_ExistingNotTouched()
-	{
-		$event = $this->getEvent();
-		
-		$handler = $this->getHandler();
-		$handler2 = $this->getHandler();
-		$handler3 = $this->getHandler();
-
-		$this->getSubject()->subscribe($event->Id, $handler3->Id);
-
-		$connector = clone MySQLConfig::connector();
-		$connector->setConnection($this->mockThrowableConnection('DELETE'));
-		
-		$dao = $this->getSubject();
-		$dao->setConnector($connector);
-		
-		$dao->addSubscribers([$event->Id => [$handler->Id, $handler2->Id]]);
-
-		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
-		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
-		self::assertFalse($this->connectionExist($event->Id, $handler2->Id));
-	}
-	
-	/** 
-	 * @expectedException \Exception 
-	 */
-	public function test_addSubscribers_ExecptionThrowedInInsertInTransaction_ExistingNotTouched()
-	{
-		$event = $this->getEvent();
-		
-		$handler = $this->getHandler();
-		$handler2 = $this->getHandler();
-		$handler3 = $this->getHandler();
-
-		$this->getSubject()->subscribe($event->Id, $handler3->Id);
-
-		$connector = clone MySQLConfig::connector();
-		$connector->setConnection($this->mockThrowableConnection('INSERT IGNORE'));
-		
-		$dao = $this->getSubject();
-		$dao->setConnector($connector);
-		
-		$dao->addSubscribers([$event->Id => [$handler->Id, $handler2->Id]]);
-
-		self::assertTrue($this->connectionExist($event->Id, $handler3->Id));
-		self::assertFalse($this->connectionExist($event->Id, $handler->Id));
-		self::assertFalse($this->connectionExist($event->Id, $handler2->Id));
 	}
 	
 	public function test_addSubscribersByNames()
