@@ -2,6 +2,7 @@
 namespace Eddy;
 
 
+use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\IProcessor;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEngine;
@@ -66,6 +67,13 @@ class Eddy
 		}
 		
 		$plugin->setup($this->config());
+	}
+	
+	public function sendAbort(int $count = 20): void
+	{
+		/** @var IMainQueue $queue */
+		$queue = Scope::skeleton($this, IMainQueue::class);
+		$queue->sendAbort($count);
 	}
 	
 	public function runSetup(): void

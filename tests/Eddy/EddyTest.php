@@ -2,6 +2,7 @@
 namespace Eddy;
 
 
+use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\IEngine;
 use Eddy\Base\Engine\IProcessor;
 use Eddy\Base\Module\IEventModule;
@@ -75,4 +76,13 @@ class EddyTest extends TestCase
 		$this->getSubject()->handle();
 	}
 	
+	public function test_sendAbort()
+	{
+		$mock = $this->getMockBuilder(IMainQueue::class)->getMock();
+		$mock->expects($this->once())->method('sendAbort')->with(25);
+		
+		\UnitTestScope::override(IMainQueue::class, $mock);
+		
+		$this->getSubject()->sendAbort(25);
+	}
 }
