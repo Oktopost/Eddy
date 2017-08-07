@@ -8,6 +8,8 @@ use Eddy\Enums\EventState;
 use Eddy\Exceptions\ConfigMismatchException;
 
 use Annotation\Value;
+use Eddy\Utils\ClassNameSearch;
+use Eddy\Utils\ClassNameSearchTest;
 
 
 class DynamicEventConfig implements IEventConfig
@@ -24,7 +26,7 @@ class DynamicEventConfig implements IEventConfig
 	private $handlerClassName	= false;
 	
 	
-	private function replaceNameSuffix(string $source, string $with = ''): string
+	private function removeSuffix(string $source): string
 	{
 		$length = strlen(self::EVENT_SUFFIX);
 		$sourceLength = strlen($source);
@@ -34,7 +36,13 @@ class DynamicEventConfig implements IEventConfig
 			$source = substr($source, 0, $sourceLength - $length);
 		}
 		
-		return $source . $with;
+		return $source;
+	}
+	
+	private function detectClassName(string $annotation, string $suffix)
+	{
+		$name = $this->tryGetAnnotation($annotation);
+		return ($name ?: ClassNameSearch::find($this->eventClassName(), self::EVENT_SUFFIX, $suffix));
 	}
 	
 	private function tryGetAnnotation(string $annotation): ?string
@@ -99,7 +107,7 @@ class DynamicEventConfig implements IEventConfig
 			{
 				$reflection = new \ReflectionClass($this->eventClassName());
 				$this->name = $reflection->getShortName();
-				$this->name = $this->replaceNameSuffix($this->name());
+				$this->name = $this->removeSuffix($this->name());
 			}
 		}
 		
@@ -133,12 +141,7 @@ class DynamicEventConfig implements IEventConfig
 	{
 		if ($this->proxyClassName === false)
 		{
-			$this->proxyClassName = null;
-			$name = $this->replaceNameSuffix($this->name(), self::PROXY_SUFFIX);
-			
-			$this->proxyClassName = (!class_exists($name) ?
-				$this->tryGetAnnotation(ObjectAnnotations::PROXY_ANNOTATION) :
-				$name);
+			$this->proxyClassName = $this->detectClassName(ObjectAnnotations::PROXY_ANNOTATION, self::PROXY_SUFFIX);
 		}
 		
 		return $this->proxyClassName;
@@ -148,12 +151,8 @@ class DynamicEventConfig implements IEventConfig
 	{
 		if ($this->handlerClassName === false)
 		{
-			$this->handlerClassName = null;
-			$name = $this->replaceNameSuffix($this->name(), self::HANDLER_SUFFIX);
-			
-			$this->handlerClassName = (!class_exists($name) ?
-				$this->tryGetAnnotation(ObjectAnnotations::HANDLER_ANNOTATION) :
-				$name);
+			$this->handlerClassName = $this->detectClassName(
+				ObjectAnnotations::HANDLER_ANNOTATION, self::HANDLER_SUFFIX);
 			
 			if (!$this->handlerClassName)
 				$this->handlerClassName = $this->eventClassName();

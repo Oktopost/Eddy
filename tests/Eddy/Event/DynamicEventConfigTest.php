@@ -199,6 +199,30 @@ class DynamicEventConfigTest extends TestCase
 		self::assertEquals($proxy, $subject->proxyClassName());
 	}
 	
+	public function test_proxyClassName_ProxyByNameWithEventStartingWithInterfacePrefix_ProxyNameReturned()
+	{
+		$name = 'Helper' . __FUNCTION__;
+		$proxy = "{$name}Proxy";
+		
+		eval("class {$proxy} {}");
+		eval("interface I{$name} {}");
+		
+		$subject = new DynamicEventConfig("I{$name}");
+		self::assertEquals($proxy, $subject->proxyClassName());
+	}
+	
+	public function test_proxyClassName_ProxyByNameOfEventWithPrefixAndSuffix_ProxyNameReturned()
+	{
+		$name = 'Helper' . __FUNCTION__;
+		$proxy = "{$name}Proxy";
+		
+		eval("class {$proxy} {}");
+		eval("interface I{$name}Event {}");
+		
+		$subject = new DynamicEventConfig("I{$name}Event");
+		self::assertEquals($proxy, $subject->proxyClassName());
+	}
+	
 	
 	public function test_handlersInterface_NoHandlerDefined_InterfaceNameUsed()
 	{
@@ -245,7 +269,7 @@ class DynamicEventConfigTest extends TestCase
 		self::assertEquals($name, $subject->handlersInterface());
 	}
 	
-	public function test_handlersInterface_HandlerByNameDetected_ProxyNameReturned()
+	public function test_handlersInterface_HandlerByNameDetected_HandlerNameReturned()
 	{
 		$name = 'Helper' . __FUNCTION__;
 		$handler = "{$name}Handler";
@@ -257,7 +281,7 @@ class DynamicEventConfigTest extends TestCase
 		self::assertEquals($handler, $subject->handlersInterface());
 	}
 	
-	public function test_handlersInterface_HandlerByNameWithEventSuffix_ProxyNameReturned()
+	public function test_handlersInterface_HandlerByNameWithEventSuffix_HandlerNameReturned()
 	{
 		$name = 'Helper' . __FUNCTION__;
 		$handler = "{$name}Handler";
