@@ -260,9 +260,36 @@ class RedisSubscribersDAOTest extends TestCase
 	/**
 	 * @expectedException \Eddy\Exceptions\InvalidUsageException
 	 */
-	public function test_addSubscribersByNames_EmptyArray()
+	public function test_addSubscribersByNames_EmptyArray_ExceptionThrowed()
 	{
 		$this->getSubject()->addSubscribersByNames([]);
+	}
+	
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_addSubscribersByNames_NotExistingEventName_ExceptionThrowed()
+	{
+		$handler = $this->getHandler();
+		$this->getSubject()->addSubscribersByNames(['test' => $handler->Name]);
+	}
+	
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_addSubscribersByNames_NotExistingHandlerName_ExceptionThrowed()
+	{
+		$event = $this->getEvent();
+		$this->getSubject()->addSubscribersByNames([$event->Name => 'test']);
+	}
+	
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_addSubscribersByNames_NotExistingHandlerNameInArray_ExceptionThrowed()
+	{
+		$event = $this->getEvent();
+		$this->getSubject()->addSubscribersByNames([$event->Name => ['test']]);
 	}
 
 	public function test_addExecutor()

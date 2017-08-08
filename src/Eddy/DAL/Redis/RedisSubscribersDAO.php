@@ -82,9 +82,19 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 		{
 			$eventId = $this->client->hget(RedisKeyBuilder::eventByName(), $eventName);
 			
+			if (!$eventId)
+			{
+				continue;
+			}
+			
 			if (!is_array($handler))
 			{
 				$handlerId = $this->client->hget(RedisKeyBuilder::handlerByName(), $handler);
+				
+				if (!$handlerId)
+				{
+					continue;
+				}
 				
 				$eventIdsToHandlers[$eventId] = $handlerId;
 				
@@ -94,6 +104,12 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 			foreach ($handler as $handlerName)
 			{
 				$handlerId = $this->client->hget(RedisKeyBuilder::handlerByName(), $handlerName);
+				
+				if (!$handlerId)
+				{
+					continue;
+				}
+				
 				$eventIdsToHandlers[$eventId][] = $handlerId;
 			}
 		}

@@ -20,17 +20,24 @@ class CachedHandlerDAO implements ICachedHandlerDAO
 	
 	private function loadAndCacheAdditional(array $ids, array $handlers): array 
 	{
-		$mapper = function ($o) { return $o->Id; };
+		$notLoaded = $ids;
 		
-		$loadedIds = array_map($mapper, $handlers);
+		if ($handlers)
+		{
+			$mapper = function ($o) { return $o->Id; };
+
+			$loadedIds = array_map($mapper, $handlers);
+			$notLoaded = array_diff($ids, $loadedIds);
+		}
 		
-		$notLoaded = array_diff($ids, $loadedIds);
+		$additionalEvents = $this->main->loadMultiple($notLoaded);
 		
-		$additionalHandlers = $this->main->loadMultiple($notLoaded);
+		if ($additionalEvents)
+		{
+			$this->cache->saveSetupAll($additionalEvents);
+		}
 		
-		$this->cache->saveSetupAll($additionalHandlers);
-		
-		return array_merge($handlers, $additionalHandlers);
+		return array_merge($handlers, $additionalEvents);
 	}
 	
 	public function setMain(IHandlerDAO $dao): void

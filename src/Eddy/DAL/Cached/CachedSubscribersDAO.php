@@ -51,6 +51,11 @@ class CachedSubscribersDAO implements ICachedSubscribersDAO
 		if (!$handlerIds)
 		{
 			$handlerIds = $this->main->getHandlersIds($eventId);
+			
+			if ($handlerIds)
+			{
+				$this->cache->addSubscribers([$eventId => $handlerIds]);
+			}
 		}
 		
 		return $handlerIds;
@@ -63,6 +68,18 @@ class CachedSubscribersDAO implements ICachedSubscribersDAO
 		if (!$eventsIds)
 		{
 			$eventsIds = $this->main->getEventsIds($handlerId);
+			
+			if ($eventsIds)
+			{	
+				$eventToHandler = [];
+				
+				foreach ($eventsIds as $eventId)
+				{
+					$eventToHandler[$eventId] = $handlerId;
+				}
+				
+				$this->cache->addSubscribers($eventToHandler);
+			}
 		}
 		
 		return $eventsIds;
