@@ -10,11 +10,13 @@ use Eddy\Base\Engine\Lock\ILocker;
 use Eddy\Base\Engine\Queue\IQueueBuilder;
 
 use Eddy\Base\IConfig;
+use Eddy\DAL\MySQLDAL;
 use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 
 use Eddy\Scope;
 use Eddy\Utils\Config;
+use lib\MySQLConfig;
 use PHPUnit\Framework\TestCase;
 
 
@@ -47,7 +49,7 @@ class PublisherObjectTest extends TestCase
 		\UnitTestScope::clear();
 		
 		$this->config = new Config();
-		$this->config->setMainDataBase([]);
+		$this->config->setDAL(new MySQLDAL(MySQLConfig::connector()));
 		$this->config->Engine->Locker = $this->mockILockProvider();
 		
 		$this->locker = $this->getMockBuilder(ILocker::class)->getMock();

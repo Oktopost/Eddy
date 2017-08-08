@@ -18,7 +18,7 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 	
 	private function prepareCleanUp(MultiExec $transaction): void
 	{
-		$prefix = $this->client->getOptions()->prefix->getPrefix();
+		$prefix = $this->client->getOptions()->prefix ? $this->client->getOptions()->prefix->getPrefix() : '';
 		
 		$keys = [
 			RedisKeyBuilder::getEventHandlersPrefix(), 

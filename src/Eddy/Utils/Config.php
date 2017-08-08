@@ -6,6 +6,7 @@ use Eddy\DAL\MySQLDAL;
 use Eddy\Base\IDAL;
 use Eddy\Base\IConfig;
 use Eddy\Base\IExceptionHandler;
+use Eddy\Exceptions\InvalidUsageException;
 use Eddy\Exceptions\UnexpectedException;
 
 use Objection\LiteObject;
@@ -16,8 +17,8 @@ use Squid\MySql;
 
 class Config extends LiteObject implements IConfig
 {
-	/** @var IDAL */
-	private $dal;
+	/** @var IDAL|null */
+	private $dal = null;
 	
 	
 	/**
@@ -45,6 +46,11 @@ class Config extends LiteObject implements IConfig
 
 	public function DAL(): IDAL
 	{
+		if (!$this->dal)
+		{
+			throw new InvalidUsageException('Need to setup DAL plugin before access DAL');
+		}
+		
 		return $this->dal;
 	}
 	
@@ -60,19 +66,8 @@ class Config extends LiteObject implements IConfig
 		}
 	}
 	
-	public function setMainDataBase($setup): void
+	public function setDAL(IDAL $dal): void
 	{
-		if (is_array($setup))
-		{
-			$mysql = new MySql();
-			$mysql->config()->addConfig($setup);
-			$setup = $mysql->getConnector();
-		}
-		else if (!($setup instanceof MySql\IMySqlConnector))
-		{
-			throw new UnexpectedException('Parameter must be array or IMySqlConnector');
-		}
-		
-		$this->dal = new MySQLDAL($setup);
+		$this->dal = $dal;
 	}
 }

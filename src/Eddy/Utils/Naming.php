@@ -9,6 +9,7 @@ use Objection\LiteObject;
 
 
 /**
+ * @property string	$MainPrefix
  * @property string $EventQueuePrefix
  * @property string $HandlerQueuePrefix
  * @property string $LockPrefix

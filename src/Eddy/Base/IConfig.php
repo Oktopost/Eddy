@@ -17,5 +17,5 @@ interface IConfig
 {
 	public function DAL(): IDAL;
 	public function handleError(\Throwable $t): void;
-	public function setMainDataBase($setup): void;
+	public function setDAL(IDAL $dal): void;
 }

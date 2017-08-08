@@ -2,6 +2,7 @@
 namespace Eddy\Plugins;
 
 
+use Eddy\DAL\MySQLDAL;
 use Eddy\Utils\Config;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Object\EventObject;
@@ -73,7 +74,7 @@ class ExecutorLoggerPluginTest extends TestCase
 	protected function setUp()
 	{
 		$this->config = new Config();
-		$this->config->setMainDataBase(MySQLConfig::connector());
+		$this->config->setDAL(new MySQLDAL(MySQLConfig::connector()));
 		
 		foreach (MySQLConfig::TABLES as $table)
 		{
