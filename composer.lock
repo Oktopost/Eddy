@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ef4ccf63bfcf14fbdd285cab362196ef",
-    "content-hash": "51978be1f7cae1eb73d428ae2164d229",
+    "hash": "e11070debec17a54ba387531c53c1f38",
+    "content-hash": "e56f6e14d78db80586a6b3b332f7f055",
     "packages": [
         {
             "name": "oktopost/annotation",
@@ -48,16 +48,16 @@
         },
         {
             "name": "oktopost/deep-queue",
-            "version": "1.0.10",
+            "version": "1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/DeepQueue.git",
-                "reference": "62ee082c37313e74c0d15fd4569ad5279fb782fe"
+                "reference": "06cc719e1db26dc8283279880c663cbcfe9a6b95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/DeepQueue/zipball/62ee082c37313e74c0d15fd4569ad5279fb782fe",
-                "reference": "62ee082c37313e74c0d15fd4569ad5279fb782fe",
+                "url": "https://api.github.com/repos/Oktopost/DeepQueue/zipball/06cc719e1db26dc8283279880c663cbcfe9a6b95",
+                "reference": "06cc719e1db26dc8283279880c663cbcfe9a6b95",
                 "shasum": ""
             },
             "require": {
@@ -94,7 +94,7 @@
                 }
             ],
             "description": "Messaging library",
-            "time": "2017-08-06 06:30:14"
+            "time": "2017-08-07 10:36:33"
         },
         {
             "name": "oktopost/objection",
