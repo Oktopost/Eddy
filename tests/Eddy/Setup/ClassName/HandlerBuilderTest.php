@@ -32,6 +32,8 @@ class HandlerBuilderTest extends TestCase
 			{
 				public function name(): string { return 'a'; }
 				public function delay(): float { return 10; }
+				public function delayBuffer(): float { return 1; }
+				public function packageSize(): int { return 14; }
 				public function maxBulkSize(): int { return 12; }
 				public function initialState(): string { return \\Eddy\\Enums\\EventState::RUNNING; }
 				public function handlerClassName(): string { return $handler::class; }

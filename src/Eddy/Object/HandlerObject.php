@@ -20,6 +20,8 @@ use Objection\LiteObject;
  * @property string	$ConfigClassName,
  * @property float	$Delay,
  * @property int	$MaxBulkSize
+ * @property float	$DelayBuffer
+ * @property int	$PackageSize
  */
 class HandlerObject extends AEddyObject implements IEddyQueueObject
 {
@@ -34,7 +36,9 @@ class HandlerObject extends AEddyObject implements IEddyQueueObject
 			'HandlerClassName'	=> LiteSetup::createString(),
 			'ConfigClassName'	=> LiteSetup::createString(null),
 			'Delay'				=> LiteSetup::createDouble(),
-			'MaxBulkSize'		=> LiteSetup::createInt(255)
+			'MaxBulkSize'		=> LiteSetup::createInt(255),
+			'DelayBuffer'		=> LiteSetup::createDouble(),
+			'PackageSize'		=> LiteSetup::createInt()
 		];
 	}
 	

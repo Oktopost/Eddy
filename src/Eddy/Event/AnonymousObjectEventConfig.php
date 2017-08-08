@@ -22,6 +22,8 @@ class AnonymousObjectEventConfig implements IEventConfig
 	public function name(): string { return $this->object->Name; }
 	public function delay(): float { return $this->object->Delay; }
 	public function maxBulkSize(): int { return $this->object->MaxBulkSize; }
+	public function delayBuffer(): float { return $this->object->DelayBuffer; }
+	public function packageSize(): int { return $this->object->PackageSize; }
 	public function initialState(): string { return EventState::RUNNING; }
 	public function eventClassName(): string { return $this->object->EventInterface; }
 	public function proxyClassName(): ?string { return $this->object->ProxyClassName; }

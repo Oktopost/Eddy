@@ -150,6 +150,46 @@ class DynamicEventConfigTest extends TestCase
 		self::assertNull($subject->prepare([1]));
 	}
 	
+	public function test_prepare_NoDelayBufferAnnotation_BufferDelaySetToZero()
+	{
+		$subject = $this->createInterfaceWithAnnotation(__FUNCTION__, '');
+		self::assertEquals(0, $subject->delayBuffer());
+	}
+	
+	public function test_prepare_BufferDelayValueOnInterface_BufferDelaySet()
+	{
+		$delayBuffer = 5;
+		$subject = $this->createInterfaceWithAnnotation(__FUNCTION__, '@delayBuffer ' . $delayBuffer);
+		self::assertEquals($delayBuffer, $subject->delayBuffer());
+	}
+	
+	public function test_prepare_BufferDelayValueOnConfig_BufferDelaySet()
+	{
+		$delayBuffer = 4;
+		$subject = $this->createConfigWithAnnotation(__FUNCTION__, '@delayBuffer ' . $delayBuffer);
+		self::assertEquals($delayBuffer, $subject->delayBuffer());
+	}
+	
+	public function test_prepare_NoPackageSizeAnnotation_PackageSizeSetToZero()
+	{
+		$subject = $this->createInterfaceWithAnnotation(__FUNCTION__, '');
+		self::assertEquals(0, $subject->packageSize());
+	}
+	
+	public function test_prepare_PackageSizeValueOnInterface_PackageSizeSet()
+	{
+		$packageSize = 5;
+		$subject = $this->createInterfaceWithAnnotation(__FUNCTION__, '@packageSize ' . $packageSize);
+		self::assertEquals($packageSize, $subject->packageSize());
+	}
+	
+	public function test_prepare_PackageSizeValueOnConfig_PackageSizSet()
+	{
+		$packageSize = 4;
+		$subject = $this->createConfigWithAnnotation(__FUNCTION__, '@packageSize ' . $packageSize);
+		self::assertEquals($packageSize, $subject->packageSize());
+	}
+	
 	
 	public function test_proxyClassName_NoProxy_ReturnNull()
 	{

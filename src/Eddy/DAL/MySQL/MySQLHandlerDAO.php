@@ -103,7 +103,9 @@ class MySQLHandlerDAO implements IMySQLHandlerDAO
 		return $this->connector->upsertObjectsForValues([$handler], [
 			'State',
 			'Delay',
-			'MaxBulkSize'
+			'MaxBulkSize',
+			'DelayBuffer',
+			'PackageSize'
 		]);
 	}
 

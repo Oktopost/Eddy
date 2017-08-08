@@ -20,6 +20,8 @@ class ConfigToObjectTest extends TestCase
 			public function name(): string { return 'a'; }
 			public function delay(): float { return 10; }
 			public function maxBulkSize(): int { return 12; }
+			public function delayBuffer(): float { return 1; }
+			public function packageSize(): int { return 14; }
 			public function initialState(): string { return EventState::RUNNING; }
 			public function eventClassName(): string { return 'b'; }
 			public function proxyClassName(): ?string { return 'c'; }
@@ -39,9 +41,11 @@ class ConfigToObjectTest extends TestCase
 		self::assertEquals('a',	$result->Name);
 		self::assertEquals(10, 	$result->Delay);
 		self::assertEquals(12, 	$result->MaxBulkSize);
-		self::assertEquals('b', $result->EventInterface);
-		self::assertEquals('c', $result->ProxyClassName);
-		self::assertEquals('d', $result->HandlerInterface);
+		self::assertEquals(1, 	$result->DelayBuffer);
+		self::assertEquals(14, 	$result->PackageSize);
+		self::assertEquals('b', 	$result->EventInterface);
+		self::assertEquals('c', 	$result->ProxyClassName);
+		self::assertEquals('d', 	$result->HandlerInterface);
 	}
 	
 	public function test_get_PassHandlerConfig()
@@ -50,6 +54,8 @@ class ConfigToObjectTest extends TestCase
 		{
 			public function name(): string { return 'a'; }
 			public function delay(): float { return 10; }
+			public function delayBuffer(): float { return 1; }
+			public function packageSize(): int { return 14;	}
 			public function maxBulkSize(): int { return 12; }
 			public function initialState(): string { return EventState::RUNNING; }
 			public function handlerClassName(): string { return 'b'; }
@@ -68,6 +74,8 @@ class ConfigToObjectTest extends TestCase
 		self::assertEquals('a',	$result->Name);
 		self::assertEquals(10, 	$result->Delay);
 		self::assertEquals(12, 	$result->MaxBulkSize);
+		self::assertEquals(1, 	$result->DelayBuffer);
+		self::assertEquals(14,	$result->PackageSize);
 		self::assertEquals('b',	$result->HandlerClassName);
 	}
 }

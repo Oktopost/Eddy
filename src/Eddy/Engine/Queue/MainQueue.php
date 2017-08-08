@@ -4,7 +4,6 @@ namespace Eddy\Engine\Queue;
 
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
-use Eddy\Base\Engine\Queue\IQueueManager;
 use Eddy\Exceptions\AbortException;
 
 

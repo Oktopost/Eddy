@@ -24,6 +24,8 @@ class ConfigToObject
 		$object->Delay			= $config->delay();
 		$object->State			= $config->initialState();
 		$object->MaxBulkSize	= $config->maxBulkSize();
+		$object->DelayBuffer	= $config->delayBuffer();
+		$object->PackageSize	= $config->packageSize();
 		
 		$object->ConfigClassName	= get_class($config);
 		$object->ProxyClassName		= $config->proxyClassName();
@@ -41,6 +43,8 @@ class ConfigToObject
 		$object->Delay			= $config->delay();
 		$object->State			= $config->initialState();
 		$object->MaxBulkSize	= $config->maxBulkSize();
+		$object->DelayBuffer	= $config->delayBuffer();
+		$object->PackageSize	= $config->packageSize();
 		
 		$object->ConfigClassName	= get_class($config);
 		$object->HandlerClassName	= $config->handlerClassName();

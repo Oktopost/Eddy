@@ -68,6 +68,28 @@ class ObjectAnnotationsTest extends TestCase
 		self::assertEquals('testConfigName', 
 			ObjectAnnotations::getConfigName(AnnotationTest_Config::class));
 	}
+	
+	public function test_getDelayBuffer__NoAnnotation_ReturnNull()
+	{
+		self::assertNull(ObjectAnnotations::getDelayBuffer(AnnotationTest_NoFlags::class));
+	}
+	
+	public function test_getDelayBuffer_WithAnnotation_ReturnDelayBuffer()
+	{
+		self::assertEquals(5, 
+			ObjectAnnotations::getDelayBuffer(AnnotationTest_DelayBuffer::class));
+	}
+	
+	public function test_getPackageSize__NoAnnotation_ReturnNull()
+	{
+		self::assertNull(ObjectAnnotations::getPackageSize(AnnotationTest_NoFlags::class));
+	}
+	
+	public function test_getPackageSize_WithAnnotation_ReturnPackageSize()
+	{
+		self::assertEquals(4, 
+			ObjectAnnotations::getPackageSize(AnnotationTest_PackageSize::class));
+	}
 }
 
 
@@ -107,5 +129,19 @@ interface AnnotationTest_Config {
  * @Unique
  */
 interface AnnotationTest_Unique {
+	
+}
+
+/**
+ * @delayBuffer 5
+ */
+interface AnnotationTest_DelayBuffer {
+	
+}
+
+/**
+ * @packageSize 4
+ */
+interface AnnotationTest_PackageSize {
 	
 }

@@ -2,15 +2,15 @@
 namespace Eddy\Plugins;
 
 
-use Eddy\Base\IDAL;
-use Eddy\DAL\CachedDAL;
-use Eddy\DAL\MySQLDAL;
-use Eddy\DAL\RedisDAL;
-use Eddy\Exceptions\UnexpectedException;
 use Eddy\IEddyPlugin;
+use Eddy\DAL\RedisDAL;
+use Eddy\DAL\MySQLDAL;
+use Eddy\DAL\CachedDAL;
+use Eddy\Exceptions\UnexpectedException;
 use Eddy\Utils\Config;
+
 use Predis\Client;
-use Predis\Command\Processor\KeyPrefixProcessor;
+
 use Squid\MySql;
 
 
@@ -45,7 +45,7 @@ class CachedDALPlugin implements IEddyPlugin
 
 	/**
 	 * @param MySql\IMySqlConnector|array $mysqlSetup
-	 * @param rray $redisSetup
+	 * @param array $redisSetup
 	 */
 	public function __construct($mysqlSetup, array $redisSetup = [])
 	{

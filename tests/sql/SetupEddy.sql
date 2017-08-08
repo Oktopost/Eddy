@@ -10,6 +10,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS `EddyEvent` (
 	`HandlerInterface`	TEXT NOT NULL,
 	`Delay`				FLOAT,
 	`MaxBulkSize`		INT,
+	`DelayBuffer`		FLOAT,
+	`PackageSize`		INT,
 	
 	PRIMARY KEY (`Id`),
 	
@@ -31,6 +33,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS `EddyHandler` (
 	`ConfigClassName`	TEXT,
 	`Delay`				FLOAT,
 	`MaxBulkSize`		INT,
+	`DelayBuffer`		FLOAT,
+	`PackageSize`		INT,
 	
 	PRIMARY KEY (`Id`),
 	

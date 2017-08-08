@@ -11,6 +11,8 @@ use Eddy\Base\Config\INaming;
  * @property string	$State
  * @property float	$Delay
  * @property int	$MaxBulkSize
+ * @property float	$DelayBuffer
+ * @property int	$PackageSize
  */
 interface IEddyQueueObject
 {

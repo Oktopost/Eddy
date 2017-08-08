@@ -105,7 +105,9 @@ class MySQLEventDAO implements IMySQLEventDAO
 		return $this->connector->upsertObjectsForValues([$event], [
 			'State',
 			'Delay',
-			'MaxBulkSize'
+			'MaxBulkSize',
+			'DelayBuffer',
+			'PackageSize'
 		]);
 	}
 

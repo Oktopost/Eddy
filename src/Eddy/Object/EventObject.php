@@ -25,6 +25,8 @@ use Objection\LiteSetup;
  * @property string	$HandlerInterface
  * @property float	$Delay
  * @property int	$MaxBulkSize
+ * @property float	$DelayBuffer
+ * @property int	$PackageSize
  */
 class EventObject extends AEddyObject implements IEddyQueueObject
 {
@@ -41,7 +43,9 @@ class EventObject extends AEddyObject implements IEddyQueueObject
 			'ConfigClassName'	=> LiteSetup::createString(null),
 			'HandlerInterface'	=> LiteSetup::createString(),
 			'Delay'				=> LiteSetup::createDouble(),
-			'MaxBulkSize'		=> LiteSetup::createInt(255)
+			'MaxBulkSize'		=> LiteSetup::createInt(255),
+			'DelayBuffer'		=> LiteSetup::createDouble(),
+			'PackageSize'		=> LiteSetup::createInt()
 		];
 	}
 	

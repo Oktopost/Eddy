@@ -20,6 +20,8 @@ class DynamicEventConfig implements IEventConfig
 	
 	
 	private $isUnique			= null;
+	private $delayBuffer		= null;
+	private $packageSize		= null;
 	private $name				= null;
 	private $eventClassName		= null;
 	private $proxyClassName		= false;
@@ -86,6 +88,30 @@ class DynamicEventConfig implements IEventConfig
 		return 256;
 	}
 	
+	public function delayBuffer(): float
+	{
+		if (is_null($this->delayBuffer))
+		{
+			$this->delayBuffer = 
+				ObjectAnnotations::getDelayBuffer($this) ?: 
+				ObjectAnnotations::getDelayBuffer($this->eventClassName()) ?: 0;
+		}
+		
+		return $this->delayBuffer;
+	}
+	
+	public function packageSize(): int
+	{
+		if (is_null($this->packageSize))
+		{
+			$this->packageSize = 
+				ObjectAnnotations::getPackageSize($this) ?: 
+				ObjectAnnotations::getPackageSize($this->eventClassName()) ?: 0;
+		}
+		
+		return $this->packageSize;
+	}
+
 	public function initialState(): string
 	{
 		return EventState::PAUSED;

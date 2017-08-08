@@ -11,11 +11,13 @@ class ObjectAnnotations
 	use \Objection\TStaticClass;
 	
 	
-	public const EVENT_ANNOTATION	= 'Event';
-	public const PROXY_ANNOTATION	= 'Proxy';
-	public const HANDLER_ANNOTATION	= 'Handler';
-	public const CONFIG_ANNOTATION	= 'Config';
-	public const UNIQUE_ANNOTATION	= 'Unique';
+	public const EVENT_ANNOTATION			= 'Event';
+	public const PROXY_ANNOTATION			= 'Proxy';
+	public const HANDLER_ANNOTATION			= 'Handler';
+	public const CONFIG_ANNOTATION			= 'Config';
+	public const UNIQUE_ANNOTATION			= 'Unique';
+	public const DELAY_BUFFER_ANNOTATION 	= 'DelayBuffer';
+	public const PACKAGE_SIZE_ANNOTATION	= 'PackageSize';
 	
 	
 	public static function isEvent($target): bool
@@ -46,5 +48,15 @@ class ObjectAnnotations
 	public static function getConfigName($target): ?string
 	{
 		return Value::getValue($target, self::CONFIG_ANNOTATION, null);
+	}
+	
+	public static function getDelayBuffer($target): ?float
+	{
+		return Value::getValue($target, self::DELAY_BUFFER_ANNOTATION, null);
+	}
+	
+	public static function getPackageSize($target): ?int
+	{
+		return Value::getValue($target, self::PACKAGE_SIZE_ANNOTATION, null);
 	}
 }
