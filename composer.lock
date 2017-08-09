@@ -48,16 +48,16 @@
         },
         {
             "name": "oktopost/deep-queue",
-            "version": "1.0.13",
+            "version": "1.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/DeepQueue.git",
-                "reference": "05c25101752490dd239cd2f737ef1278d4d53f88"
+                "reference": "81b8b0c596550a8c4c164a0c1b439b54d68f02ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/DeepQueue/zipball/05c25101752490dd239cd2f737ef1278d4d53f88",
-                "reference": "05c25101752490dd239cd2f737ef1278d4d53f88",
+                "url": "https://api.github.com/repos/Oktopost/DeepQueue/zipball/81b8b0c596550a8c4c164a0c1b439b54d68f02ab",
+                "reference": "81b8b0c596550a8c4c164a0c1b439b54d68f02ab",
                 "shasum": ""
             },
             "require": {
@@ -94,7 +94,7 @@
                 }
             ],
             "description": "Messaging library",
-            "time": "2017-08-09 10:09:35"
+            "time": "2017-08-09 12:35:31"
         },
         {
             "name": "oktopost/objection",
