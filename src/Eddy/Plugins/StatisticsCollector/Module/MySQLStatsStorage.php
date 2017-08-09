@@ -48,7 +48,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 		
 		if (!$date || !isset($date[0]))
 		{
-			return time() - $this->getGranularity();
+			return $this->roundToMinutes(time() - $this->getGranularity());
 		}
 		
 		return strtotime($date[0]);
@@ -56,6 +56,8 @@ class MySQLStatsStorage implements IStatisticsStorage
 	
 	private function setNextTime(int $lastTime): void
 	{
+		$lastTime = (time() - $lastTime > $this->getGranularity()) ? time() : $lastTime;
+		
 		$nextDate = date('Y-m-d H:i:s', $lastTime + $this->getGranularity());
 		
 		$this->config->mysqlConnector
@@ -64,6 +66,20 @@ class MySQLStatsStorage implements IStatisticsStorage
 			->values([self::DUMP_TIME, $nextDate])
 			->setDuplicateKeys(['Param'])
 			->executeDml();
+	}
+	
+	private function roundToMinutes(int $time): int
+	{
+		$dayStart = strtotime('midnight', $time);
+		
+		$roundedDiff = round(($time - $dayStart) / 60);
+		
+		return $dayStart + ($roundedDiff * 60);
+	}
+
+	private function getDataDate(int $endTime): string
+	{
+		return date('Y-m-d H:i:s', $this->roundToMinutes($endTime));
 	}
 
 
@@ -82,11 +98,11 @@ class MySQLStatsStorage implements IStatisticsStorage
 		$this->setNextTime($endTime);
 		
 		if (!$data) return;
-
-		$newDate = date('Y-m-d H:i:s', $endTime);
+		
 		$granularity = $this->getGranularity();
+		$dataDate = $this->getDataDate($endTime);
 
-		$combinedData = (new StatsDataCombiner())->combineAll($data, $newDate, $granularity);
+		$combinedData = (new StatsDataCombiner())->combineAll($data, $dataDate, $granularity);
 
 		$this->save($combinedData);
 	}
