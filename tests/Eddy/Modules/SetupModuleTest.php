@@ -2,6 +2,7 @@
 namespace Eddy\Modules;
 
 
+use Eddy\Base\Engine\Queue\IQueueObjectCreator;
 use Eddy\Scope;
 use Eddy\Base\IDAL;
 use Eddy\Base\ISetup;
@@ -114,6 +115,8 @@ class SetupModuleTest extends TestCase
 		\UnitTestScope::clear();
 		
 		\UnitTestScope::override(ISetupBuilder::class, $this->createBuilderMock());
+		\UnitTestScope::override(IQueueObjectCreator::class, 
+			$this->createMock(IQueueObjectCreator::class));
 	}
 	
 	

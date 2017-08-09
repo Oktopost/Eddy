@@ -9,4 +9,5 @@ interface IQueueProvider
 {
 	public function getQueue(string $name): IQueue;
 	public function getManager(string $name): IQueueManager;
+	public function getObjectManager(): IQueueObjectManager;
 }

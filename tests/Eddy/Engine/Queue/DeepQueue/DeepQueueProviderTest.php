@@ -4,6 +4,7 @@ namespace Eddy\Engine\Queue\DeepQueue;
 
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\Queue\IQueueManager;
+use Eddy\Base\Engine\Queue\IQueueObjectManager;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 
 use DeepQueue\Enums\QueueLoaderPolicy;
@@ -32,5 +33,10 @@ class DeepQueueProviderTest extends TestCase
 	public function test_getManager_IQueueManagerInstanceReturned()
 	{
 		self::assertInstanceOf(IQueueManager::class, $this->getSubject()->getManager('test'));
+	}
+	
+	public function test_getObjectManager_IQueueObjectManagerReturned()
+	{
+		self::assertInstanceOf(IQueueObjectManager::class, $this->getSubject()->getObjectManager());
 	}
 }

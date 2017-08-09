@@ -2,8 +2,10 @@
 namespace Eddy\Modules;
 
 
-use Eddy\Base\Module\ISetupModule;
+use Eddy\Scope;
 use Eddy\Base\Setup\IEventsSetup;
+use Eddy\Base\Module\ISetupModule;
+use Eddy\Base\Engine\Queue\IQueueObjectCreator;
 
 
 /**
@@ -26,13 +28,17 @@ class SetupModule implements ISetupModule
 	
 	private function save(IEventsSetup $setup): void
 	{
+		$queueCreator = Scope::skeleton($this, IQueueObjectCreator::class);
+		
 		if ($setup->Events)
 		{
+			$queueCreator->createQueues($setup->Events);
 			$this->config->DAL()->events()->saveSetupAll($setup->Events);
 		}
 		
 		if ($setup->Handlers)
 		{
+			$queueCreator->createQueues($setup->Handlers);
 			$this->config->DAL()->handlers()->saveSetupAll($setup->Handlers);
 		}
 		
