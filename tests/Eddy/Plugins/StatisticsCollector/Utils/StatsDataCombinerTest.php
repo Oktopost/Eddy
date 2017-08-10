@@ -64,27 +64,4 @@ class StatsDataCombinerTest extends TestCase
 		
 		$this->checkEquals($data, $combined, 2);
 	}
-	
-	public function test_combineAll_sanity()
-	{
-		$time = time();
-		
-		$eventEntry = $this->createEntry($time);
-		$eventEntry2 = $this->createEntry($time, 'test2');
-		$handlerEntry = $this->createEntry($time, 'h1', StatsObjectType::HANDLER);
-
-		$granularity = 100;
-		
-		$combined = $this->getSubject()->combineAll([
-			$eventEntry->toArray(), $eventEntry->toArray(), 
-			$eventEntry2->toArray(), 
-			$handlerEntry->toArray(), $handlerEntry->toArray(), $handlerEntry->toArray()
-		], date('Y-m-d H:i:s', $time), $granularity);
-		
-		self::assertEquals(3, sizeof($combined));
-		
-		$this->checkEquals($eventEntry, $combined[0], 2, $granularity);
-		$this->checkEquals($eventEntry2, $combined[1], 1, $granularity);
-		$this->checkEquals($handlerEntry, $combined[2], 3, $granularity);
-	}
 }

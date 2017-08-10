@@ -2,6 +2,7 @@
 namespace Eddy\Plugins;
 
 
+use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
 use Eddy\Utils\Config;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
@@ -103,15 +104,21 @@ class StatisticsCollectorPluginTest extends TestCase
 	
 	public function test_dump()
 	{
+		$time = time();
+		
+		$entry = new StatsEntry();
+		$entry->DataDate = date('Y-m-d H:i:s', $time);
+
 		$storage = $this->mockStatisticsStorage();
 		$storage->expects($this->once())
 			->method('getEndTime')->willReturn(0);
+		
 		$storage->expects($this->once())
-			->method('populate')->with($this->equalTo([1]), $this->equalTo(0));
+			->method('populate')->with($this->equalTo([$entry->toArray()]), $this->equalTo($time));
 		
 		$cache = $this->mockCacheCollector();
 		$cache->expects($this->once())
-			->method('pullData')->with($this->equalTo(0))->willReturn([1]);
+			->method('pullData')->with($this->equalTo(0))->willReturn([$entry->toArray()]);
 		
 		$this->getSubject()->dump();
 	}

@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS `EddyStatistics` (
 	`DataDate`			DATETIME NOT NULL,
 	
 	PRIMARY KEY (`Id`),
+	
+	UNIQUE KEY `k_EddyStatistics_NameTypeDataDate` (`Name`, `Type`, `DataDate`),
 
 	INDEX `k_Name` (`Name`)
 ) 

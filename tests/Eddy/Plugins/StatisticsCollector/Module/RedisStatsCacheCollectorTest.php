@@ -217,6 +217,25 @@ class RedisStatsCacheCollectorTest extends TestCase
 		self::assertEmpty($data);
 	}
 	
+	public function test_PullData_DataMoreThanLimitExist_GotLimiitedData()
+	{
+		$this->config->maxSize = 1;
+		
+		$object = $this->createObject();
+		$time = time();
+		
+		$this->getSubject()->collectData($object, 14, StatsOperation::DEQUEUE, $time);
+		$this->getSubject()->collectData($object, 15, StatsOperation::DEQUEUE, $time - 1);
+		
+		$data = $this->getSubject()->pullData($time);
+		
+		self::assertEquals(1, count($data));
+		
+		$entry = $this->config->redisClient->hgetall($this->getKey($object, $time));
+		
+		self::assertNotEmpty($entry);
+	}
+	
 	public function test_PullData_DataExists_GotDataArray()
 	{
 		$object = $this->createObject();

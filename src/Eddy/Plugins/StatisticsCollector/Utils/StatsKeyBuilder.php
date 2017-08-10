@@ -11,9 +11,4 @@ class StatsKeyBuilder
 	{
 		return "{$type}:{$name}:{$time}";
 	}
-	
-	public static function getForCombine(string $type, string $name): string
-	{
-		return "{$type}.{$name}";
-	}
 }

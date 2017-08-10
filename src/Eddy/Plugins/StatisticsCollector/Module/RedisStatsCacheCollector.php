@@ -78,7 +78,7 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 	{
 		$keys = [];
 		$pattern = $this->config->getRedisScope() . '*';
-		
+
 		foreach (new Keyspace($this->config->redisClient, $pattern) as $key)
 		{
 			$time = substr($key, strrpos($key, ':') + 1);
@@ -89,7 +89,13 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 			}
 		}
 		
+		$keys = array_unique($keys);
 		sort($keys);
+		
+		if (count($keys) > $this->config->maxSize)
+		{
+			$keys = array_slice($keys, 0, $this->config->maxSize);
+		}
 		
 		return $keys;
 	}
@@ -106,7 +112,7 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		$transaction->del($keys);
 		
 		$result = $transaction->execute();
-		
+
 		array_pop($result);
 		
 		return $result ?: [];

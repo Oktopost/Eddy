@@ -3,7 +3,6 @@ namespace Eddy\Plugins\StatisticsCollector\Module;
 
 
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
-use Eddy\Plugins\StatisticsCollector\Utils\StatsDataCombiner;
 
 
 /**
@@ -15,6 +14,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 	private const SETTINGS_TABLE_NAME	= 'EddyStatisticsSettings';
 	private const DUMP_TIME				= 'NextDumpTime';
 	
+	private const TIME_DELAY			= 5;
 	
 	/**
 	 * @context
@@ -31,9 +31,16 @@ class MySQLStatsStorage implements IStatisticsStorage
 	private function save(array $data): void
 	{
 		$this->config->mysqlConnector
-			->insert()
+			->upsert()
+			->ignore()
 			->into(self::TABLE_NAME)
 			->valuesBulk($data)
+			->setExp('Enqueued', 'Enqueued + VALUES(Enqueued)')
+			->setExp('Dequeued', 'Dequeued + VALUES(Dequeued)')
+			->setExp('WithErrors', 'WithErrors + VALUES(WithErrors)')
+			->setExp('ErrorsTotal', 'ErrorsTotal + VALUES(ErrorsTotal)')
+			->setExp('Processed', 'Processed + VALUES(Processed)')
+			->setExp('TotalRuntime', 'TotalRuntime + VALUES(TotalRuntime)')
 			->executeDml();
 	}
 	
@@ -48,17 +55,15 @@ class MySQLStatsStorage implements IStatisticsStorage
 		
 		if (!$date || !isset($date[0]))
 		{
-			return $this->roundToMinutes(time() - $this->getGranularity());
+			return time() - self::TIME_DELAY;
 		}
 		
-		return strtotime($date[0]);
+		return strtotime($date[0]) - self::TIME_DELAY;
 	}
 	
 	private function setNextTime(int $lastTime): void
 	{
-		$lastTime = (time() - $lastTime > $this->getGranularity()) ? time() : $lastTime;
-		
-		$nextDate = date('Y-m-d H:i:s', $lastTime + $this->getGranularity());
+		$nextDate = $this->getDataDate($lastTime + $this->getGranularity());
 		
 		$this->config->mysqlConnector
 			->upsert()
@@ -99,11 +104,16 @@ class MySQLStatsStorage implements IStatisticsStorage
 		
 		if (!$data) return;
 		
-		$granularity = $this->getGranularity();
-		$dataDate = $this->getDataDate($endTime);
+		$preparedData = [];
+		
+		foreach ($data as $entry)
+		{
+			$entry['Granularity'] = $this->getGranularity();
+			$entry['DataDate'] = $this->getDataDate(strtotime($entry['DataDate']));
+			
+			$preparedData[] = $entry;
+		}
 
-		$combinedData = (new StatsDataCombiner())->combineAll($data, $dataDate, $granularity);
-
-		$this->save($combinedData);
+		$this->save($preparedData);
 	}
 }

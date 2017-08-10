@@ -23,8 +23,11 @@ class StatsConfig implements IStatsConfig
 	/** @var Client */
 	public $redisClient;
 	
-	/** @var int Time period to dump statistics to MySQL */
+	/** @var int Time period to combine statistics in MySQL */
 	public $granularity = 300; 
+	
+	/* @var int */
+	public $maxSize = 10000;
 
 	
 	/**

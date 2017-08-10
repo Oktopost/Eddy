@@ -24,7 +24,7 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	/**
 	 * @param IMySqlConnector|array $mysqlConfig
 	 */
-	public function __construct($mysqlConfig, array $redisConfig, int $granularity = 300)
+	public function __construct($mysqlConfig, array $redisConfig, int $granularity = 300, int $maxSize = 10000)
 	{
 		$context = Scope::skeleton()->context($this, 'Eddy::StatisticsCollectorPlugin');
 		
@@ -56,6 +56,12 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 		$endTime = $storage->getEndTime();
 		
 		$data = $cache->pullData($endTime);
+		
+		if ($data)
+		{
+			$lastElement = array_slice($data, -1, 1);
+			$endTime = strtotime($lastElement[0]['DataDate']);
+		}
 		
 		$storage->populate($data, $endTime);
 	}
