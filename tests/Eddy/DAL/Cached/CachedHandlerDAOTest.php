@@ -6,6 +6,7 @@ use Eddy\Base\IDAL;
 use Eddy\DAL\MySQLDAL;
 use Eddy\DAL\RedisDAL;
 use Eddy\DAL\Redis\RedisEventDAO;
+use Eddy\Enums\EventState;
 use Eddy\Object\HandlerObject;
 
 use lib\MySQLConfig;
@@ -298,5 +299,20 @@ class CachedHandlerDAOTest extends TestCase
 		$this->getSubject()->flushAll();
 		
 		self::assertEmpty($this->cache->handlers()->loadMultiple([$handler->Id, $handler2->Id]));
+	}
+	
+	public function test_loadAllRunning_LoadFromMain()
+	{
+		$handler = $this->getHandler();
+		$handler->State = EventState::RUNNING;
+		
+		$this->getSubject()->saveSetup($handler);
+		
+		$running = $this->getSubject()->loadAllRunning();
+		
+		self::assertEquals(1, sizeof($running));
+		self::assertEquals($handler->Name, $running[0]->Name);
+		
+		self::assertEmpty($this->cache->handlers()->loadAllRunning());
 	}
 }

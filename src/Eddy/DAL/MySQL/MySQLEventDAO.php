@@ -46,7 +46,14 @@ class MySQLEventDAO implements IMySQLEventDAO
 		$objects = $this->connector->selectObjectsByFields(['Id' => $ids]);
 		return $objects ?: [];
 	}
-	
+
+	public function loadAllRunning(): array
+	{
+		$objects = $this->connector->selectObjectsByFields(['State' => EventState::RUNNING]);
+		
+		return $objects ?: [];
+	}
+
 	public function loadByIdentifier(string $identifier): ?EventObject
 	{
 		$event = $this->loadByInterfaceName($identifier);

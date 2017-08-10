@@ -84,6 +84,11 @@ class CachedHandlerDAO implements ICachedHandlerDAO
 		return $handlers;
 	}
 
+	public function loadAllRunning(): array
+	{
+		return $this->main->loadAllRunning();
+	}
+
 	public function loadByIdentifier(string $identifier): ?HandlerObject
 	{
 		$handler = $this->cache->loadByIdentifier($identifier);

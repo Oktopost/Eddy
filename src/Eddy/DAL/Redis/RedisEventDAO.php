@@ -2,6 +2,7 @@
 namespace Eddy\DAL\Redis;
 
 
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\DAL\Redis\Base\IRedisEventDAO;
 use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
@@ -88,6 +89,25 @@ class RedisEventDAO implements IRedisEventDAO
 		}
 				
 		return $events;
+	}
+	
+	public function loadAllRunning(): array
+	{
+		$allEntries = $this->client->hgetall(RedisKeyBuilder::eventObject());
+		
+		$running = [];
+
+		foreach ($allEntries as $entry)
+		{
+			$event = $this->fromString($entry);
+			
+			if ($event->State == EventState::RUNNING)
+			{
+				$running[] = $event;
+			}
+		}
+		
+		return $running;
 	}
 
 	public function loadByIdentifier(string $identifier): ?EventObject

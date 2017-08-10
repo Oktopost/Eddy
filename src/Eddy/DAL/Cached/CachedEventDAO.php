@@ -85,6 +85,12 @@ class CachedEventDAO implements ICachedEventDAO
 		return $events;
 	}
 
+	public function loadAllRunning(): array
+	{
+		return $this->main->loadAllRunning();
+	}
+
+
 	public function loadByIdentifier(string $identifier): ?EventObject
 	{
 		$event = $this->cache->loadByIdentifier($identifier);

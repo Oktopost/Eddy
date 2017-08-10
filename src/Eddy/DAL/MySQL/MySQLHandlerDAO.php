@@ -47,6 +47,13 @@ class MySQLHandlerDAO implements IMySQLHandlerDAO
 		return $objects ?: [];
 	}
 	
+	public function loadAllRunning(): array
+	{
+		$objects = $this->connector->selectObjectsByFields(['State' => EventState::RUNNING]);
+		
+		return $objects ?: [];
+	}
+	
 	public function loadByIdentifier(string $identifier): ?HandlerObject 
 	{
 		$handler = $this->loadByClassName($identifier);

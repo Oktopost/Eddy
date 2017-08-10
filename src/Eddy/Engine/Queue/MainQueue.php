@@ -4,7 +4,9 @@ namespace Eddy\Engine\Queue;
 
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
+use Eddy\Base\Module\IEddyObjectModule;
 use Eddy\Exceptions\AbortException;
+use Eddy\Scope;
 
 
 /**
@@ -74,5 +76,20 @@ class MainQueue implements IMainQueue
 			throw new AbortException();
 		
 		return $result;
+	}
+
+	public function refresh(): void
+	{
+		/** @var IEddyObjectModule $module */
+		$module = Scope::skeleton($this, IEddyObjectModule::class);
+		
+		$runningEddyObjects = $module->getAllRunning();
+		
+		foreach ($runningEddyObjects as $object)
+		{
+			$queueName = $object->getQueueNaming($this->config->Naming);
+			
+			$this->schedule($queueName);
+		}
 	}
 }

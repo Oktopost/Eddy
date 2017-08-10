@@ -208,4 +208,25 @@ class RedisHandlerDAOTest extends TestCase
 		self::assertNull($this->getSubject()->load($handlerObject->Id));
 		self::assertNull($this->getSubject()->load($handlerObject2->Id));
 	}
+	
+	public function test_loadAllRunning_NoRunning_GotEmptyArray()
+	{
+		self::assertEmpty($this->getSubject()->loadAllRunning());
+	}
+	
+	public function test_loadAllRunning_RunningAndNotActiveExists_GotOnlyRunningArray()
+	{
+		$handler1 = $this->getHandler();
+		$handler1->State = EventState::RUNNING;
+		
+		$handler2 = $this->getHandler();
+		$handler2->State = EventState::PAUSED;
+		
+		$this->getSubject()->saveSetupAll([$handler1, $handler2]);
+		
+		$running = $this->getSubject()->loadAllRunning();
+		
+		self::assertEquals(1, count($running));
+		self::assertEquals($handler1->Name, $running[0]->Name);
+	}
 }

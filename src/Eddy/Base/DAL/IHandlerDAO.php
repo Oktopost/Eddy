@@ -11,16 +11,24 @@ use Eddy\Object\HandlerObject;
 interface IHandlerDAO
 {
 	public function load(string $id): ?HandlerObject;
-	public function loadMultiple(array $ids): array;
 	public function loadByIdentifier(string $identifier): ?HandlerObject;
-	
 	public function loadByName(string $name): ?HandlerObject;
 	public function loadByClassName(string $className): ?HandlerObject;
-	
+
+	/**
+	 * @return HandlerObject[]|array
+	 */
+	public function loadMultiple(array $ids): array;
+
+	/**
+	 * @return HandlerObject[]|array
+	 */
+	public function loadAllRunning(): array;
+
 	public function saveSetup(HandlerObject $handler): bool;
 	
 	/**
-	 * @param HandlerObject[]|array $events
+	 * @param HandlerObject[]|array $handlers
 	 * @return bool
 	 */
 	public function saveSetupAll(array $handlers): bool;

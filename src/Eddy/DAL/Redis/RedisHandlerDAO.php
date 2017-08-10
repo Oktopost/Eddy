@@ -2,6 +2,7 @@
 namespace Eddy\DAL\Redis;
 
 
+use Eddy\Enums\EventState;
 use Eddy\Object\HandlerObject;
 use Eddy\DAL\Redis\Base\IRedisHandlerDAO;
 use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
@@ -88,6 +89,25 @@ class RedisHandlerDAO implements IRedisHandlerDAO
 		}
 				
 		return $handlers;
+	}
+	
+	public function loadAllRunning(): array
+	{
+		$allEntries = $this->client->hgetall(RedisKeyBuilder::handlerObject());
+		
+		$running = [];
+
+		foreach ($allEntries as $entry)
+		{
+			$handler = $this->fromString($entry);
+			
+			if ($handler->State == EventState::RUNNING)
+			{
+				$running[] = $handler;
+			}
+		}
+		
+		return $running;
 	}
 
 	public function loadByIdentifier(string $identifier): ?HandlerObject

@@ -7,6 +7,7 @@ use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\Base\IConfig;
 use Eddy\Base\IDAL;
 use Eddy\Base\Module\IEddyObjectModule;
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 use Eddy\Scope;
@@ -93,6 +94,45 @@ class EddyObjectModuleTest extends TestCase
 		self::assertInstanceOf(HandlerObject::class, 
 			$this->getSubject($handlerDAO)
 				->getByQueueName($handlerObject->getQueueNaming(new Naming())));
+	}
+	
+	public function test_getAllRunning_NoRunning_GotEmptyArray()
+	{
+		$handlerDAO = $this->getMockBuilder(IHandlerDAO::class)->getMock();
+		$handlerDAO->expects($this->once())
+			->method('loadAllRunning')
+			->willReturn([]);
+		
+		$eventDAO = $this->getMockBuilder(IEventDAO::class)->getMock();
+		$eventDAO->expects($this->once())
+			->method('loadAllRunning')
+			->willReturn([]);
+		
+		self::assertEmpty($this->getSubject($handlerDAO, $eventDAO)->getAllRunning());
+	}
+	
+	public function test_getAllRunning_RunningExists_GotArray()
+	{
+		$handlerObject = new HandlerObject();
+		$handlerObject->State = EventState::RUNNING;
+		$handlerObject->Name = 'TestHandler';
+		
+		
+		$handlerDAO = $this->getMockBuilder(IHandlerDAO::class)->getMock();
+		$handlerDAO->expects($this->once())
+			->method('loadAllRunning')
+			->willReturn([$handlerObject]);
+		
+		$eventObject = new EventObject();
+		$eventObject->State = EventState::RUNNING;
+		$eventObject->Name = 'TestEvent';
+		
+		$eventDAO = $this->getMockBuilder(IEventDAO::class)->getMock();
+		$eventDAO->expects($this->once())
+			->method('loadAllRunning')
+			->willReturn([$eventObject]);
+		
+		self::assertEquals(2, count($this->getSubject($handlerDAO, $eventDAO)->getAllRunning()));
 	}
 }
 

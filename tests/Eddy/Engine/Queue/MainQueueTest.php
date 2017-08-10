@@ -2,6 +2,7 @@
 namespace Eddy\Engine\Queue;
 
 
+use Eddy\Base\Module\IEddyObjectModule;
 use Eddy\Scope;
 use Eddy\Base\IConfig;
 use Eddy\Base\Engine\IQueue;
@@ -163,5 +164,32 @@ class MainQueueTest extends TestCase
 			->with($this->equalTo([MainQueue::ABORT_INDICATOR, MainQueue::ABORT_INDICATOR]));
 		
 		$this->getSubject($queue)->sendAbort(2);
+	}
+	
+	public function test_refresh()
+	{
+		$event = new EventObject();
+		$event->Name = 'Event';
+		
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IEddyObjectModule
+		 */
+		$moduleMock = $this->getMockBuilder(IEddyObjectModule::class)->getMock();
+		$moduleMock->expects($this->once())
+			->method('getAllRunning')
+			->willReturn([$event]);
+		
+		\UnitTestScope::override(IEddyObjectModule::class, $moduleMock);
+		
+		/**
+		 * @var $queue \PHPUnit_Framework_MockObject_MockObject|IQueue
+		 */
+		$queue = $this->getMockBuilder(IQueue::class)->getMock();
+		$queue
+			->expects($this->once())
+			->method('enqueue')
+			->with($this->equalTo(['testNameEvent' => 'testNameEvent'], 1));
+		
+		$this->getSubject($queue, $this->getIQueueManagerMock())->refresh();
 	}
 }

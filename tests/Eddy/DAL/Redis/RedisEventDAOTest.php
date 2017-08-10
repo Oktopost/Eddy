@@ -3,6 +3,7 @@ namespace Eddy\DAL\Redis;
 
 
 use Eddy\DAL\Redis\Base\IRedisEventDAO;
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
@@ -204,5 +205,26 @@ class RedisEventDAOTest extends TestCase
 		
 		self::assertNull($this->getSubject()->load($eventObject->Id));
 		self::assertNull($this->getSubject()->load($eventObject2->Id));
+	}
+	
+	public function test_loadAllRunning_NoRunning_GotEmptyArray()
+	{
+		self::assertEmpty($this->getSubject()->loadAllRunning());
+	}
+	
+	public function test_loadAllRunning_RunningAndNotActiveExists_GotOnlyRunningArray()
+	{
+		$event1 = $this->getEvent();
+		$event1->State = EventState::RUNNING;
+		
+		$event2 = $this->getEvent();
+		$event2->State = EventState::PAUSED;
+		
+		$this->getSubject()->saveSetupAll([$event1, $event2]);
+		
+		$running = $this->getSubject()->loadAllRunning();
+		
+		self::assertEquals(1, count($running));
+		self::assertEquals($event1->Name, $running[0]->Name);
 	}
 }

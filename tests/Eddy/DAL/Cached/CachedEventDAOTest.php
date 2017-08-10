@@ -8,6 +8,7 @@ use Eddy\DAL\MySQLDAL;
 use Eddy\DAL\Redis\RedisHandlerDAO;
 use Eddy\DAL\RedisDAL;
 
+use Eddy\Enums\EventState;
 use Eddy\Object\EventObject;
 use lib\MySQLConfig;
 
@@ -298,5 +299,20 @@ class CachedEventDAOTest extends TestCase
 		$this->getSubject()->flushAll();
 		
 		self::assertEmpty($this->cache->events()->loadMultiple([$event->Id, $event2->Id]));
+	}
+	
+	public function test_loadAllRunning_LoadFromMain()
+	{
+		$event = $this->getEvent();
+		$event->State = EventState::RUNNING;
+		
+		$this->getSubject()->saveSetup($event);
+		
+		$running = $this->getSubject()->loadAllRunning();
+		
+		self::assertEquals(1, sizeof($running));
+		self::assertEquals($event->Name, $running[0]->Name);
+		
+		self::assertEmpty($this->cache->events()->loadAllRunning());
 	}
 }

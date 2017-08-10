@@ -54,4 +54,12 @@ class EddyObjectModule implements IEddyObjectModule
 		
 		return $object;
 	}
+
+	public function getAllRunning(): array
+	{
+		$events = $this->config->DAL()->events()->loadAllRunning();
+		$handlers = $this->config->DAL()->handlers()->loadAllRunning();
+		
+		return array_merge($events, $handlers);
+	}
 }
