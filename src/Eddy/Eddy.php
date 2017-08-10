@@ -76,6 +76,13 @@ class Eddy
 		$queue->sendAbort($count);
 	}
 	
+	public function refresh(): void
+	{
+		/** @var IMainQueue $queue */
+		$queue = Scope::skeleton($this, IMainQueue::class);
+		$queue->refresh();
+	}
+	
 	public function runSetup(): void
 	{
 		/** @var ISetupModule $setup */

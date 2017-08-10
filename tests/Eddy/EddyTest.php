@@ -85,4 +85,14 @@ class EddyTest extends TestCase
 		
 		$this->getSubject()->sendAbort(25);
 	}
+	
+	public function test_refresh()
+	{
+		$mock = $this->getMockBuilder(IMainQueue::class)->getMock();
+		$mock->expects($this->once())->method('refresh');
+		
+		\UnitTestScope::override(IMainQueue::class, $mock);
+		
+		$this->getSubject()->refresh();
+	}
 }
