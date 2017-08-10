@@ -72,9 +72,9 @@ class MySQLStatsStorage implements IStatisticsStorage
 	{
 		$dayStart = strtotime('midnight', $time);
 		
-		$roundedDiff = round(($time - $dayStart) / 60);
+		$roundedDiff = round(($time - $dayStart) / $this->getGranularity());
 		
-		return $dayStart + ($roundedDiff * 60);
+		return $dayStart + ($roundedDiff * $this->getGranularity());
 	}
 
 	private function getDataDate(int $endTime): string

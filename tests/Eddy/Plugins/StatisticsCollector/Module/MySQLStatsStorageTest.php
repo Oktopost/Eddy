@@ -94,7 +94,7 @@ class MySQLStatsStorageTest extends TestCase
 	public function test_getEndTime_NoSettings_ReturnGranularityBeforeNow()
 	{
 		self::assertEquals(time() - $this->config->granularity, 
-			$this->getSubject()->getEndTime(), '', 60);
+			$this->getSubject()->getEndTime(), '', $this->config->granularity);
 	}
 	
 	public function test_getEndTime_SettingExists_GotParam()
@@ -149,7 +149,7 @@ class MySQLStatsStorageTest extends TestCase
 		self::assertEquals($data1['Name'], $savedData['Name']);
 		self::assertEquals($data1['Type'], $savedData['Type']);
 		self::assertEquals(300, $savedData['Granularity']);
-		self::assertEquals($time, strtotime($savedData['DataDate']), '', 60);
+		self::assertEquals($time, strtotime($savedData['DataDate']), '', $savedData['Granularity']);
 		
 		self::assertEquals($data1['Enqueued'] + $data2['Enqueued'], $savedData['Enqueued']);
 		self::assertEquals($data1['Dequeued'] + $data2['Dequeued'], $savedData['Dequeued']);
