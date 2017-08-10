@@ -93,11 +93,6 @@ class MySQLStatsStorage implements IStatisticsStorage
 		return $this->getNextTime();
 	}
 
-	public function isTimeToDump(): bool
-	{
-		return ($this->getGranularity() <= time() - $this->getNextTime());
-	}
-
 	public function populate(array $data, int $endTime): void
 	{
 		$this->setNextTime($endTime);

@@ -104,23 +104,7 @@ class MySQLStatsStorageTest extends TestCase
 		
 		self::assertEquals($time - 5, $this->getSubject()->getEndTime());
 	}
-	
-	public function test_isTimeToDump_DiffEndNowTimeLessThanGranularity_GotFalse()
-	{
-		$time = time() - $this->config->granularity + ($this->config->granularity / 10);
-		$this->setEndTime($time);
-		
-		self::assertFalse($this->getSubject()->isTimeToDump());
-	}
-	
-	public function test_isTimeToDump_DiffEndNowTimeMoreThanGranularity_GotTrue()
-	{
-		$time = time() - $this->config->granularity;
-		$this->setEndTime($time);
-		
-		self::assertTrue($this->getSubject()->isTimeToDump());
-	}
-	
+
 	public function test_populate_passEmptyData_NextDateChanged()
 	{
 		$time = time();
