@@ -145,12 +145,16 @@ class RedisSubscribersDAO implements IRedisSubscribersDAO
 
 	public function getHandlersIds(string $eventId): array
 	{
-		return $this->client->hkeys(RedisKeyBuilder::eventHandlers($eventId));
+		$handlerIds = $this->client->hkeys(RedisKeyBuilder::eventHandlers($eventId));
+		
+		return $handlerIds ?: [];
 	}
 
 	public function getEventsIds(string $handlerId): array
 	{
-		return $this->client->hkeys(RedisKeyBuilder::handlerEvents($handlerId));
+		$eventsIds = $this->client->hkeys(RedisKeyBuilder::handlerEvents($handlerId));
+		
+		return $eventsIds ?: [];
 	}
 
 	public function addSubscribers(array $eventToHandlers): void

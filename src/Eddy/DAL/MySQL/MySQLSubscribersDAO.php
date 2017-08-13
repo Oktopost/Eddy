@@ -169,22 +169,26 @@ class MySQLSubscribersDAO implements IMySQLSubscribersDAO
 
 	public function getHandlersIds(string $eventId): array
 	{
-		return $this->connector
+		$handlerIds = $this->connector
 			->select()
 			->from(self::SUBSCRIBERS_TABLE)
 			->column(self::HANDLER_FIELD)
 			->byField(self::EVENT_FIELD, $eventId)
 			->queryColumn();
+		
+		return $handlerIds ?: [];
 	}
 
 	public function getEventsIds(string $handlerId): array 
 	{
-		return $this->connector
+		$eventsIds = $this->connector
 			->select()
 			->from(self::SUBSCRIBERS_TABLE)
 			->column(self::EVENT_FIELD)
 			->byField(self::HANDLER_FIELD, $handlerId)
 			->queryColumn();
+		
+		return $eventsIds ?: [];
 	}
 
 	public function addSubscribers(array $eventToHandlers): void
