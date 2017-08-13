@@ -91,9 +91,9 @@ class MySQLStatsStorageTest extends TestCase
 	}
 	
 	
-	public function test_getEndTime_NoSettings_ReturnGranularityBeforeNow()
+	public function test_getEndTime_NoSettings_ReturnGranularitNextToNow()
 	{
-		self::assertEquals(time() - $this->config->granularity, 
+		self::assertEquals(time() + $this->config->granularity, 
 			$this->getSubject()->getEndTime(), '', $this->config->granularity);
 	}
 	

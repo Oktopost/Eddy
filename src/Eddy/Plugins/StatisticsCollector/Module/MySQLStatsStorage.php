@@ -55,7 +55,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 		
 		if (!$date || !isset($date[0]))
 		{
-			return time() - self::TIME_DELAY;
+			return time() + $this->getGranularity() - self::TIME_DELAY;
 		}
 		
 		return strtotime($date[0]) - self::TIME_DELAY;
@@ -63,7 +63,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 	
 	private function setNextTime(int $lastTime): void
 	{
-		$nextDate = $this->getDataDate($lastTime + $this->getGranularity());
+		$nextDate = date('Y-m-d H:i:s', $this->roundToMinutes($lastTime) + $this->getGranularity());
 		
 		$this->config->mysqlConnector
 			->upsert()
