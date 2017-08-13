@@ -45,7 +45,7 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 		$config->Engine->addController($processController);
 	}
 	
-	public function dump(): void
+	public function dump(?int $time = null): void
 	{
 		/** @var IStatisticsStorage $storage */
 		$storage = Scope::skeleton($this, IStatisticsStorage::class);
@@ -53,7 +53,7 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 		/** @var IStatisticsCacheCollector $cache */
 		$cache = Scope::skeleton($this,IStatisticsCacheCollector::class);
 		
-		$endTime = $storage->getEndTime();
+		$endTime = $time ?: $storage->getEndTime();
 		
 		$data = $cache->pullData($endTime);
 		
@@ -64,5 +64,10 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 		}
 		
 		$storage->populate($data, $endTime);
+		
+		if (!$time)
+		{
+			$storage->setNextTime($endTime);
+		}
 	}
 }

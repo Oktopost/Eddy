@@ -60,19 +60,7 @@ class MySQLStatsStorage implements IStatisticsStorage
 		
 		return strtotime($date[0]) - self::TIME_DELAY;
 	}
-	
-	private function setNextTime(int $lastTime): void
-	{
-		$nextDate = date('Y-m-d H:i:s', $this->roundToMinutes($lastTime) + $this->getGranularity());
-		
-		$this->config->mysqlConnector
-			->upsert()
-			->into(self::SETTINGS_TABLE_NAME, ['Param', 'Value'])
-			->values([self::DUMP_TIME, $nextDate])
-			->setDuplicateKeys(['Param'])
-			->executeDml();
-	}
-	
+
 	private function roundToMinutes(int $time): int
 	{
 		$dayStart = strtotime('midnight', $time);
@@ -87,16 +75,26 @@ class MySQLStatsStorage implements IStatisticsStorage
 		return date('Y-m-d H:i:s', $this->roundToMinutes($endTime));
 	}
 
-
+	
 	public function getEndTime(): int
 	{
 		return $this->getNextTime();
 	}
 
+	public function setNextTime(int $lastTime): void
+	{
+		$nextDate = date('Y-m-d H:i:s', $this->roundToMinutes($lastTime) + $this->getGranularity());
+
+		$this->config->mysqlConnector
+			->upsert()
+			->into(self::SETTINGS_TABLE_NAME, ['Param', 'Value'])
+			->values([self::DUMP_TIME, $nextDate])
+			->setDuplicateKeys(['Param'])
+			->executeDml();
+	}
+
 	public function populate(array $data, int $endTime): void
 	{
-		$this->setNextTime($endTime);
-		
 		if (!$data) return;
 		
 		$preparedData = [];

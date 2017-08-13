@@ -104,6 +104,17 @@ class MySQLStatsStorageTest extends TestCase
 		
 		self::assertEquals($time - 5, $this->getSubject()->getEndTime());
 	}
+	
+	public function test_setNextTime_NextTimeSetted()
+	{
+		$time = time();
+		
+		$this->getSubject()->setNextTime($time);
+		
+		self::assertEquals($time + $this->config->granularity, 
+			$this->getSubject()->getEndTime(), '', $this->config->granularity);
+	}
+	
 
 	public function test_populate_passEmptyData_NextDateChanged()
 	{
