@@ -122,4 +122,25 @@ class StatisticsCollectorPluginTest extends TestCase
 		
 		$this->getSubject()->dump();
 	}
+	
+	public function test_dump_NoData()
+	{
+		$time = time();
+		
+		$storage = $this->mockStatisticsStorage();
+		$storage->expects($this->once())
+			->method('getEndTime')->willReturn(0);
+		
+		$storage->expects($this->once())
+			->method('setNextTime')->with($this->equalTo(time(), 1));
+		
+		$storage->expects($this->once())
+			->method('populate')->with($this->equalTo([]), $this->equalTo($time));
+		
+		$cache = $this->mockCacheCollector();
+		$cache->expects($this->once())
+			->method('pullData')->with($this->equalTo(0))->willReturn([]);
+		
+		$this->getSubject()->dump();
+	}
 }

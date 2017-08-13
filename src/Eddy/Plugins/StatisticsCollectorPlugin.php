@@ -62,6 +62,10 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 			$lastElement = array_slice($data, -1, 1);
 			$endTime = strtotime($lastElement[0]['DataDate']);
 		}
+		else
+		{
+			$endTime = time();
+		}
 		
 		$storage->populate($data, $endTime);
 		
