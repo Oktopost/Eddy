@@ -14,6 +14,7 @@ class SkeletonSetup
 		$skeleton
 			->setConfigLoader(new DirectoryConfigLoader(__DIR__ . '/../../skeleton'))
 			->registerGlobalFor(__NAMESPACE__)
+			->useGlobal()
 			->enableKnot();
 		
 		return $skeleton;
