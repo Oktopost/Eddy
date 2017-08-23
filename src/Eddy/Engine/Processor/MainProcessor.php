@@ -12,6 +12,12 @@ use Eddy\Exceptions\AbortException;
 class MainProcessor implements IProcessor
 {
 	/**
+	 * @context 
+	 * @var \Eddy\Base\IConfig
+	 */
+	private $config;
+	
+	/**
 	 * @autoload
 	 * @var \Eddy\Base\Engine\Processor\IProcessControlChain
 	 */
@@ -33,6 +39,11 @@ class MainProcessor implements IProcessor
 		catch (AbortException $abort)
 		{
 			return false;
+		}
+		catch (\Throwable $t)
+		{
+			$this->config->handleError($t);
+			return true;
 		}
 	}
 	

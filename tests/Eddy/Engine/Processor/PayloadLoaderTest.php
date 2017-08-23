@@ -87,8 +87,8 @@ class PayloadLoaderTest extends TestCase
 		$queue = $this->getMockBuilder(IQueue::class)->getMock();
 		$config->Engine->QueueProvider = $provider;
 		
-		
-		$provider->expects($this->once())->method('getQueue')->with('abc')->willReturn($queue);
+		$expectedName = $config->Naming->HandlerQueuePrefix . $object->Name;
+		$provider->expects($this->once())->method('getQueue')->with($expectedName)->willReturn($queue);
 		
 		
 		$subject->getPayloadFor('abc');

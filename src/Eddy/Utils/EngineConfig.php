@@ -33,7 +33,7 @@ class EngineConfig extends LiteObject implements IEngineConfig
 	
 	/**
 	 * @param IQueueProvider|DeepQueue|string $config
-	 * @return EngineConfig
+	 * @return EngineConfig|IEngineConfig
 	 */
 	public function setQueueProvider($config): IEngineConfig
 	{

@@ -4,6 +4,7 @@ namespace Eddy\Engine\Processor\ByTypeProcessors;
 
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
+
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
@@ -30,6 +31,12 @@ class EventPayload implements IPayloadProcessor
 	 * @var \Eddy\Base\IConfig
 	 */
 	private $config;
+
+	/**
+	 * @autoload
+	 * @var \Eddy\Base\Engine\Queue\IQueueBuilder
+	 */
+	private $builder;
 	
 	
 	private function enqueueOne(HandlerObject $object, array $payload)
@@ -37,9 +44,7 @@ class EventPayload implements IPayloadProcessor
 		if (!$object->isActive())
 			return;
 		
-		$queueName = $object->getQueueNaming($this->config->Naming);
-		$queue = $this->config->Engine->QueueProvider->getQueue($queueName);
-		
+		$queue = $this->builder->getQueue($object);
 		$queue->enqueue($payload, $object->Delay);
 	}
 	

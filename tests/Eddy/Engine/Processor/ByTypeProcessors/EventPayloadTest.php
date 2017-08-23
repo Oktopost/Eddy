@@ -2,18 +2,18 @@
 namespace Eddy\Engine\Processor\ByTypeProcessors;
 
 
-use Eddy\Base\Engine\IMainQueue;
-use Eddy\Base\Engine\IQueue;
-use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Base\IConfig;
-use Eddy\Base\Module\ISubscribersModule;
+use Eddy\Base\Engine\IQueue;
+use Eddy\Base\Engine\IMainQueue;
+use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Base\Engine\Processor\ProcessTarget;
-use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Base\Module\ISubscribersModule;
 use Eddy\Utils\Config;
-use Eddy\Object\EventObject;
-
 use Eddy\Utils\Naming;
+use Eddy\Enums\EventState;
+use Eddy\Object\EventObject;
+use Eddy\Object\HandlerObject;
+
 use PHPUnit\Framework\TestCase;
 
 
@@ -22,7 +22,7 @@ class EventPayloadTest extends TestCase
 	/** @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule */
 	private $subModule;
 	
-	/** @var \PHPUnit_Framework_MockObject_MockObject|ISubscribersModule */
+	/** @var \PHPUnit_Framework_MockObject_MockObject|IQueueProvider */
 	private $queue;
 	
 	/** @var \PHPUnit_Framework_MockObject_MockObject|IMainQueue */

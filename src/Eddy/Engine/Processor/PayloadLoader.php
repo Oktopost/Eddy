@@ -19,10 +19,10 @@ class PayloadLoader implements IPayloadLoader
 	private $module;
 
 	/**
-	 * @context
-	 * @var \Eddy\Base\IConfig
+	 * @autoload
+	 * @var \Eddy\Base\Engine\Queue\IQueueBuilder
 	 */
-	private $config;
+	private $builder;
 	
 	
 	public function getPayloadFor(string $queueName): ?ProcessTarget
@@ -31,7 +31,7 @@ class PayloadLoader implements IPayloadLoader
 		
 		if (!$target || $target->State != EventState::RUNNING) return null;
 		
-		$queue = $this->config->Engine->QueueProvider->getQueue($queueName);
+		$queue = $this->builder->getQueue($target);
 		$data = $queue->dequeue($target->MaxBulkSize);
 		
 		if (!$data) return null;

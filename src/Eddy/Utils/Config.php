@@ -2,17 +2,13 @@
 namespace Eddy\Utils;
 
 
-use Eddy\DAL\MySQLDAL;
 use Eddy\Base\IDAL;
 use Eddy\Base\IConfig;
 use Eddy\Base\IExceptionHandler;
 use Eddy\Exceptions\InvalidUsageException;
-use Eddy\Exceptions\UnexpectedException;
 
-use Objection\LiteObject;
 use Objection\LiteSetup;
-
-use Squid\MySql;
+use Objection\LiteObject;
 
 
 class Config extends LiteObject implements IConfig

@@ -34,6 +34,11 @@ class MainProcessorTest extends TestCase
 		\UnitTestScope::override(IProcessControlChain::class, $this->chain);
 	}
 	
+	private function subject($config = null): MainProcessor
+	{
+		return \UnitTestScope::load(MainProcessor::class, [ IConfig::class => ($config ?: new Config()) ]);
+	}
+	
 	
 	public function test_sanity_SkeletonSetup()
 	{
@@ -47,8 +52,7 @@ class MainProcessorTest extends TestCase
 		$this->mockIterationProcessor();
 		$this->mockChain();
 		
-		/** @var MainProcessor $subject */
-		$subject = \UnitTestScope::load(MainProcessor::class);
+		$subject = $this->subject();
 		
 		$this->iteration->method('runOnce')->willReturn(false);
 		$this->chain
@@ -67,8 +71,7 @@ class MainProcessorTest extends TestCase
 		$this->mockIterationProcessor();
 		$this->mockChain();
 		
-		/** @var MainProcessor $subject */
-		$subject = \UnitTestScope::load(MainProcessor::class);
+		$subject = $this->subject();
 		
 		$this->iteration->expects($this->once())->method('runOnce')->willReturn(false);
 		
@@ -80,8 +83,7 @@ class MainProcessorTest extends TestCase
 		$this->mockIterationProcessor();
 		$this->mockChain();
 		
-		/** @var MainProcessor $subject */
-		$subject = \UnitTestScope::load(MainProcessor::class);
+		$subject = $this->subject();
 		
 		$this->iteration
 			->expects($this->exactly(3))
@@ -96,8 +98,7 @@ class MainProcessorTest extends TestCase
 		$this->mockIterationProcessor();
 		$this->mockChain();
 		
-		/** @var MainProcessor $subject */
-		$subject = \UnitTestScope::load(MainProcessor::class);
+		$subject = $this->subject();
 		
 		$this->iteration
 			->expects($this->once())

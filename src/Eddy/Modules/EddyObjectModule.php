@@ -30,7 +30,7 @@ class EddyObjectModule implements IEddyObjectModule
 	
 	private function getObjectName(string $queueName, $prefix): string
 	{
-		return str_replace($prefix, '', $queueName);	
+		return str_replace($prefix, '', $queueName);
 	}
 	
 	
