@@ -102,6 +102,7 @@ class MainProcessorTest extends TestCase
 		$subject = $this->subject();
 		
 		$this->iteration
+			->expects($this->once())
 			->method('runOnce')
 			->willThrowException(new AbortException());
 		
