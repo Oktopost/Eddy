@@ -4,6 +4,7 @@ namespace Eddy\Engine\Processor;
 
 use Eddy\Base\Engine\Processor\IIterationProcessor;
 use Eddy\Base\Engine\Processor\IProcessControlChain;
+use Eddy\Base\IExceptionHandler;
 use Eddy\Exceptions\AbortException;
 use Eddy\Scope;
 use Eddy\Base\IConfig;
@@ -101,9 +102,35 @@ class MainProcessorTest extends TestCase
 		$subject = $this->subject();
 		
 		$this->iteration
-			->expects($this->once())
 			->method('runOnce')
 			->willThrowException(new AbortException());
+		
+		$subject->run();
+	}
+	
+	public function test_run_ExceptionThrown_ExceptionHandled()
+	{
+		$this->mockIterationProcessor();
+		$this->mockChain();
+		
+		$e = new \Exception();
+		$config = new Config();
+		$subject = $this->subject($config);
+		
+		$config->ExceptionHandler = $this->getMockBuilder(IExceptionHandler::class)->getMock();
+		$config->ExceptionHandler->expects($this->once())
+			->method('exception')
+			->with($e);
+		
+		$this->iteration
+			->expects($this->at(0))
+			->method('runOnce')
+			->willThrowException($e);
+		
+		$this->iteration
+			->expects($this->at(1))
+			->method('runOnce')
+			->willReturn(false);
 		
 		$subject->run();
 	}
