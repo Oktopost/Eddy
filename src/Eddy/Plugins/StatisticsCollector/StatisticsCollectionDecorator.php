@@ -3,7 +3,6 @@ namespace Eddy\Plugins\StatisticsCollector;
 
 
 use Eddy\Base\Engine\Queue\AbstractQueueDecorator;
-use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 
 
@@ -21,14 +20,18 @@ class StatisticsCollectionDecorator extends AbstractQueueDecorator implements IS
 
 	public function enqueue(array $data, float $secDelay = 0.0): void
 	{
-		$this->collector->collectData($this->getObject(), count($data), StatsOperation::ENQUEUE, time());
+		$this->collector->collectEnqueue($this->getObject(), count($data));
 		$this->getQueue()->enqueue($data, $secDelay);
 	}
 
 	public function dequeue(int $maxCount, float $waitSec = 0.0): array
 	{
 		$data = $this->getQueue()->dequeue($maxCount, $waitSec);
-		$this->collector->collectData($this->getObject(), count($data), StatsOperation::DEQUEUE, time());
+		
+		if (count($data) > 0)
+		{
+			$this->collector->collectDequeue($this->getObject(), count($data));
+		}
 		
 		return $data;
 	}

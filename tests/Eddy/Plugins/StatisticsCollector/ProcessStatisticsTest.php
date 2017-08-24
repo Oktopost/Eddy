@@ -60,8 +60,7 @@ class ProcessStatisticsTest extends TestCase
 			->method('collectExecutionTime')
 			->with(
 				$this->isInstanceOf(IEddyQueueObject::class),
-				$this->greaterThan(0),
-				$this->equalTo(time())
+				$this->greaterThan(0)
 			);
 		
 		$this->getSubject()->preProcess($this->getTarget(), []);
@@ -76,8 +75,7 @@ class ProcessStatisticsTest extends TestCase
 			->method('collectError')
 			->with(
 				$this->isInstanceOf(IEddyQueueObject::class),
-				$this->equalTo(1),
-				$this->equalTo(time())
+				$this->equalTo(1)
 			);
 		
 		$this->getSubject()->exception(new HandlerObject(), [1], new \Exception());

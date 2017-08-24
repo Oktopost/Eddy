@@ -23,12 +23,12 @@ $this->set(IPublisherObject::class,	PublisherObject::class);
 $this->set(IQueueObjectCreator::class, QueueObjectCreator::class);
 
 
+use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
+use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsStorage;
-use Eddy\Plugins\StatisticsCollector\ProcessStatistics;
-use Eddy\Plugins\StatisticsCollector\StatisticsCollectionDecorator;
 use Eddy\Plugins\StatisticsCollector\Module\RedisStatsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Module\MySQLStatsStorage;
 

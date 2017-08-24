@@ -28,6 +28,9 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 	 */
 	private $config;
 	
+	/** @var int|null */
+	private $time = null;
+	
 	
 	private function getObjectType(IEddyQueueObject $object): string
 	{
@@ -61,13 +64,14 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		return $entry;
 	}
 	
-	private function prepareEntry(IEddyQueueObject $object, int $amount, string $operation, int $time): StatsEntry
+	private function prepareEntry(IEddyQueueObject $object, int $amount, string $operation, ?int $time = null): StatsEntry
 	{
 		$entry = new StatsEntry();
-		$entry->Name = $object->Name;
-		$entry->Type = $this->getObjectType($object);
-		$entry->Granularity = self::CACHE_GRANULARITY_TIME;
-		$entry->DataDate = date('Y-m-d H:i:s', $time);
+		
+		$entry->Name		= $object->Name;
+		$entry->Type		= $this->getObjectType($object);
+		$entry->Granularity	= self::CACHE_GRANULARITY_TIME;
+		$entry->DataDate	= date('Y-m-d H:i:s', $this->getTime($time));
 
 		$entry = $this->setAmountData($entry, $amount, $operation);
 
@@ -118,9 +122,17 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		return $result ?: [];
 	}
 
-	private function save(StatsEntry $entry, int $time): void
+	private function getTime(?int $time = null): int
 	{
-		$key = StatsKeyBuilder::get($entry->Type, $entry->Name, $time);
+		if ($time)
+			return $time;
+		
+		return $this->time ?: time();
+	}
+
+	private function save(StatsEntry $entry, ?int $time = null): void
+	{
+		$key = StatsKeyBuilder::get($entry->Type, $entry->Name, $this->getTime($time));
 		$data = $entry->toArray();
 		
 		$oldData = $this->config->redisClient->hgetall($key);
@@ -132,29 +144,44 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		
 		$this->config->redisClient->hmset($key, $data);
 	}
-
 	
-	public function collectData(IEddyQueueObject $object, int $amount, string $operation, int $time): void
+	private function saveEntry(IEddyQueueObject $object, int $amount, string $operation): void
 	{
-		$entry = $this->prepareEntry($object, $amount, $operation, $time);
-		
-		$this->save($entry, $time);
+		$entry = $this->prepareEntry($object, $amount, $operation);
+		$this->save($entry);
 	}
 	
-	public function collectError(IEddyQueueObject $object, int $amount, int $time): void
+	
+	public function setTime(int $time)
 	{
-		$entry = $this->prepareEntry($object, $amount, StatsOperation::ERROR, $time);
+		$this->time = $time;
+	}
+
+
+	public function collectEnqueue(IEddyQueueObject $object, int $amount): void
+	{
+		$this->saveEntry($object, $amount, StatsOperation::ENQUEUE);
+	}
+	
+	public function collectDequeue(IEddyQueueObject $object, int $amount): void
+	{
+		$this->saveEntry($object, $amount, StatsOperation::DEQUEUE);
+	}
+	
+	public function collectError(IEddyQueueObject $object, int $amount): void
+	{
+		$entry = $this->prepareEntry($object, $amount, StatsOperation::ERROR);
 		$entry->ErrorsTotal = 1;
 		
-		$this->save($entry, $time);
+		$this->save($entry);
 	}
 	
-	public function collectExecutionTime(IEddyQueueObject $object, float $executionTime, int $time): void
+	public function collectExecutionTime(IEddyQueueObject $object, float $executionTime): void
 	{
-		$entry = $this->prepareEntry($object, 0, StatsOperation::EXECUTION_TIME, $time);
+		$entry = $this->prepareEntry($object, 0, StatsOperation::EXECUTION_TIME);
 		$entry->TotalRuntime = $executionTime;
 		
-		$this->save($entry, $time);
+		$this->save($entry);
 	}
 
 	public function pullData(int $endTime): array
