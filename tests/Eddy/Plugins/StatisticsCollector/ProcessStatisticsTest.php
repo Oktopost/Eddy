@@ -60,6 +60,7 @@ class ProcessStatisticsTest extends TestCase
 			->method('collectExecutionTime')
 			->with(
 				$this->isInstanceOf(IEddyQueueObject::class),
+				0,
 				$this->greaterThan(0)
 			);
 		

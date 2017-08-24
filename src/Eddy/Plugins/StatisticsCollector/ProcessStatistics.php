@@ -32,13 +32,12 @@ class ProcessStatistics extends AProcessController implements IProcessStatistics
 	{
 		$executionTime = microtime(true) - $this->startTime;
 		
-		$this->collector->collectExecutionTime($target, $executionTime);
+		$this->collector->collectExecutionTime($target, count($payload), $executionTime);
 	}
 	
 	public function exception(HandlerObject $target, array $payload, \Throwable $t): bool
 	{
-		$this->collector->collectError($target, sizeof($payload));
-		
+		$this->collector->collectError($target, count($payload));
 		return true;
 	}
 }

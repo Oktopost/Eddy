@@ -86,7 +86,6 @@ class RedisStatsCacheCollectorTest extends TestCase
 	public function test_collectEnqueue_NoPreviousData_StatisticsCollected()
 	{
 		$object = $this->createObject();
-		$time = time();
 		
 		$this->getSubject()->collectEnqueue($object, 14);
 		
@@ -97,13 +96,14 @@ class RedisStatsCacheCollectorTest extends TestCase
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
 		self::assertEquals(14, $data['Enqueued']);
+		self::assertEquals(0, $data['Processed']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}
+	
 	
 	public function test_collectDequeue_WithPreviousData_StatisticsCombinedAndCollected()
 	{
 		$object = $this->createObject(HandlerObject::class);
-		$time = time();
 		
 		$this->getSubject()->collectDequeue($object, 14);
 		$this->getSubject()->collectDequeue($object, 10);
@@ -115,8 +115,10 @@ class RedisStatsCacheCollectorTest extends TestCase
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
 		self::assertEquals(24, $data['Dequeued']);
+		self::assertEquals(0, $data['Processed']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}
+	
 	
 	public function test_collectError_NoPreviousData_ErrorInfoCollected()
 	{
@@ -137,11 +139,10 @@ class RedisStatsCacheCollectorTest extends TestCase
 	
 	public function test_collectError_PreviousDataExist_ErrorInfoAttached()
 	{
-
 		$object = $this->createObject();
 		
-		$this->getSubject()->collectDequeue($object, 14);
-		$this->getSubject()->collectError($object, 14);
+		$this->getSubject()->collectDequeue($object, 2);
+		$this->getSubject()->collectError($object, 3);
 		
 		$data = $this->getData($object);
 		
@@ -149,24 +150,26 @@ class RedisStatsCacheCollectorTest extends TestCase
 		
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
-		self::assertEquals(14, $data['Dequeued']);
-		self::assertEquals(14, $data['WithErrors']);
-		self::assertEquals(28, $data['Processed']);
+		self::assertEquals(2, $data['Dequeued']);
+		self::assertEquals(3, $data['WithErrors']);
+		self::assertEquals(3, $data['Processed']);
 		self::assertEquals(1, $data['ErrorsTotal']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}
+	
 	
 	public function test_collectExecutionTime_NoPreviousData_ExecutionTimeSaved()
 	{
 		$object = $this->createObject();
 		
-		$this->getSubject()->collectExecutionTime($object, 1.1);
+		$this->getSubject()->collectExecutionTime($object, 3, 1.1);
 		
 		$data = $this->getData($object);
 		
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
 		self::assertEquals(1.1, $data['TotalRuntime']);
+		self::assertEquals(3, $data['Processed']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}
 	
@@ -174,14 +177,15 @@ class RedisStatsCacheCollectorTest extends TestCase
 	{
 		$object = $this->createObject();
 		
-		$this->getSubject()->collectExecutionTime($object, 1.1);
-		$this->getSubject()->collectExecutionTime($object, 2.2);
+		$this->getSubject()->collectExecutionTime($object, 1, 1.1);
+		$this->getSubject()->collectExecutionTime($object, 1, 2.2);
 		
 		$data = $this->getData($object);
 		
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
 		self::assertEquals(3.3, $data['TotalRuntime']);
+		self::assertEquals(2, $data['Processed']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}
 		
@@ -189,7 +193,7 @@ class RedisStatsCacheCollectorTest extends TestCase
 	{
 		$object = $this->createObject();
 		
-		$this->getSubject()->collectExecutionTime($object, 1.1);
+		$this->getSubject()->collectExecutionTime($object, 2, 1.1);
 		$this->getSubject()->collectDequeue($object, 14);
 		
 		$data = $this->getData($object);
@@ -197,7 +201,7 @@ class RedisStatsCacheCollectorTest extends TestCase
 		self::assertEquals($object->Name, $data['Name']);
 		self::assertEquals($this->getType($object), $data['Type']);
 		self::assertEquals(14, $data['Dequeued']);
-		self::assertEquals(14, $data['Processed']);
+		self::assertEquals(2, $data['Processed']);
 		self::assertEquals(1.1, $data['TotalRuntime']);
 		self::assertEquals(time(), strtotime($data['DataDate']), '', 1);
 	}

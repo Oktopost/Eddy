@@ -44,8 +44,6 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 	
 	private function setAmountData(StatsEntry $entry, int $amount, string $operation): StatsEntry
 	{
-		$entry->Processed = $amount;
-		
 		switch ($operation)
 		{
 			case StatsOperation::DEQUEUE:
@@ -171,15 +169,19 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 	public function collectError(IEddyQueueObject $object, int $amount): void
 	{
 		$entry = $this->prepareEntry($object, $amount, StatsOperation::ERROR);
+		
 		$entry->ErrorsTotal = 1;
+		$entry->Processed = $amount;
 		
 		$this->save($entry);
 	}
 	
-	public function collectExecutionTime(IEddyQueueObject $object, float $executionTime): void
+	public function collectExecutionTime(IEddyQueueObject $object, int $amount, float $executionTime): void
 	{
-		$entry = $this->prepareEntry($object, 0, StatsOperation::EXECUTION_TIME);
+		$entry = $this->prepareEntry($object, $amount, StatsOperation::EXECUTION_TIME);
+		
 		$entry->TotalRuntime = $executionTime;
+		$entry->Processed = $amount;
 		
 		$this->save($entry);
 	}
