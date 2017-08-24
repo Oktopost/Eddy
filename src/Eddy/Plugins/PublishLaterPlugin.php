@@ -17,11 +17,15 @@ class PublishLaterPlugin implements ITarget, IEddyPlugin
 	private $stack = [];
 	
 	
-	public function mock($event): PublishLaterEvent
+	public function mock($event, string $name): PublishLaterEvent
 	{
-		$mock = new PublishLaterEvent($event);
-		$this->stack[] = $mock;
-		return $mock;
+		if (!isset($this->stack[$name]))
+		{
+			$mock = new PublishLaterEvent($event);
+			$this->stack[$name] = $mock;
+		}
+		
+		return $this->stack[$name];
 	}
 	
 	

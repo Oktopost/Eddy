@@ -51,7 +51,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$result = $subject->setup(new Config());
 		
-		$subject->mock($object)->fire();
+		$subject->mock($object, 'a')->fire();
 		
 		
 		$result->postProcess(new EventObject(), []);
@@ -68,9 +68,35 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$result = $subject->mock($object);
+		$result = $subject->mock($object, 'a');
 		
 		self::assertInstanceOf(PublishLaterEvent::class, $result);
+	}
+	
+	public function test_mock_SameObjectReturnedForSameEventName()
+	{
+		$object = $this->getTestEvent();
+		
+		$subject = new PublishLaterPlugin();
+		$subject->setup(new Config());
+		
+		$result1 = $subject->mock($object, 'abc');
+		$result2 = $subject->mock($object, 'abc');
+		
+		self::assertSame($result1, $result2);
+	}
+	
+	public function test_mock_DifferentObjectReturnedForDifferentEventNames()
+	{
+		$object = $this->getTestEvent();
+		
+		$subject = new PublishLaterPlugin();
+		$subject->setup(new Config());
+		
+		$result1 = $subject->mock($object, 'abc');
+		$result2 = $subject->mock($object, '123');
+		
+		self::assertNotSame($result1, $result2);
 	}
 	
 	
@@ -90,7 +116,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject->setup(new Config());
 		
 		
-		$subject->mock($object)->fire();
+		$subject->mock($object, 'a')->fire();
 		
 		
 		$subject->flush();
@@ -106,7 +132,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$mock = $subject->mock($object);
+		$mock = $subject->mock($object, 'a');
 		$mock->fire();
 		$mock->trigger();
 		
@@ -125,8 +151,8 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object1)->fire();
-		$subject->mock($object2)->trigger();
+		$subject->mock($object1, 'a')->fire();
+		$subject->mock($object2, 'b')->trigger();
 		
 		
 		$subject->flush();
@@ -143,7 +169,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire();
+		$subject->mock($object, 'a')->fire();
 		
 		
 		$subject->flush();
@@ -159,7 +185,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire(2, 'b');
+		$subject->mock($object, 'a')->fire(2, 'b');
 		
 		
 		$subject->flush();
@@ -175,8 +201,8 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire(2);
-		$subject->mock($object)->fire(3);
+		$subject->mock($object, 'a')->fire(2);
+		$subject->mock($object, 'b')->fire(3);
 		
 		
 		$subject->flush();
@@ -192,7 +218,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire([1]);
+		$subject->mock($object, 'a')->fire([1]);
 		
 		
 		$subject->flush();
@@ -208,7 +234,7 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$mock = $subject->mock($object);
+		$mock = $subject->mock($object, 'a');
 		$mock->fire([1]);
 		$mock->fire([2, 3]);
 		
@@ -226,8 +252,8 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire(1);
-		$subject->mock($object)->fire([2]);
+		$subject->mock($object, 'a')->fire(1);
+		$subject->mock($object, 'b')->fire([2]);
 		
 		
 		$subject->flush();
@@ -243,14 +269,30 @@ class PublishLaterPluginTest extends TestCase
 		$subject = new PublishLaterPlugin();
 		$subject->setup(new Config());
 		
-		$subject->mock($object)->fire([1]);
-		$subject->mock($object)->fire(2);
+		$subject->mock($object, 'a')->fire([1]);
+		$subject->mock($object, 'b')->fire(2);
 		
 		
 		$subject->flush();
 		
 		
 		self::assertEquals([[[1], null], [2, null]], $object->with);
+	}
+	
+	public function test_flush_BufferReset()
+	{
+		$object = $this->getTestEvent();
+		
+		$subject = new PublishLaterPlugin();
+		$subject->setup(new Config());
+		
+		$subject->mock($object, 'a')->fire(1);
+		$subject->flush();
+		
+		$subject->flush();
+		
+		
+		self::assertEquals([[1, null]], $object->with);
 	}
 	
 	
@@ -275,7 +317,7 @@ class PublishLaterPluginTest extends TestCase
 			{
 				throw new \Exception();
 			}
-		});
+		}, 'a');
 		
 		$mock->fire();
 		
