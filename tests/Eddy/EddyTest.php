@@ -33,6 +33,7 @@ class EddyTest extends TestCase
 		self::assertInstanceOf(Config::class, $this->getSubject()->config());
 	}
 	
+	
 	public function test_event()
 	{
 		$engineMock = $this->getMockBuilder(IEngine::class)->getMock();
@@ -48,13 +49,50 @@ class EddyTest extends TestCase
 		$this->getSubject()->event('test');
 	}
 	
-	public function test_addPlugin()
+	
+	public function test_addPlugin_AddArray_AllPluginsAdded()
 	{
+		$pluginMock1 = $this->getMockBuilder(IEddyPlugin::class)->getMock();
+		$pluginMock1->expects($this->once())->method('setup');
+		
+		$pluginMock2 = $this->getMockBuilder(IEddyPlugin::class)->getMock();
+		$pluginMock2->expects($this->once())->method('setup');
+		
+		$this->getSubject()->addPlugin([$pluginMock1, $pluginMock2]);
+	}
+	
+	public function test_addPlugin_SinglePlugin_PluginAdded()
+	{
+		/** @var IEddyPlugin|\PHPUnit_Framework_MockObject_MockObject $pluginMock */
 		$pluginMock = $this->getMockBuilder(IEddyPlugin::class)->getMock();
 		$pluginMock->expects($this->once())->method('setup');
 		
-		$this->getSubject()->addPlugin([$pluginMock]);
+		$this->getSubject()->addPlugin($pluginMock);
 	}
+	
+	public function test_addPlugin_ConfigPassedToPlugin()
+	{
+		$subject = $this->getSubject();
+		
+		/** @var IEddyPlugin|\PHPUnit_Framework_MockObject_MockObject $pluginMock */
+		$pluginMock = $this->getMockBuilder(IEddyPlugin::class)->getMock();
+		$pluginMock->method('setup')->with($subject->config());
+		
+		$subject->addPlugin($pluginMock);
+	}
+	
+	public function test_addPlugin_PluginSetupMethodReturnsANewPlugin_NewPluginIsAlsoAdded()
+	{
+		$pluginMock2 = $this->getMockBuilder(IEddyPlugin::class)->getMock();
+		$pluginMock2->expects($this->once())->method('setup');
+		
+		/** @var IEddyPlugin|\PHPUnit_Framework_MockObject_MockObject $pluginMock1 */
+		$pluginMock1 = $this->getMockBuilder(IEddyPlugin::class)->getMock();
+		$pluginMock1->method('setup')->willReturn($pluginMock2);
+		
+		$this->getSubject()->addPlugin($pluginMock1);
+	}
+	
 	
 	public function test_runSetup()
 	{
@@ -66,6 +104,7 @@ class EddyTest extends TestCase
 		$this->getSubject()->runSetup();
 	}
 	
+	
 	public function test_runHandle()
 	{
 		$mock = $this->getMockBuilder(IProcessor::class)->getMock();
@@ -76,6 +115,7 @@ class EddyTest extends TestCase
 		$this->getSubject()->handle();
 	}
 	
+	
 	public function test_sendAbort()
 	{
 		$mock = $this->getMockBuilder(IMainQueue::class)->getMock();
@@ -85,6 +125,7 @@ class EddyTest extends TestCase
 		
 		$this->getSubject()->sendAbort(25);
 	}
+	
 	
 	public function test_refresh()
 	{

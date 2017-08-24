@@ -54,7 +54,7 @@ class CachedDALPlugin implements IEddyPlugin
 	}
 
 
-	public function setup(Config $config): void
+	public function setup(Config $config)
 	{
 		$mysqlDAL = new MySQLDAL($this->mySQLConnector);
 		$redisDAL = new RedisDAL(new Client($this->redisConfig, ['prefix' => $config->Naming->MainPrefix]));

@@ -19,7 +19,7 @@ class RedisLockerPlugin implements IEddyPlugin
 	}
 
 
-	public function setup(Config $config): void
+	public function setup(Config $config)
 	{
 		$config->Engine->Locker = $this->lockProvider;
 	}

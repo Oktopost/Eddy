@@ -36,7 +36,7 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	}
 
 	
-	public function setup(Config $config): void
+	public function setup(Config $config)
 	{
 		$decorator = Scope::skeleton($this, IStatisticsCollectionDecorator::class);
 		$config->Engine->addDecorator($decorator);

@@ -66,7 +66,12 @@ class Eddy
 			return;
 		}
 		
-		$plugin->setup($this->config());
+		$result = $plugin->setup($this->config());
+		
+		if ($result)
+		{
+			$this->addPlugin($result);
+		}
 	}
 	
 	public function sendAbort(int $count = 20): void

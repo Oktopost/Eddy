@@ -7,5 +7,5 @@ use Eddy\Utils\Config;
 
 interface IEddyPlugin
 {
-	public function setup(Config $config): void;
+	public function setup(Config $config);
 }

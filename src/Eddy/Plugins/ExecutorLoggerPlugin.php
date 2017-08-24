@@ -31,7 +31,7 @@ class ExecutorLoggerPlugin extends AbstractQueueDecorator implements IEddyPlugin
 	}
 	
 	
-	public function setup(Config $config): void
+	public function setup(Config $config)
 	{
 		$this->subscribersDAO = $config->DAL()->subscribers();
 		
