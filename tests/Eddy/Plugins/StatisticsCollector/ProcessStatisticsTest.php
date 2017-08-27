@@ -79,6 +79,8 @@ class ProcessStatisticsTest extends TestCase
 				$this->equalTo(1)
 			);
 		
-		$this->getSubject()->exception(new HandlerObject(), [1], new \Exception());
+		$result = $this->getSubject()->exception(new HandlerObject(), [1], new \Exception());
+		
+		self::assertFalse($result);
 	}
 }

@@ -151,9 +151,11 @@ class ExecutorLoggerPluginTest extends TestCase
 		$plugin->dequeue(1);
 		
 		$plugin->postProcess($handler, []);
-		$plugin->exception($handler, [], new \Exception());
+		$result = $plugin->exception($handler, [], new \Exception());
 		
 		self::assertTrue($this->isExecutorExist($handler->Id, $event->Id));
 		self::assertTrue($this->isExecutorExist($handler->Id, $event2->Id));
+		
+		self::assertFalse($result);
 	}
 }

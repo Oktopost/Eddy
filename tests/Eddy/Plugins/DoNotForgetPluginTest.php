@@ -123,8 +123,9 @@ class DoNotForgetPluginTest extends TestCase
 			$isCalled = true;
 		});
 		
-		$plugin->exception(new HandlerObject(), [], new \Exception());
+		$result = $plugin->exception(new HandlerObject(), [], new \Exception());
 		
 		self::assertTrue($isCalled);
+		self::assertFalse($result);
 	}
 }

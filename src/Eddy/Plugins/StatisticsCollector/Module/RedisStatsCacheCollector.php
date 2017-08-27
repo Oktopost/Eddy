@@ -62,14 +62,14 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		return $entry;
 	}
 	
-	private function prepareEntry(IEddyQueueObject $object, int $amount, string $operation, ?int $time = null): StatsEntry
+	private function prepareEntry(IEddyQueueObject $object, int $amount, string $operation): StatsEntry
 	{
 		$entry = new StatsEntry();
 		
 		$entry->Name		= $object->Name;
 		$entry->Type		= $this->getObjectType($object);
 		$entry->Granularity	= self::CACHE_GRANULARITY_TIME;
-		$entry->DataDate	= date('Y-m-d H:i:s', $this->getTime($time));
+		$entry->DataDate	= date('Y-m-d H:i:s', $this->getTime());
 
 		$entry = $this->setAmountData($entry, $amount, $operation);
 
@@ -120,17 +120,14 @@ class RedisStatsCacheCollector implements IStatisticsCacheCollector
 		return $result ?: [];
 	}
 
-	private function getTime(?int $time = null): int
+	private function getTime(): int
 	{
-		if ($time)
-			return $time;
-		
 		return $this->time ?: time();
 	}
 
-	private function save(StatsEntry $entry, ?int $time = null): void
+	private function save(StatsEntry $entry): void
 	{
-		$key = StatsKeyBuilder::get($entry->Type, $entry->Name, $this->getTime($time));
+		$key = StatsKeyBuilder::get($entry->Type, $entry->Name, $this->getTime());
 		$data = $entry->toArray();
 		
 		$oldData = $this->config->redisClient->hgetall($key);
