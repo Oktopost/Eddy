@@ -16,5 +16,5 @@ abstract class AProcessController implements IProcessController
 	public function preProcess(IEddyQueueObject $target, array $payload): void {}
 	public function postProcess(IEddyQueueObject $target, array $payload): void	{}
 	
-	public function exception(HandlerObject $target, array $payload, \Throwable $t): bool {	return true; }
+	public function exception(HandlerObject $target, array $payload, \Throwable $t): bool {	return false; }
 }
