@@ -69,7 +69,7 @@ class ExecutorLoggerPlugin extends AbstractQueueDecorator implements IEddyPlugin
 	public function exception(HandlerObject $target, array $payload, \Throwable $t): bool
 	{
 		$this->handlerObject = null;
-		return true;
+		return false;
 	}
 
 	public function start(): bool {	return true; }
