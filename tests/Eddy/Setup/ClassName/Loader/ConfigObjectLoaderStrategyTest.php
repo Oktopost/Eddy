@@ -92,6 +92,19 @@ class ConfigObjectLoaderStrategyTest extends TestCase
 		
 		self::assertInstanceOf(HandlerObject::class, $subject->tryLoad($class));
 	}
+
+	public function test_tryLoad_NonPublicConstructor_ReturnNull()
+	{
+		$class = $this->createObject(
+			__FUNCTION__,
+			IHandlerConfig::class,
+			'protected function __construct() {}'
+		);
+		
+		$subject = new ConfigObjectLoaderStrategy(IHandlerConfig::class);
+		
+		self::assertNull($subject->tryLoad($class));
+	}
 	
 	public function test_tryLoad_SanityTestForEvents()
 	{
@@ -111,5 +124,22 @@ class ConfigObjectLoaderStrategyTest extends TestCase
 		$subject = new ConfigObjectLoaderStrategy(IEventConfig::class);
 		
 		self::assertInstanceOf(EventObject::class, $subject->tryLoad($name));
+	}
+	
+	public function test_tryLoad_AbstractClass_ReturnNull()
+	{
+		$name = 'TestClass' . (new \ReflectionClass($this))->getShortName() . __FUNCTION__;
+		
+		eval("interface {$name}Event {}");
+		eval("
+			abstract class $name extends \\Eddy\\Event\\DynamicEventConfig 
+			{
+				
+			}
+		");
+		
+		$subject = new ConfigObjectLoaderStrategy(IEventConfig::class);
+		
+		self::assertNull($subject->tryLoad($name));
 	}
 }

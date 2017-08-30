@@ -24,11 +24,21 @@ class ConfigObjectLoaderStrategy implements ILoaderStrategy
 		if (!is_subclass_of($item, $this->targetInterface)) return null;
 		
 		$reflection = new \ReflectionClass($item);
-		$constructor = $reflection->getConstructor();
 		
-		if ($constructor && $constructor->getNumberOfRequiredParameters() > 0)
+		if ($reflection->isAbstract())
 			return null;
 		
+		$constructor = $reflection->getConstructor();
+		
+		if ($constructor)
+		{
+			if (!$constructor->isPublic() ||
+				$constructor->getNumberOfRequiredParameters() > 0)
+			{
+				return null;
+			}
+		}
+			
 		/** @var IEventConfig $config */
 		$config = $reflection->newInstance();
 		
