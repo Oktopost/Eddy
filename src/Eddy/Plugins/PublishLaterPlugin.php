@@ -6,6 +6,7 @@ use Eddy\IEddyPlugin;
 use Eddy\Utils\Config;
 use Eddy\Plugins\DoNotForget\ITarget;
 use Eddy\Plugins\PublishLater\PublishLaterEvent;
+use Eddy\Exceptions\InvalidUsageException;
 
 
 class PublishLaterPlugin implements ITarget, IEddyPlugin
@@ -16,9 +17,16 @@ class PublishLaterPlugin implements ITarget, IEddyPlugin
 	/** @var PublishLaterEvent[] */
 	private $stack = [];
 	
+	private $isFlushing = false;
+	
 	
 	public function mock($event, string $name): PublishLaterEvent
 	{
+		if ($this->isFlushing)
+		{
+			throw new InvalidUsageException('Can not mock inside flushing');
+		}
+		
 		if (!isset($this->stack[$name]))
 		{
 			$mock = new PublishLaterEvent($event);
@@ -31,6 +39,8 @@ class PublishLaterPlugin implements ITarget, IEddyPlugin
 	
 	public function flush()
 	{
+		$this->isFlushing = true;
+		
 		foreach ($this->stack as $publishObject)
 		{
 			$original = $publishObject->original();
@@ -52,6 +62,8 @@ class PublishLaterPlugin implements ITarget, IEddyPlugin
 		}
 		
 		$this->stack = [];
+		
+		$this->isFlushing = false;
 	}
 
 	public function setup(Config $config)

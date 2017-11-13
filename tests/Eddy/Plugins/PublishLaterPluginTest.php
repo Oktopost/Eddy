@@ -4,6 +4,7 @@ namespace Eddy\Plugins;
 
 use Eddy\Base\IExceptionHandler;
 use Eddy\Plugins\PublishLater\PublishLaterEvent;
+use Eddy\Scope;
 use Eddy\Utils\Config;
 use Eddy\Object\EventObject;
 use PHPUnit\Framework\TestCase;
@@ -326,5 +327,36 @@ class PublishLaterPluginTest extends TestCase
 		
 		
 		self::assertInstanceOf(\Exception::class, $config->ExceptionHandler->e);
+	}
+
+	/**
+	 * @expectedException \Eddy\Exceptions\InvalidUsageException
+	 */
+	public function test_flush_mockInside_gotException()
+	{
+		$subject = new PublishLaterPlugin();
+		$subject->setup(new Config());
+		
+		Scope::skeleton()->set('testPlugin', $subject);
+		
+		$mock = $subject->mock(new class 
+		{
+			public function fire()
+			{
+				/** @var PublishLaterPlugin $subject */
+				$subject = Scope::skeleton()->get('testPlugin');
+				
+				$subject->mock(new class 
+				{
+					public function doNothing()
+					{
+					}
+				}, 'b');
+			}
+		}, 'a');
+		
+		$mock->fire();
+		
+		$subject->flush();
 	}
 }
