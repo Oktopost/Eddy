@@ -15,6 +15,8 @@ class RedisLockProvider implements ILockProvider
 	/** @var Client */
 	private $client;
 	
+	private $ttl;
+	
 	
 	private function initClient(array $redisConfig): void
 	{
@@ -42,6 +44,11 @@ class RedisLockProvider implements ILockProvider
 			throw new InvalidUsageException('Redis lock provider expects queue name as a string');
 		}
 		
-		return new RedisLocker($queueName, $this->client);
+		return new RedisLocker($queueName, $this->client, $this->ttl);
+	}
+
+	public function setTTL(int $ttl): void
+	{
+		$this->ttl = $ttl;
 	}
 }

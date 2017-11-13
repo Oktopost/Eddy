@@ -15,9 +15,9 @@ class RedisLockerTest extends TestCase
 	private $client;
 	
 	
-	private function getSubject(): RedisLocker
+	private function getSubject(int $ttl = 300): RedisLocker
 	{
-		return new RedisLocker(self::QUEUE_NAME, $this->client);
+		return new RedisLocker(self::QUEUE_NAME, $this->client, $ttl);
 	}
 	
 	
@@ -72,6 +72,15 @@ class RedisLockerTest extends TestCase
 		$this->getSubject()->lock();
 		
 		self::assertTrue($this->getSubject()->unlock());
+		self::assertFalse($this->getSubject()->isLocked());
+	}
+	
+	public function test_releaseLockAfterTTL_FalseNoMoreLock()
+	{
+		$this->getSubject(1)->lock();
+		sleep(2);
+		
+		self::assertFalse($this->getSubject()->unlock());
 		self::assertFalse($this->getSubject()->isLocked());
 	}
 }

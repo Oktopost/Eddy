@@ -10,12 +10,16 @@ class RedisLockProviderTest extends TestCase
 {
 	private function getSubject(): RedisLockProvider
 	{
-		return new RedisLockProvider([
+		$provider = new RedisLockProvider([
 			'scheme'	=> 'tcp',
 			'host'		=> '127.0.0.1',
 			'port'		=> '6379',
 			'prefix'	=> 'locker-test:'	
 		]);
+		
+		$provider->setTTL(300);
+		
+		return $provider;
 	}
 
 	

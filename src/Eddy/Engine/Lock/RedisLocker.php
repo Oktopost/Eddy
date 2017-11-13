@@ -17,6 +17,8 @@ class RedisLocker implements ILocker
 	/** @var Client */
 	private $client;
 	
+	private $ttl;
+	
 	
 	private function getKey(): string 
 	{
@@ -24,16 +26,18 @@ class RedisLocker implements ILocker
 	}
 	
 	
-	public function __construct(string $queueName, Client $client)
+	public function __construct(string $queueName, Client $client, int $ttl)
 	{
 		$this->queueName = $queueName;
 		$this->client = $client;
+		
+		$this->ttl = $ttl;
 	}
 
 
 	public function lock(float $timeoutSeconds = -1.0): bool
 	{
-		$result = $this->client->set($this->getKey(), time(), 'NX');
+		$result = $this->client->set($this->getKey(), time(), 'EX', $this->ttl, 'NX');
 		return (bool)$result;
 	}
 

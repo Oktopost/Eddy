@@ -13,6 +13,7 @@ use Eddy\Base\Engine\Queue\IQueueDecorator;
  * @property ILockProvider			$Locker
  * @property IQueueDecorator[]		$QueueDecorators
  * @property IProcessController[]	$Controllers
+ * @property int					$LockTTLSec
  */
 interface IEngineConfig
 {

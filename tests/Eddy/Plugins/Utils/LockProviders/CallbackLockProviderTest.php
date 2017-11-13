@@ -11,7 +11,10 @@ class CallbackLockProviderTest extends TestCase
 {
 	private function getSubject(callable $arg): CallbackLockProvider
 	{
-		return new CallbackLockProvider($arg);
+		$provider = new CallbackLockProvider($arg);
+		$provider->setTTL(333);
+		
+		return $provider;
 	}
 	
 	

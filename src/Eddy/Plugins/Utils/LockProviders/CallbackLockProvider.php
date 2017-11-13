@@ -21,4 +21,9 @@ class CallbackLockProvider implements ILockProvider
 	{
 		return ($this->callback)($queueName);
 	}
+
+	public function setTTL(int $ttl): void
+	{
+		return;
+	}
 }

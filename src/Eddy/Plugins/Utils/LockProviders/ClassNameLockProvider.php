@@ -35,4 +35,9 @@ class ClassNameLockProvider implements ILockProvider
 	{
 		return new $this->className($queueName);
 	}
+
+	public function setTTL(int $ttl): void
+	{
+		return;
+	}
 }

@@ -21,6 +21,8 @@ class RedisLockerPlugin implements IEddyPlugin
 
 	public function setup(Config $config)
 	{
+		$this->lockProvider->setTTL($config->Engine->LockTTLSec);
+		
 		$config->Engine->Locker = $this->lockProvider;
 	}
 }

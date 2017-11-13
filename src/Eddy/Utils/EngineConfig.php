@@ -26,7 +26,8 @@ class EngineConfig extends LiteObject implements IEngineConfig
 			'QueueProvider' 	=> LiteSetup::createInstanceOf(IQueueProvider::class),
 			'Locker'			=> LiteSetup::createInstanceOf(ILockProvider::class),
 			'QueueDecorators'	=> LiteSetup::createArray(),
-			'Controllers'		=> LiteSetup::createArray()
+			'Controllers'		=> LiteSetup::createArray(),
+			'LockTTLSec'		=> LiteSetup::createInt(300)
 		];
 	}
 	

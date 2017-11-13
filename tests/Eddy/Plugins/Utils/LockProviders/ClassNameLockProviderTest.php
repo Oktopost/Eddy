@@ -11,7 +11,10 @@ class ClassNameLockProviderTest extends TestCase
 {
 	private function getSubject(string $className): ClassNameLockProvider
 	{
-		return new ClassNameLockProvider($className);
+		$provider = new ClassNameLockProvider($className);
+		$provider->setTTL(333);
+		
+		return $provider;
 	}
 	
 	
