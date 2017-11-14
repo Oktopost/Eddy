@@ -73,6 +73,8 @@ class HandlerPayload implements IPayloadProcessor
 			throw $t;
 		}
 		
-		$method($target->Payload);
+		$payload = array_values($target->Payload); 
+		
+		$method($payload);
 	}
 }
