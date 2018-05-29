@@ -320,7 +320,7 @@ class EventPayloadTest extends TestCase
 		$handler = new HandlerObject();
 		$handler->Name = 'a';
 		$handler->State = EventState::RUNNING;
-		$handler->HandlerClassName = get_class($class);
+		$handler->ConfigClassName = get_class($class);
 				
 		$this->mockSubscribers([$handler]);
 		

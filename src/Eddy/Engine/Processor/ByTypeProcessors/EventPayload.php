@@ -54,17 +54,16 @@ class EventPayload implements IPayloadProcessor
 		if (!$handlerObject->isActive())
 			return $payload;
 		
-		/** @var IHandlerConfig $handler */
-		$handler = $handlerObject->getHandlerInstance();
+		$handlerConfig = $handlerObject->getConfigInstance();
 		
 		$processed = [];
 		
 		foreach ($payload as $key => $item)
 		{
-			if (!$handler->filter($item))
+			if (!$handlerConfig->filter($item))
 				continue;
 			
-			$item = $handler->convert($item);
+			$item = $handlerConfig->convert($item);
 			$processed[$key] = $item;
 		}
 		

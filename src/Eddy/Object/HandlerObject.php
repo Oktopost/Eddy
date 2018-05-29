@@ -2,6 +2,7 @@
 namespace Eddy\Object;
 
 
+use Eddy\IHandlerConfig;
 use Eddy\Scope;
 use Eddy\Base\Config\INaming;
 use Eddy\Base\IEddyQueueObject;
@@ -54,5 +55,15 @@ class HandlerObject extends AEddyObject implements IEddyQueueObject
 	public function getHandlerInstance()
 	{
 		return Scope::skeleton()->load($this->HandlerClassName);
+	}
+	
+	public function getConfigInstance(): IHandlerConfig
+	{
+		if ($this->ConfigClassName)
+		{
+			return Scope::skeleton()->load($this->ConfigClassName);
+		}
+		
+		return $this->getHandlerInstance();
 	}
 }
