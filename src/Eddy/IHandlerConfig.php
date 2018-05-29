@@ -16,4 +16,16 @@ interface IHandlerConfig
 	 * @return mixed
 	 */
 	public function getInstance();
+	
+	/**
+	 * @param mixed $item
+	 * @return bool
+	 */
+	public function filter($item): bool;
+
+	/**
+	 * @param mixed $item
+	 * @return mixed
+	 */
+	public function convert($item);
 }

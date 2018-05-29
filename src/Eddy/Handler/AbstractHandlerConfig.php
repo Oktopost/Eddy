@@ -22,4 +22,16 @@ class AbstractHandlerConfig implements IHandlerConfig
 	public function getInstance()				{ return new static(); }
 	public function delayBuffer(): float		{ return 0; }
 	public function packageSize(): int			{ return 0; }
+
+	/**
+	 * @param mixed $item
+	 * @return bool
+	 */
+	public function filter($item): bool 		{ return true; }
+
+	/**
+	 * @param mixed $item
+	 * @return mixed
+	 */
+	public function convert($item)				{ return $item ;}
 }

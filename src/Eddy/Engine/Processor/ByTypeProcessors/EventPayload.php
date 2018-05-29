@@ -5,6 +5,7 @@ namespace Eddy\Engine\Processor\ByTypeProcessors;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
 
+use Eddy\IHandlerConfig;
 use Eddy\Object\EventObject;
 use Eddy\Object\HandlerObject;
 
@@ -48,6 +49,28 @@ class EventPayload implements IPayloadProcessor
 		$queue->enqueue($payload, $object->Delay);
 	}
 	
+	private function sanitize(HandlerObject $handlerObject, array $payload): array
+	{
+		if (!$handlerObject->isActive())
+			return $payload;
+		
+		/** @var IHandlerConfig $handler */
+		$handler = $handlerObject->getHandlerInstance();
+		
+		$processed = [];
+		
+		foreach ($payload as $key => $item)
+		{
+			if (!$handler->filter($item))
+				continue;
+			
+			$item = $handler->convert($item);
+			$processed[$key] = $item;
+		}
+		
+		return $processed;
+	}
+	
 	
 	public function process(ProcessTarget $target): void
 	{
@@ -58,7 +81,12 @@ class EventPayload implements IPayloadProcessor
 		
 		foreach ($subscribers as $subscriber)
 		{
-			$this->enqueueOne($subscriber, $target->Payload);
+			$payload = $this->sanitize($subscriber, $target->Payload);
+			
+			if (!$payload)
+				continue;
+			
+			$this->enqueueOne($subscriber, $payload);
 			$this->mainQueue->schedule($subscriber->getQueueNaming($this->config->Naming));
 		}
 	}

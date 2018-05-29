@@ -8,6 +8,8 @@ use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Module\ISubscribersModule;
+use Eddy\Handler\AbstractHandlerConfig;
+use Eddy\IHandlerConfig;
 use Eddy\Utils\Config;
 use Eddy\Utils\Naming;
 use Eddy\Enums\EventState;
@@ -104,7 +106,8 @@ class EventPayloadTest extends TestCase
 		$handler = new HandlerObject();
 		$handler->Name = 'a';
 		$handler->State = EventState::DELETED;
-		
+		$handler->HandlerClassName = EventPayload_TestHander::class;
+				
 		$this->mockSubscribers([$handler]);
 		
 		$subject = $this->subject();
@@ -119,6 +122,7 @@ class EventPayloadTest extends TestCase
 		$handler = new HandlerObject();
 		$handler->Name = 'a';
 		$handler->State = EventState::PAUSED;
+		$handler->HandlerClassName = EventPayload_TestHander::class;
 		
 		$this->mockSubscribers([$handler]);
 		
@@ -134,6 +138,7 @@ class EventPayloadTest extends TestCase
 		$handler = new HandlerObject();
 		$handler->Name = 'a';
 		$handler->State = EventState::RUNNING;
+		$handler->HandlerClassName = EventPayload_TestHander::class;
 		
 		$this->mockSubscribers([$handler]);
 		
@@ -150,6 +155,7 @@ class EventPayloadTest extends TestCase
 		$handler = new HandlerObject();
 		$handler->Name = 'a';
 		$handler->Delay = 123;
+		$handler->HandlerClassName = EventPayload_TestHander::class;
 		
 		$this->mockSubscribers([$handler]);
 		
@@ -165,9 +171,11 @@ class EventPayloadTest extends TestCase
 	{
 		$handler1 = new HandlerObject();
 		$handler1->Name = 'a';
+		$handler1->HandlerClassName = EventPayload_TestHander::class;
 		
 		$handler2 = new HandlerObject();
 		$handler2->Name = 'a';
+		$handler2->HandlerClassName = EventPayload_TestHander::class;
 		
 		$this->mockSubscribers([$handler1, $handler2]);
 		
@@ -182,6 +190,7 @@ class EventPayloadTest extends TestCase
 	{
 		$handler1 = new HandlerObject();
 		$handler1->Name = 'a';
+		$handler1->HandlerClassName = EventPayload_TestHander::class;
 		
 		$main = $this->mockMainQueue();
 		$this->mockSubscribers([$handler1]);
@@ -196,9 +205,11 @@ class EventPayloadTest extends TestCase
 	{
 		$handler1 = new HandlerObject();
 		$handler1->Name = 'a';
+		$handler1->HandlerClassName = EventPayload_TestHander::class;
 		
 		$handler2 = new HandlerObject();
 		$handler2->Name = 'b';
+		$handler2->HandlerClassName = EventPayload_TestHander::class;
 		
 		
 		$main = $this->mockMainQueue();
@@ -216,6 +227,7 @@ class EventPayloadTest extends TestCase
 	{
 		$handler = new HandlerObject();
 		$handler->Name = 'h_a';
+		$handler->HandlerClassName = EventPayload_TestHander::class;
 		
 		$this->mockSubscribers([$handler]);
 		
@@ -237,4 +249,88 @@ class EventPayloadTest extends TestCase
 		
 		$subject->process($this->target);
 	}
+	
+	public function test_AllPayloadsFilteredByHandler_NothingProcessed()
+	{
+		$class = new class extends AbstractHandlerConfig implements IHandlerConfig
+		{
+			public function filter($item): bool
+			{
+				return false;
+			}
+		};
+		
+		$handler = new HandlerObject();
+		$handler->Name = 'a';
+		$handler->State = EventState::RUNNING;
+		$handler->HandlerClassName = get_class($class);
+				
+		$this->mockSubscribers([$handler]);
+		
+		$subject = $this->subject();
+		$this->queue->expects($this->never())->method('enqueue');
+	
+		$subject->process($this->target);
+	}
+	
+	public function test_SomePayloadFilteredByHandler_OtherProcessed()
+	{
+		$class = new class extends AbstractHandlerConfig implements IHandlerConfig
+		{
+			public function filter($item): bool
+			{
+				return $item === ['a'];
+			}
+		};
+		
+		$handler = new HandlerObject();
+		$handler->Name = 'a';
+		$handler->State = EventState::RUNNING;
+		$handler->HandlerClassName = get_class($class);
+				
+		$this->mockSubscribers([$handler]);
+		
+		$subject = $this->subject();
+				
+		$this->queue->expects($this->once())->method('enqueue')->with([['a']], $this->anything());
+	
+		$subject->process($this->target);
+	}
+	
+	public function test_PayloadConvertedAndPayloadFiltered_KeysKeeped_EnqueueCalled()
+	{
+		$this->target->Payload = ['_a' => 'a', '_b' => 'b'];
+		
+		$class = new class extends AbstractHandlerConfig implements IHandlerConfig
+		{
+			public function filter($item): bool
+			{
+				return $item === 'b';
+			}
+			
+			public function convert($item)
+			{
+				if ($item == 'b')
+					return 'c';
+				
+				return $item;
+			}
+		};
+		
+		$handler = new HandlerObject();
+		$handler->Name = 'a';
+		$handler->State = EventState::RUNNING;
+		$handler->HandlerClassName = get_class($class);
+				
+		$this->mockSubscribers([$handler]);
+		
+		$subject = $this->subject();
+				
+		$this->queue->expects($this->once())->method('enqueue')->with(['_b' => 'c'], $this->anything());
+	
+		$subject->process($this->target);
+	}
 }
+
+
+class EventPayload_TestHander extends AbstractHandlerConfig implements IHandlerConfig {}

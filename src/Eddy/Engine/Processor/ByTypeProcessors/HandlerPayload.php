@@ -21,15 +21,6 @@ class HandlerPayload implements IPayloadProcessor
 		$module = Scope::skeleton($this, IHandlersModule::class);
 		$module->pause($object);
 	}
-	
-	/**
-	 * @param HandlerObject $source
-	 * @return mixed
-	 */
-	private function getHandlerInstance(HandlerObject $source)
-	{
-		return Scope::skeleton()->load($source->HandlerClassName);
-	}
 
 	/**
 	 * @param mixed $instance
@@ -64,7 +55,7 @@ class HandlerPayload implements IPayloadProcessor
 		
 		try
 		{
-			$instance = $this->getHandlerInstance($handler);
+			$instance = $handler->getHandlerInstance();
 			$method = $this->getTargetMethod($instance);
 		}
 		catch (\Throwable $t)

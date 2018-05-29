@@ -2,12 +2,12 @@
 namespace Eddy\Object;
 
 
-use Eddy\Base\IEddyQueueObject;
+use Eddy\Scope;
 use Eddy\Base\Config\INaming;
+use Eddy\Base\IEddyQueueObject;
 use Eddy\Enums\EventState;
 
 use Objection\LiteSetup;
-use Objection\LiteObject;
 
 
 /**
@@ -46,5 +46,13 @@ class HandlerObject extends AEddyObject implements IEddyQueueObject
 	public function getQueueNaming(INaming $naming): string
 	{
 		return $naming->HandlerQueuePrefix . $this->Name;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getHandlerInstance()
+	{
+		return Scope::skeleton()->load($this->HandlerClassName);
 	}
 }

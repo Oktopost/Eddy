@@ -28,6 +28,8 @@ class ConfigObjectLoaderStrategyTest extends TestCase
 				public function initialState(): string { return \\Eddy\\Enums\\EventState::RUNNING; }
 				public function handlerClassName(): string { return \\stdClass::class; }
 				public function getInstance() {}
+				public function filter(\$item): bool 		{ return true; }
+				public function convert(\$item)				{ return \$item ;}
 			}
 		");
 		

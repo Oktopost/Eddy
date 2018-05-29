@@ -60,6 +60,8 @@ class ConfigToObjectTest extends TestCase
 			public function initialState(): string { return EventState::RUNNING; }
 			public function handlerClassName(): string { return 'b'; }
 			public function getInstance() {}
+			public function filter($item): bool 		{ return true; }
+			public function convert($item)				{ return $item ;}
 		};
 		
 		/** @var HandlerObject $result */
