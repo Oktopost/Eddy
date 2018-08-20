@@ -11,7 +11,7 @@ use Eddy\Base\Module\ISetupModule;
 use Eddy\Utils\Config;
 
 
-class Eddy
+class Eddy implements IEvents
 {
 	/** @var IConfig */
 	private $config;
