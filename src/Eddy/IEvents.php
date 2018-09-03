@@ -5,8 +5,8 @@ namespace Eddy;
 interface IEvents
 {
 	/**
-	 * @param string $interface
+	 * @param string $className
 	 * @return mixed
 	 */
-	public function event(string $interface);
+	public function event(string $className);
 }

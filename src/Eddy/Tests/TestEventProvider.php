@@ -25,14 +25,14 @@ class TestEventProvider implements IEvents
 	}
 	
 	/**
-	 * @param string $interface
+	 * @param string $className
 	 * @return mixed
 	 */
-	public function event(string $interface)
+	public function event(string $className)
 	{
 		/** @var IEventProxy $obj */
-		$obj = Scope::skeleton($interface);
-		$obj->setPublisher($this->testQueue->getPublisher($interface));
+		$obj = Scope::skeleton()->load(new $className);
+		$obj->setPublisher($this->testQueue->getPublisher($className));
 		
 		return $obj;
 	}

@@ -40,15 +40,15 @@ class Eddy implements IEvents
 	}
 
 	/**
-	 * @param string $interface
+	 * @param string $className
 	 * @return mixed
 	 */
-	public function event(string $interface)
+	public function event(string $className)
 	{
 		/** @var IEventModule $eventModule */
 		$eventModule = Scope::skeleton($this, IEventModule::class);
 
-		return $this->engine->event($eventModule->loadByInterfaceName($interface));
+		return $this->engine->event($eventModule->loadByInterfaceName($className));
 	}
 
 	/**
