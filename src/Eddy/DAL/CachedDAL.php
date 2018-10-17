@@ -39,7 +39,8 @@ class CachedDAL implements IDAL
 
 	public function handlers(): IHandlerDAO
 	{
-		if (!$this->handlerDAO) {
+		if (!$this->handlerDAO)
+		{
 			$this->handlerDAO = Scope::skeleton(ICachedHandlerDAO::class);
 			$this->handlerDAO->setMain($this->main->handlers());
 			$this->handlerDAO->setCache($this->cache->handlers());
@@ -50,7 +51,8 @@ class CachedDAL implements IDAL
 
 	public function events(): IEventDAO
 	{
-		if (!$this->eventDAO) {
+		if (!$this->eventDAO)
+		{
 			$this->eventDAO = Scope::skeleton(ICachedEventDAO::class);
 			$this->eventDAO->setMain($this->main->events());
 			$this->eventDAO->setCache($this->cache->events());
@@ -61,7 +63,8 @@ class CachedDAL implements IDAL
 
 	public function subscribers(): ISubscribersDAO
 	{
-		if (!$this->subscribersDAO) {
+		if (!$this->subscribersDAO)
+		{
 			$this->subscribersDAO = Scope::skeleton(ICachedSubscribersDAO::class);
 			$this->subscribersDAO->setMain($this->main->subscribers());
 			$this->subscribersDAO->setCache($this->cache->subscribers());
