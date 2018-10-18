@@ -2,6 +2,7 @@
 namespace Eddy\Plugins\StatisticsCollector\Base;
 
 
+use Eddy\Base\IConfig;
 use Eddy\Base\Engine\Processor\IProcessController;
 
 
@@ -10,5 +11,5 @@ use Eddy\Base\Engine\Processor\IProcessController;
  */
 interface IProcessStatistics extends IProcessController
 {
-	
+	public function setConfig(IConfig $config): void;
 }

@@ -38,10 +38,16 @@ class StatisticsCollectorPlugin implements IEddyPlugin
 	
 	public function setup(Config $config)
 	{
+		/** @var IStatisticsCollectionDecorator $decorator */
 		$decorator = Scope::skeleton($this, IStatisticsCollectionDecorator::class);
+		$decorator->setConfig($config);
+		
 		$config->Engine->addDecorator($decorator);
 		
+		/** @var IProcessStatistics $processController */
 		$processController = Scope::skeleton($this, IProcessStatistics::class);
+		$processController->setConfig($config);
+		
 		$config->Engine->addController($processController);
 	}
 	

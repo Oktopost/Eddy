@@ -3,6 +3,7 @@ namespace Eddy\Plugins\StatisticsCollector\Base;
 
 
 use Eddy\Base\Engine\Queue\IQueueDecorator;
+use Eddy\Base\IConfig;
 
 
 /**
@@ -10,5 +11,5 @@ use Eddy\Base\Engine\Queue\IQueueDecorator;
  */
 interface IStatisticsCollectionDecorator extends IQueueDecorator
 {
-	
+	public function setConfig(IConfig $config): void;
 }
