@@ -4,6 +4,7 @@ namespace Eddy\Plugins\Utils\LockProviders;
 
 use Eddy\Base\Engine\Lock\ILocker;
 
+use Eddy\Base\IExceptionHandler;
 use PHPUnit\Framework\TestCase;
 
 
@@ -13,6 +14,13 @@ class CallbackLockProviderTest extends TestCase
 	{
 		$provider = new CallbackLockProvider($arg);
 		$provider->setTTL(333);
+		
+		$handler = new class implements IExceptionHandler
+		{
+			public function exception(\Throwable $t): void {}
+		};
+		
+		$provider->setErrorHandler($handler);
 		
 		return $provider;
 	}
@@ -51,6 +59,10 @@ class DummyTestCallbackLockProvider_Locker implements ILocker
 		$this->queueName = $queueName;	
 	}
 
+	public function setErrorHandler(IExceptionHandler $handler): void
+	{
+		// TODO: Implement setErrorHandler() method.
+	}
 
 	public function lock(): bool { return true; }
 

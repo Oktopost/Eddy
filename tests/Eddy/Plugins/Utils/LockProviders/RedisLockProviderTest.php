@@ -3,6 +3,7 @@ namespace Eddy\Plugins\Utils\LockProviders;
 
 
 use Eddy\Base\Engine\Lock\ILocker;
+use Eddy\Base\IExceptionHandler;
 use PHPUnit\Framework\TestCase;
 
 
@@ -18,6 +19,13 @@ class RedisLockProviderTest extends TestCase
 		]);
 		
 		$provider->setTTL(300);
+		
+		$handler = new class implements IExceptionHandler
+		{
+			public function exception(\Throwable $t): void {}
+		};
+		
+		$provider->setErrorHandler($handler);
 		
 		return $provider;
 	}
