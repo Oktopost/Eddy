@@ -83,7 +83,7 @@ class Test_Mananger_DQ extends DeepQueue
 			{
 				$class = new class implements IQueueConfig {
 					public $DelayBuffer = 0;
-					public $MaxBulkSize = 0;
+					public $PackageSize = 0;
 				};
 				$this->Config = new $class;
 			}
