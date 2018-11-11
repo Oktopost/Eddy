@@ -2,7 +2,12 @@
 namespace Eddy\Engine\Queue\DeepQueue;
 
 
+use DeepQueue\Base\IDeepQueueConfig;
+use DeepQueue\Base\IMetaData;
+use DeepQueue\Base\IQueueConfig;
+use DeepQueue\Base\IQueueObject;
 use DeepQueue\Base\Plugins\ConnectorElements\IQueueManager as IDeepQueueQueueManager;
+use DeepQueue\Base\Queue\IQueue;
 use DeepQueue\DeepQueue;
 
 
@@ -65,5 +70,29 @@ class Test_Mananger_DQ extends DeepQueue
 	public function manager(string $name): IDeepQueueQueueManager
 	{
 		return $this->queueManager;
+	}
+	
+	public function getQueueObject(string $name): ?IQueueObject
+	{
+		$mockQueue = new class implements IQueueObject
+		{		
+			public $Config;
+			
+			
+			public function __construct()
+			{
+				$class = new class implements IQueueConfig {
+					public $DelayBuffer = 0;
+					public $MaxBulkSize = 0;
+				};
+				$this->Config = new $class;
+			}
+
+			public function getStream(): IQueue	{}
+			public function getMetaData(): IMetaData {}
+			public function setDeepConfig(IDeepQueueConfig $config): void {}
+		};
+		
+		return $mockQueue;
 	}
 }

@@ -33,6 +33,16 @@ class DeepQueueManagerAdapter implements IQueueManager
 	 */
 	public function getNextRuntime(): ?float
 	{
-		return $this->deepQueue->manager($this->name)->getWaitingTime();
+		$delayBuffer = 0;
+		$bulkSize = 0;	
+		$queue = $this->deepQueue->getQueueObject($this->name);
+		
+		if ($queue)
+		{
+			$delayBuffer = $queue->Config->DelayBuffer;
+			$bulkSize = $queue->Config->MaxBulkSize;
+		}
+		
+		return $this->deepQueue->manager($this->name)->getWaitingTime($delayBuffer, $bulkSize);
 	}
 }
