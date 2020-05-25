@@ -5,7 +5,7 @@ namespace Eddy\Modules;
 use Eddy\Scope;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Base\Setup\IClassNameLoader;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Exceptions\InvalidEventException;
 
 

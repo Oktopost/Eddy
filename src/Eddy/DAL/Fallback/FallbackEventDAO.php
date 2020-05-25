@@ -4,7 +4,7 @@ namespace Eddy\DAL\Fallback;
 
 use Eddy\Base\IConfig;
 use Eddy\Base\DAL\IEventDAO;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\DAL\Fallback\Base\IFallbackEventDAO;
 
 

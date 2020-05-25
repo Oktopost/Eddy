@@ -2,7 +2,7 @@
 namespace Eddy\Base;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 interface IEngine

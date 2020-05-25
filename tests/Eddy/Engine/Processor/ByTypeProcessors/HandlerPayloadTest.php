@@ -6,7 +6,7 @@ use Eddy\Base\Module\IHandlersModule;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Exceptions\EddyException;
 use Eddy\Utils\Config;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 namespace Eddy\Plugins;
 
 
-use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
+use Eddy\Plugins\StatisticsCollector\Objects\StatsEntry;
 use Eddy\Utils\Config;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;

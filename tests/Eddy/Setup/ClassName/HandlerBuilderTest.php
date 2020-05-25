@@ -2,7 +2,7 @@
 namespace Eddy\Setup\ClassName;
 
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 use PHPUnit\Framework\TestCase;
 

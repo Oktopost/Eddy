@@ -3,8 +3,8 @@ namespace Eddy\Plugins\StatisticsCollector;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 

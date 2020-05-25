@@ -3,8 +3,8 @@ namespace Eddy\Setup;
 
 
 use Eddy\Base\Setup\IEventsSetup;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;

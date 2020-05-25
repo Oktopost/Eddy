@@ -5,7 +5,7 @@ namespace Eddy\DAL\Fallback;
 use Eddy\Base\IConfig;
 use Eddy\Base\DAL\IEventDAO;
 use Eddy\Base\IExceptionHandler;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Utils\Config;
 
 use PHPUnit\Framework\TestCase;

@@ -4,8 +4,8 @@ namespace Eddy\Plugins\StatisticsCollector\Module;
 
 use Eddy\Scope;
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Plugins\StatisticsCollector\Base\IStatsConfig;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;

@@ -6,7 +6,7 @@ use Eddy\Base\IExceptionHandler;
 use Eddy\Plugins\PublishLater\PublishLaterEvent;
 use Eddy\Scope;
 use Eddy\Utils\Config;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use PHPUnit\Framework\TestCase;
 
 

@@ -4,7 +4,7 @@ namespace Eddy\Plugins\StatisticsCollector\Utils;
 
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;
-use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
+use Eddy\Plugins\StatisticsCollector\Objects\StatsEntry;
 use PHPUnit\Framework\TestCase;
 
 

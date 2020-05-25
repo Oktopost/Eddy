@@ -4,7 +4,7 @@ namespace Eddy\Plugins\StatisticsCollector\Module;
 
 use Eddy\Scope;
 use Eddy\Plugins\StatisticsCollector\Base\IStatsConfig;
-use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
+use Eddy\Plugins\StatisticsCollector\Objects\StatsEntry;
 use Eddy\Plugins\StatisticsCollector\Config\StatsConfig;
 
 use lib\MySQLConfig;

@@ -2,7 +2,7 @@
 namespace Eddy\Setup\ClassName;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 use PHPUnit\Framework\TestCase;
 

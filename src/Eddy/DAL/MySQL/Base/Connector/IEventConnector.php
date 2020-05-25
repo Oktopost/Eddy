@@ -3,7 +3,7 @@ namespace Eddy\DAL\MySQL\Base\Connector;
 
 
 use Squid\MySql\IMySqlConnector;
-use Squid\MySql\Connectors\Object\Generic\IGenericIdConnector;
+use Squid\MySql\Connectors\Objects\Generic\IGenericIdConnector;
 
 
 /**

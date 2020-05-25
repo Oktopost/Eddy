@@ -14,7 +14,7 @@ use Eddy\Base\Config\ISetupConfig;
 use Eddy\Base\Module\ISetupModule;
 use Eddy\Base\Setup\IEventsSetup;
 use Eddy\Base\Setup\ISetupBuilder;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Utils\Config;
 use Eddy\Utils\SetupConfig;
 

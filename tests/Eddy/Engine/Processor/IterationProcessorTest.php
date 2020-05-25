@@ -11,7 +11,7 @@ use Eddy\Base\Engine\ILockProvider;
 use Eddy\Base\Engine\Lock\ILocker;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
 use Eddy\Base\Engine\Processor\IProcessControlChain;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Scope;
 use Eddy\Utils\Config;
 

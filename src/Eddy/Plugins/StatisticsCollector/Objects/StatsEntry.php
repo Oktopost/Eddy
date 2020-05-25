@@ -1,5 +1,5 @@
 <?php
-namespace Eddy\Plugins\StatisticsCollector\Object;
+namespace Eddy\Plugins\StatisticsCollector\Objects;
 
 
 use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;

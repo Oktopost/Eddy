@@ -2,8 +2,8 @@
 namespace Eddy\DAL\MySQL;
 
 
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\DAL\MySQL\Connector\EventConnector;
 use Eddy\DAL\MySQL\Connector\HandlerConnector;
 

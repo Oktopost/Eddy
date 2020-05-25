@@ -4,9 +4,9 @@ namespace Eddy\Engine\Processor\Control;
 
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\Processor\AProcessController;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Utils\Config;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;

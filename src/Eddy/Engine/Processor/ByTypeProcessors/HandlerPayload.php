@@ -6,7 +6,7 @@ use Eddy\Scope;
 use Eddy\Base\Module\IHandlersModule;
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Exceptions\EddyException;
 
 

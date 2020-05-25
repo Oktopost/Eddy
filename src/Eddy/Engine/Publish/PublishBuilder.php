@@ -3,8 +3,8 @@ namespace Eddy\Engine\Publish;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 use Eddy\Base\Engine\Publish\IPublisher;
 use Eddy\Base\Engine\Publish\IPublishBuilder;

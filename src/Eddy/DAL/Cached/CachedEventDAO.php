@@ -4,7 +4,7 @@ namespace Eddy\DAL\Cached;
 
 use Eddy\Base\DAL\ICacheDAO;
 use Eddy\Base\DAL\IEventDAO;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\DAL\Cached\Base\ICachedEventDAO;
 use Eddy\Exceptions\InvalidUsageException;
 

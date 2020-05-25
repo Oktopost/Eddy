@@ -4,7 +4,7 @@ namespace Eddy\DAL\Cached;
 
 use Eddy\Base\DAL\ICacheDAO;
 use Eddy\Base\DAL\IHandlerDAO;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Exceptions\InvalidUsageException;
 use Eddy\DAL\Cached\Base\ICachedHandlerDAO;
 

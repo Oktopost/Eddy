@@ -4,7 +4,7 @@ namespace Eddy\Modules;
 
 use Eddy\Base\Module\IHandlersModule;
 use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

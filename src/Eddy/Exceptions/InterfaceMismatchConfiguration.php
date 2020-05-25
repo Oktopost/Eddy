@@ -2,7 +2,7 @@
 namespace Eddy\Exceptions;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 class InterfaceMismatchConfiguration extends ConfigMismatchException

@@ -5,7 +5,7 @@ namespace Eddy;
 use Eddy\Base\IEngine;
 use Eddy\Engine\Proxy\DefaultProxy;
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 /**

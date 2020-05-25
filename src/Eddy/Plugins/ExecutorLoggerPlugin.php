@@ -8,8 +8,8 @@ use Eddy\Base\DAL\ISubscribersDAO;
 use Eddy\Base\Engine\Queue\IQueueDecorator;
 use Eddy\Base\Engine\Queue\AbstractQueueDecorator;
 use Eddy\Base\Engine\Processor\IProcessController;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Utils\Config;
 
 

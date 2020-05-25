@@ -3,7 +3,7 @@ namespace Eddy\Base\Engine\Processor;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 abstract class AProcessController implements IProcessController

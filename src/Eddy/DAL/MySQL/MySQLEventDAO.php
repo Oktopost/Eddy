@@ -3,7 +3,7 @@ namespace Eddy\DAL\MySQL;
 
 
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\DAL\MySQL\Base\IMySQLEventDAO;
 use Eddy\DAL\MySQL\Base\Connector\IEventConnector;
 

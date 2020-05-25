@@ -4,8 +4,8 @@ namespace Eddy\Setup;
 
 use Eddy\Scope;
 use Eddy\Base\Setup\IClassNameLoader;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Base\Setup\ISetupBuilder;
 
 use PHPUnit\Framework\TestCase;

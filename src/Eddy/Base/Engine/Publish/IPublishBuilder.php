@@ -2,8 +2,8 @@
 namespace Eddy\Base\Engine\Publish;
 
 
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

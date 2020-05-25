@@ -5,7 +5,7 @@ namespace Eddy\Plugins\StatisticsCollector;
 use Eddy\Base\IConfig;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\Processor\AProcessController;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Plugins\StatisticsCollector\Base\IProcessStatistics;
 
 

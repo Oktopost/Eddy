@@ -2,7 +2,7 @@
 namespace Eddy\Base\Setup\ClassName;
 
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

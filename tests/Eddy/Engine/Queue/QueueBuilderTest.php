@@ -11,7 +11,7 @@ use Eddy\Base\Engine\Queue\IQueueBuilder;
 use Eddy\Base\Engine\Queue\IQueueProvider;
 use Eddy\Utils\Config;
 use Eddy\Utils\Naming;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Plugins\ExecutorLoggerPlugin;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;
 

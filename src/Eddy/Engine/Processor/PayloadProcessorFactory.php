@@ -6,7 +6,7 @@ use Eddy\Scope;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
 use Eddy\Base\Engine\Processor\IPayloadProcessorFactory;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Engine\Processor\ByTypeProcessors;
 
 

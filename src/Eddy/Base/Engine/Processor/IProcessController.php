@@ -3,7 +3,7 @@ namespace Eddy\Base\Engine\Processor;
 
 
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 interface IProcessController

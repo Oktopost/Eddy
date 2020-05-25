@@ -2,7 +2,7 @@
 namespace Eddy\Modules;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Base\Module\ISubscribersModule;
 
 

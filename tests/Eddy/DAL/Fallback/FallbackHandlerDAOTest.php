@@ -5,7 +5,7 @@ namespace Eddy\DAL\Fallback;
 use Eddy\Base\IConfig;
 use Eddy\Base\IExceptionHandler;
 use Eddy\Base\DAL\IHandlerDAO;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Utils\Config;
 
 use PHPUnit\Framework\TestCase;

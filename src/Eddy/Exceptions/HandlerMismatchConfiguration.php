@@ -2,7 +2,7 @@
 namespace Eddy\Exceptions;
 
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 class HandlerMismatchConfiguration extends ConfigMismatchException

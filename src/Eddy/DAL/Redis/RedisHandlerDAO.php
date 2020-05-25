@@ -3,7 +3,7 @@ namespace Eddy\DAL\Redis;
 
 
 use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\DAL\Redis\Base\IRedisHandlerDAO;
 use Eddy\DAL\Redis\Utils\RedisKeyBuilder;
 

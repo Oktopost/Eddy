@@ -2,7 +2,7 @@
 namespace Eddy\Base\DAL;
 
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

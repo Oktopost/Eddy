@@ -6,7 +6,7 @@ use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
 use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\DAL\MySQL\Connector\HandlerConnector;
 
 use lib\MySQLConfig;

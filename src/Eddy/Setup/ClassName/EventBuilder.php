@@ -6,7 +6,7 @@ use Eddy\Base\Setup\ClassName\IEventBuilder;
 use Eddy\Base\Setup\ClassName\ILoaderStrategy;
 
 use Eddy\IEventConfig;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 class EventBuilder implements IEventBuilder

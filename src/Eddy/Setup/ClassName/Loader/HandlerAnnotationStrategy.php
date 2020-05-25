@@ -4,7 +4,7 @@ namespace Eddy\Setup\ClassName\Loader;
 
 use Eddy\IHandlerConfig;
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Exceptions\HandlerMismatchConfiguration;
 
 

@@ -2,7 +2,7 @@
 namespace Eddy\Base\DAL;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 /**

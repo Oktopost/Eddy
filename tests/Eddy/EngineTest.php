@@ -7,7 +7,7 @@ use Eddy\Base\Engine\Publish\IPublisher;
 use Eddy\Base\Engine\Publish\IPublishBuilder;
 
 use Eddy\Engine\Proxy\DefaultProxy;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use PHPUnit\Framework\TestCase;
 
 

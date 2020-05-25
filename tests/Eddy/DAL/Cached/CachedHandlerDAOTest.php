@@ -7,7 +7,7 @@ use Eddy\DAL\MySQLDAL;
 use Eddy\DAL\RedisDAL;
 use Eddy\DAL\Redis\RedisEventDAO;
 use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 use lib\MySQLConfig;
 

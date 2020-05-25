@@ -4,7 +4,7 @@ namespace Eddy\Setup\ClassName\Loader;
 
 use Eddy\IEventConfig;
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Exceptions\InterfaceMismatchConfiguration;
 
 

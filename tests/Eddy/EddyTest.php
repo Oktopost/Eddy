@@ -8,7 +8,7 @@ use Eddy\Base\Engine\IProcessor;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Base\Module\ISetupModule;
 use Eddy\Utils\Config;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 use PHPUnit\Framework\TestCase;

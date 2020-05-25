@@ -2,10 +2,10 @@
 namespace Eddy\Plugins;
 
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Utils\Config;
 use Eddy\Base\IExceptionHandler;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Plugins\DoNotForget\ITarget;
 
 use PHPUnit\Framework\TestCase;

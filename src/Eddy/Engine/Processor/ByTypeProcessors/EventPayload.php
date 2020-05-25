@@ -6,8 +6,8 @@ use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
 
 use Eddy\IHandlerConfig;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

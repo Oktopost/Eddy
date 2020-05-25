@@ -2,10 +2,10 @@
 namespace Eddy\DAL\MySQL\Connector;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\DAL\MySQL\Base\Connector\IHandlerConnector;
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Objection\Mappers;
 
 use Squid\MySql\IMySqlConnector;

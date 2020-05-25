@@ -9,7 +9,7 @@ use Eddy\Base\Engine\IQueue;
 use Eddy\Base\Engine\IMainQueue;
 use Eddy\Base\Engine\Queue\IQueueManager;
 use Eddy\Base\Engine\Queue\IQueueProvider;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Utils\Config;
 use Eddy\Utils\Naming;
 

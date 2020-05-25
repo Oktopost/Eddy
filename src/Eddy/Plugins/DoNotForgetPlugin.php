@@ -8,7 +8,7 @@ use Eddy\Base\Engine\Processor\AProcessController;
 use Eddy\Base\Engine\Processor\IProcessController;
 
 use Eddy\Utils\Config;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Plugins\DoNotForget\ITarget;
 
 

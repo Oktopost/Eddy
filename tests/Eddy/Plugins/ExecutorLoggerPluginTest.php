@@ -5,8 +5,8 @@ namespace Eddy\Plugins;
 use Eddy\DAL\MySQLDAL;
 use Eddy\Utils\Config;
 use Eddy\Base\Engine\IQueue;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 use lib\MySQLConfig;
 

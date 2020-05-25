@@ -9,7 +9,7 @@ use Eddy\DAL\Redis\RedisHandlerDAO;
 use Eddy\DAL\RedisDAL;
 
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use lib\MySQLConfig;
 
 use PHPUnit\Framework\TestCase;

@@ -4,7 +4,7 @@ namespace Eddy\Engine\Processor;
 
 use Eddy\Base\Engine\Processor\ProcessTarget;
 use Eddy\Base\Engine\Processor\IPayloadProcessor;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

@@ -4,7 +4,7 @@ namespace Eddy\Event;
 
 use Eddy\IEventConfig;
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 
 class AnonymousObjectEventConfig implements IEventConfig

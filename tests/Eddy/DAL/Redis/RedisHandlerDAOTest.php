@@ -7,7 +7,7 @@ use Eddy\Enums\EventState;
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use PHPUnit\Framework\TestCase;
 use Predis\Client;
 

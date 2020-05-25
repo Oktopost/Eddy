@@ -7,7 +7,7 @@ use Eddy\Base\IEddyQueueObject;
 use Eddy\Base\Config\IEngineConfig;
 use Eddy\Base\Engine\Processor\IProcessControlChain;
 
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 /**

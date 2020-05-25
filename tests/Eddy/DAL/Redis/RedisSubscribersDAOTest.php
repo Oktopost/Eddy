@@ -3,8 +3,8 @@ namespace Eddy\DAL\Redis;
 
 
 use DeepQueue\Utils\TimeBasedRandomIdGenerator;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use PHPUnit\Framework\TestCase;
 
 use Predis\Client;

@@ -8,8 +8,8 @@ use Eddy\Base\IConfig;
 use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\Base\DAL\ISubscribersDAO;
 use Eddy\Base\Module\ISubscribersModule;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Utils\Config;
 
 use PHPUnit\Framework\TestCase;

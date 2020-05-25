@@ -12,7 +12,7 @@ use Eddy\Base\Engine\Queue\IQueueBuilder;
 use Eddy\Base\IConfig;
 use Eddy\DAL\MySQLDAL;
 use Eddy\Enums\EventState;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 use Eddy\Scope;
 use Eddy\Utils\Config;

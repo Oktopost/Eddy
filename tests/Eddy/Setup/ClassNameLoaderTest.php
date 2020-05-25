@@ -3,8 +3,8 @@ namespace Eddy\Setup;
 
 
 use Eddy\Scope;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Base\Setup\ClassName\IEventBuilder;
 use Eddy\Base\Setup\ClassName\IHandlerBuilder;
 

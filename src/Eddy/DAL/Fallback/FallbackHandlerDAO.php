@@ -3,7 +3,7 @@ namespace Eddy\DAL\Fallback;
 
 
 use Eddy\Base\IConfig;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Base\DAL\IHandlerDAO;
 use Eddy\DAL\Fallback\Base\IFallbackHandlerDAO;
 

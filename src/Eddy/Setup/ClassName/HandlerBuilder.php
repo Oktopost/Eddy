@@ -6,7 +6,7 @@ use Eddy\Base\Setup\ClassName\IHandlerBuilder;
 use Eddy\Base\Setup\ClassName\ILoaderStrategy;
 
 use Eddy\IHandlerConfig;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 
 
 class HandlerBuilder implements IHandlerBuilder

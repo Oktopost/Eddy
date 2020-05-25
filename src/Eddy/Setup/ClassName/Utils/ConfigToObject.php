@@ -5,8 +5,8 @@ namespace Eddy\Setup\ClassName\Utils;
 use Eddy\IEventConfig;
 use Eddy\IHandlerConfig;
 use Eddy\Base\IEddyQueueObject;
-use Eddy\Object\EventObject;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\EventObject;
+use Eddy\Objects\HandlerObject;
 
 use Objection\TStaticClass;
 

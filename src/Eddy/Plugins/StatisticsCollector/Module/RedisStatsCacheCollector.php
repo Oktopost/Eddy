@@ -2,12 +2,12 @@
 namespace Eddy\Plugins\StatisticsCollector\Module;
 
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 use Eddy\Base\IEddyQueueObject;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsOperation;
 use Eddy\Plugins\StatisticsCollector\Enum\StatsObjectType;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
-use Eddy\Plugins\StatisticsCollector\Object\StatsEntry;
+use Eddy\Plugins\StatisticsCollector\Objects\StatsEntry;
 use Eddy\Plugins\StatisticsCollector\Utils\StatsDataCombiner;
 use Eddy\Plugins\StatisticsCollector\Utils\StatsKeyBuilder;
 

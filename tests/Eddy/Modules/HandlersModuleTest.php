@@ -8,7 +8,7 @@ use Eddy\Base\IDAL;
 use Eddy\Base\Module\IHandlersModule;
 
 use Eddy\Enums\EventState;
-use Eddy\Object\HandlerObject;
+use Eddy\Objects\HandlerObject;
 use Eddy\Scope;
 use Eddy\Utils\Config;
 use PHPUnit\Framework\TestCase;

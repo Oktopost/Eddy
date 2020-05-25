@@ -5,7 +5,7 @@ namespace Eddy\Plugins\StatisticsCollector;
 use Eddy\Base\Engine\IQueue;
 use Eddy\Base\IEddyQueueObject;
 
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCacheCollector;
 use Eddy\Plugins\StatisticsCollector\Base\IStatisticsCollectionDecorator;

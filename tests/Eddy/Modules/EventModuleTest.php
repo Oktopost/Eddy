@@ -9,7 +9,7 @@ use Eddy\Base\DAL\IEventDAO;
 use Eddy\Base\Setup\IClassNameLoader;
 use Eddy\Base\Module\IEventModule;
 use Eddy\Utils\Config;
-use Eddy\Object\EventObject;
+use Eddy\Objects\EventObject;
 
 use PHPUnit\Framework\TestCase;
 
