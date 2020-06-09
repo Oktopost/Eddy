@@ -37,7 +37,7 @@ class DefaultProxy extends AbstractProxy
 			throw new UnexpectedException("The method {$this->className}::$name have an incorrect number of " . 
 				'parameters. Only one allowed.');
 		
-		$type = $method->getParameters()[0]->getType();
+		$type = $method->getParameters()[0]->getType()->getName();
 		
 		if (!$type || (string)$type != 'array')
 		{
